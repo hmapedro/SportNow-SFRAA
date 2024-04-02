@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "132728923486",
+    "project_id": "nksangalhos-39c97",
+    "storage_bucket": "nksangalhos-39c97.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:132728923486:android:619cbc8f732afc47531bcf",
+        "android_client_info": {
+          "package_name": "com.nksangalhos.userapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpYHjie77ft-S46cP6wyZt814hbv6W44k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:132728923486:android:26b8f8acd419b5a6531bcf",
+        "android_client_info": {
+          "package_name": "org.nksangalhos.userapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpYHjie77ft-S46cP6wyZt814hbv6W44k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
