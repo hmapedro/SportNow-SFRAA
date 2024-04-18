@@ -1009,7 +1009,7 @@ namespace SportNow.Views.Profile
                 if (string.IsNullOrEmpty(postalcodeValue.entry.Text)) {
 					postalcodeValue.entry.Text = "";
 				}
-
+                //
                 /*Debug.WriteLine("UpdateMemberInfo " + nameValue.entry.Text);
 				if (nameValue.entry.Text == "")
 				{
