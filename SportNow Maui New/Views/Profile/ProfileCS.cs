@@ -67,24 +67,25 @@ namespace SportNow.Views.Profile
 		private Microsoft.Maui.Controls.Grid gridFaturacao;
 		private Microsoft.Maui.Controls.Grid gridButtons;
 
-		FormValueEdit nameValue;
+        FormValue nameValue;
         FormValueEdit emailValue;
 		FormValueEdit phoneValue;
 		FormValueEdit addressValue;
 		FormValueEdit cityValue;
 		FormValueEdit postalcodeValue;
 		FormValueEdit EncEducacao1NomeValue;
-		FormValueEdit EncEducacao1PhoneValue;
-		FormValueEdit EncEducacao1MailValue;
-		FormValueEdit FaturaNomeValue;
+        FormValueEdit EncEducacao1PhoneValue;
+        FormValueEdit EncEducacao1MailValue;
+        FormValueEdit FaturaNomeValue;
 		FormValueEdit FaturaMoradaValue;
 		FormValueEdit FaturaCidadeValue;
         FormValueEdit CodPostalValue;
         FormValueEdit CidadeValue;
         FormValueEdit FaturaNIFValue;
-		FormValueEdit nifValue;
-		FormValueEdit cc_numberValue;
-        FormValueEditDate birthdateValue;
+		FormValue nifValue;
+		FormValue cc_numberValue;
+        FormValue birthdateValue;
+        FormValue registrationdateValue;
 
 
 
@@ -582,16 +583,16 @@ namespace SportNow.Views.Profile
 			FormValue number_memberValue = new FormValue(App.member.number_member);
 
 			FormLabel nameLabel = new FormLabel { Text = "NOME", HorizontalTextAlignment = TextAlignment.Start };
-			nameValue = new FormValueEdit(App.member.name);
+            nameValue  = new FormValue(App.member.name);
 
 			FormLabel birthdateLabel = new FormLabel { Text = "NASCIMENTO"};
             //FormValue birthdateValue = new FormValueEditDate (member.birthdate?.ToString("yyyy-MM-dd"));
             //FormValue birthdateValue = new FormValue(App.member.birthdate);
-            birthdateValue = new FormValueEditDate(App.member.birthdate);
+            birthdateValue = new FormValue(App.member.birthdate);
 
             FormLabel registrationdateLabel = new FormLabel { Text = "INSCRIÇÃO"};
             //FormValueEditDate registrationdateValue = new FormValueEditDate(App.member.registrationdate?.ToString("yyyy-MM-dd"));
-            FormValue registrationdateValue = new FormValue(App.member.registrationdate?.ToString("yyyy-MM-dd"));
+            registrationdateValue = new FormValue(App.member.registrationdate?.ToString("yyyy-MM-dd"));
 
             FormLabel addressLabel = new FormLabel { Text = "MORADA" };
             addressValue = new FormValueEdit(App.member.address);
@@ -643,22 +644,14 @@ namespace SportNow.Views.Profile
 			gridIdentificacao = new Microsoft.Maui.Controls.Grid { Padding = 0, ColumnSpacing = 5 * App.screenWidthAdapter, RowSpacing = 5 * App.screenWidthAdapter };
 			gridIdentificacao.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 			gridIdentificacao.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-			gridIdentificacao.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-            gridIdentificacao.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             gridIdentificacao.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto }); //GridLength.Auto
 			gridIdentificacao.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star }); //GridLength.Auto 
 
 			FormLabel cc_numberLabel = new FormLabel { Text = "CC" };
-            cc_numberValue = new FormValueEdit (App.member.cc_number);
+            cc_numberValue = new FormValue (App.member.cc_number);
 
             FormLabel nifLabel = new FormLabel { Text = "NIF"};
-			nifValue = new FormValueEdit (App.member.nif);
-
-			FormLabel fnkpLabel = new FormLabel { Text = "FNKP" };
-			FormValue fnkpValue = new FormValue (App.member.number_fnkp);
-
-            FormLabel awikpLabel = new FormLabel { Text = "AWIKP" };
-            FormValue awikpValue = new FormValue(App.member.number_awikp);
+            nifValue = new FormValue (App.member.nif);
 
             gridIdentificacao.Add(cc_numberLabel, 0, 0);
 			gridIdentificacao.Add(cc_numberValue, 1, 0);
@@ -666,11 +659,6 @@ namespace SportNow.Views.Profile
 			gridIdentificacao.Add(nifLabel, 0, 1);
 			gridIdentificacao.Add(nifValue, 1, 1);
 
-			gridIdentificacao.Add(fnkpLabel, 0, 2);
-			gridIdentificacao.Add(fnkpValue, 1, 2);
-
-			gridIdentificacao.Add(awikpLabel, 0, 3);
-            gridIdentificacao.Add(awikpValue, 1, 3);
             /*absoluteLayout.Add(gridIdentificacao,
 				xConstraint: )0),
 				yConstraint: )230),
@@ -705,10 +693,10 @@ namespace SportNow.Views.Profile
 
 
 			FormLabel emailLabel = new FormLabel { Text = "EMAIL" };
-			emailValue = new FormValueEdit(App.member.email);
+            emailValue = new FormValueEdit(App.member.email);
 
 			FormLabel phoneLabel = new FormLabel { Text = "TELEFONE" };
-			phoneValue = new FormValueEdit(App.member.phone);
+            phoneValue = new FormValueEdit(App.member.phone);
 
             FormLabel EncEducacao1Label = new FormLabel { Text = "ENCARREGADO DE EDUCAÇÃO", FontSize = App.itemTitleFontSize };
 
@@ -771,7 +759,7 @@ namespace SportNow.Views.Profile
             gridFaturacao.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
 
 			FormLabel FaturaNomeLabel = new FormLabel { Text = "NOME" };
-			FaturaNomeValue = new FormValueEdit(App.member.faturacao_nome);
+            FaturaNomeValue = new FormValueEdit(App.member.faturacao_nome);
 
 			FormLabel FaturaMoradaLabel = new FormLabel { Text = "MORADA" };
 			FaturaMoradaValue = new FormValueEdit(App.member.faturacao_morada);
@@ -1022,14 +1010,15 @@ namespace SportNow.Views.Profile
 					postalcodeValue.entry.Text = "";
 				}
 
-				Debug.WriteLine("UpdateMemberInfo " + nameValue.entry.Text);
+                /*Debug.WriteLine("UpdateMemberInfo " + nameValue.entry.Text);
 				if (nameValue.entry.Text == "")
 				{
 					nameValue.entry.Text = App.member.name;
                     await DisplayAlert("DADOS INVÁLIDOS", "O nome introduzido não é válido.", "Ok" );
 					return "-1";
 				}
-				else if (phoneValue.entry.Text == null)
+				else*/
+                if (phoneValue.entry.Text == null)
                 {
                     phoneValue.entry.Text = App.member.phone;
                     await DisplayAlert("DADOS INVÁLIDOS", "Tem de introduzir o telefone.", "Ok" );
@@ -1049,11 +1038,11 @@ namespace SportNow.Views.Profile
 				}
 				
 				Debug.WriteLine("UpdateMemberInfo "+ App.member.name);
-				App.member.name = nameValue.entry.Text;
+			//	App.member.name = nameValue.entry.Text;
 				App.member.email = emailValue.entry.Text;
-                App.member.nif = nifValue.entry.Text;
-                App.member.cc_number = cc_numberValue.entry.Text;
-                App.member.birthdate = birthdateValue.entry.Text;
+                //App.member.nif = nifValue.entry.Text;
+                //App.member.cc_number = cc_numberValue.entry.Text;
+                //App.member.birthdate = birthdateValue.entry.Text;
                 App.member.phone = phoneValue.entry.Text;
 				App.member.address = addressValue.entry.Text;
 				App.member.city = cityValue.entry.Text;
