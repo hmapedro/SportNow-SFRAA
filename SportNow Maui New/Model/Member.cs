@@ -34,6 +34,7 @@ namespace SportNow.Model
         public string city { get; set; }
         public string postalcode { get; set; }
 
+
         public string name_enc1 { get; set; }
         public string mail_enc1 { get; set; }
         public string phone_enc1 { get; set; }

@@ -757,7 +757,7 @@ namespace SportNow.Views.Profile
 
             gridContactos.Add(EncEducacao1MailLabel, 0, 5);
             gridContactos.Add(EncEducacao1MailValue, 1, 5);
-
+           
             gridContactos.Add(EncEducacao2Label, 0, 6);
             Microsoft.Maui.Controls.Grid.SetColumnSpan(EncEducacao1Label, 6);
 
