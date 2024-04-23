@@ -37,6 +37,9 @@ namespace SportNow.Model
         public string name_enc1 { get; set; }
         public string mail_enc1 { get; set; }
         public string phone_enc1 { get; set; }
+        public string name_enc2 { get; set; }
+        public string mail_enc2 { get; set; }
+        public string phone_enc2 { get; set; }
 
         public string member_type { get; set; }
         public string isInstructor { get; set; }

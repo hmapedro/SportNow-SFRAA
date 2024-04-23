@@ -55,15 +55,15 @@ namespace SportNow.Views.Profile
 		private ScrollView scrollView;
 
 		MenuButton geralButton;
-		MenuButton identificacaoButton;
 		MenuButton moradaButton;
+		MenuButton contactosButton;
 		MenuButton encEducacaoButton;
 
 
 		Microsoft.Maui.Controls.StackLayout stackButtons;
 		private Microsoft.Maui.Controls.Grid gridGeral;
-		private Microsoft.Maui.Controls.Grid gridIdentificacao;
 		private Microsoft.Maui.Controls.Grid gridMorada;
+		private Microsoft.Maui.Controls.Grid gridContactos;
 		private Microsoft.Maui.Controls.Grid gridFaturacao;
 		private Microsoft.Maui.Controls.Grid gridButtons;
 
@@ -76,6 +76,9 @@ namespace SportNow.Views.Profile
 		FormValueEdit EncEducacao1NomeValue;
         FormValueEdit EncEducacao1PhoneValue;
         FormValueEdit EncEducacao1MailValue;
+        FormValueEdit EncEducacao2NomeValue;
+        FormValueEdit EncEducacao2PhoneValue;
+        FormValueEdit EncEducacao2MailValue;
         FormValueEdit FaturaNomeValue;
 		FormValueEdit FaturaMoradaValue;
 		FormValueEdit FaturaCidadeValue;
@@ -129,12 +132,12 @@ namespace SportNow.Views.Profile
 
             int countStudents = App.original_member.students_count;
 
-			CreatePhoto();			
-			CreateGraduacao();
+			CreatePhoto();
+            CreateNameLabel();
 			CreateStackButtons();
 			CreateGridGeral();
-			CreateGridIdentificacao();
 			CreateGridMorada();
+			CreateGridContactos();
 			CreateGridFaturacao();
 			CreateGridButtons();
 
@@ -188,7 +191,24 @@ namespace SportNow.Views.Profile
             absoluteLayout.SetLayoutBounds(memberPhotoImage, new Rect((App.screenWidth/2) - (90 * App.screenHeightAdapter), 0, 180 * App.screenHeightAdapter, 180 * App.screenHeightAdapter));
         }
 
-		public async void CreateQuotaButton()
+        public void CreateNameLabel()
+        {
+            Label nameLabel = new Label
+            {
+                FontFamily = "futuracondensedmedium",
+                Text = App.member.name,
+                VerticalTextAlignment = TextAlignment.Center,
+                HorizontalTextAlignment = TextAlignment.Center,
+                TextColor = App.normalTextColor,
+                LineBreakMode = LineBreakMode.NoWrap,
+                FontSize = App.itemTitleFontSize
+            };
+            absoluteLayout.Add(nameLabel);
+            absoluteLayout.SetLayoutBounds(nameLabel, new Rect((App.screenWidth / 2) - (50 * App.screenHeightAdapter), 230 * App.screenHeightAdapter, 100 * App.screenHeightAdapter, 30 * App.screenHeightAdapter));
+
+
+        }
+        public async void CreateQuotaButton()
 		{
 
             quotaImage = new Image
@@ -329,10 +349,10 @@ namespace SportNow.Views.Profile
 
             geralButton = new MenuButton("GERAL", buttonWidth, 60);
 			geralButton.button.Clicked += OnGeralButtonClicked;
-			identificacaoButton = new MenuButton("ID",buttonWidth, 60);
-			identificacaoButton.button.Clicked += OnIdentificacaoButtonClicked;
-			moradaButton = new MenuButton("CONTACTOS", buttonWidth, 60);
+			moradaButton = new MenuButton("MORADA",buttonWidth, 60);
 			moradaButton.button.Clicked += OnMoradaButtonClicked;
+			contactosButton = new MenuButton("CONTACTOS", buttonWidth, 60);
+			contactosButton.button.Clicked += OnContactosButtonClicked;
 			encEducacaoButton = new MenuButton("FATURAÇÃO",buttonWidth, 60);
 			encEducacaoButton.button.Clicked += OnEncEducacaoButtonClicked;
 
@@ -344,8 +364,8 @@ namespace SportNow.Views.Profile
 				Children =
 				{
 					geralButton,
-					identificacaoButton,
 					moradaButton,
+					contactosButton,
 					encEducacaoButton
 				}
 			};
@@ -354,8 +374,8 @@ namespace SportNow.Views.Profile
             absoluteLayout.SetLayoutBounds(stackButtons, new Rect(0, 250 * App.screenHeightAdapter, App.screenWidth, 60 * App.screenHeightAdapter));
 
 			geralButton.activate();
-			identificacaoButton.deactivate();
 			moradaButton.deactivate();
+			contactosButton.deactivate();
 			encEducacaoButton.deactivate();
 		}
 
@@ -574,40 +594,33 @@ namespace SportNow.Views.Profile
 			gridGeral.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             gridGeral.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             gridGeral.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-            gridGeral.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             //gridGeral.RowDefinitions.Add(new RowDefinition { Height = 1 });
             gridGeral.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto }); //GridLength.Auto
 			gridGeral.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star }); //GridLength.Auto 
 
-			Label number_memberLabel = new FormLabel { Text = "Nº SÓCIO" };
-			FormValue number_memberValue = new FormValue(App.member.number_member);
+			//Label number_memberLabel = new FormLabel { Text = "Nº SÓCIO" };
+			//FormValue number_memberValue = new FormValue(App.member.number_member);
 
-			FormLabel nameLabel = new FormLabel { Text = "NOME", HorizontalTextAlignment = TextAlignment.Start };
-            nameValue  = new FormValue(App.member.name);
+			//FormLabel nameLabel = new FormLabel { Text = "NOME", HorizontalTextAlignment = TextAlignment.Start };
+            //nameValue  = new FormValue(App.member.name);
 
 			FormLabel birthdateLabel = new FormLabel { Text = "NASCIMENTO"};
-            //FormValue birthdateValue = new FormValueEditDate (member.birthdate?.ToString("yyyy-MM-dd"));
-            //FormValue birthdateValue = new FormValue(App.member.birthdate);
             birthdateValue = new FormValue(App.member.birthdate);
 
             FormLabel registrationdateLabel = new FormLabel { Text = "INSCRIÇÃO"};
-            //FormValueEditDate registrationdateValue = new FormValueEditDate(App.member.registrationdate?.ToString("yyyy-MM-dd"));
             registrationdateValue = new FormValue(App.member.registrationdate?.ToString("yyyy-MM-dd"));
 
-            FormLabel addressLabel = new FormLabel { Text = "MORADA" };
-            addressValue = new FormValueEdit(App.member.address);
+            FormLabel cc_numberLabel = new FormLabel { Text = "CC" };
+            cc_numberValue = new FormValue(App.member.cc_number);
 
-            FormLabel cityLabel = new FormLabel { Text = "CIDADE" };
-            cityValue = new FormValueEdit(App.member.city);
+            FormLabel nifLabel = new FormLabel { Text = "NIF" };
+            nifValue = new FormValue(App.member.nif);
 
-            FormLabel postalcodeLabel = new FormLabel { Text = "CÓDIGO POSTAL" };
-            postalcodeValue = new FormValueEdit(App.member.postalcode);
+            //gridGeral.Add(number_memberLabel, 0, 0);
+			//gridGeral.Add(number_memberValue, 1, 0);
 
-            gridGeral.Add(number_memberLabel, 0, 0);
-			gridGeral.Add(number_memberValue, 1, 0);
-
-			gridGeral.Add(nameLabel, 0, 1);
-			gridGeral.Add(nameValue, 1, 1);
+			//gridGeral.Add(nameLabel, 0, 1);
+			//gridGeral.Add(nameValue, 1, 1);
 
 			gridGeral.Add(birthdateLabel, 0, 2);
 			gridGeral.Add(birthdateValue, 1, 2);
@@ -615,14 +628,12 @@ namespace SportNow.Views.Profile
 			gridGeral.Add(registrationdateLabel, 0, 3);
 			gridGeral.Add(registrationdateValue, 1, 3);
 
-            gridGeral.Add(addressLabel, 0, 4);
-            gridGeral.Add(addressValue, 1, 4);
+            gridGeral.Add(cc_numberLabel, 0, 4);
+            gridGeral.Add(cc_numberValue, 1, 4);
 
-            gridGeral.Add(cityLabel, 0, 5);
-            gridGeral.Add(cityValue, 1, 5);
+            gridGeral.Add(nifLabel, 0, 5);
+            gridGeral.Add(nifValue, 1, 5);
 
-            gridGeral.Add(postalcodeLabel, 0, 6);
-            gridGeral.Add(postalcodeValue, 1, 6);
 
             /*absoluteLayout.Add(gridGeral,
 				xConstraint: )0),
@@ -638,26 +649,34 @@ namespace SportNow.Views.Profile
 			);*/
         }
 
-		public void CreateGridIdentificacao()
+        public void CreateGridMorada()
 		{
 
-			gridIdentificacao = new Microsoft.Maui.Controls.Grid { Padding = 0, ColumnSpacing = 5 * App.screenWidthAdapter, RowSpacing = 5 * App.screenWidthAdapter };
-			gridIdentificacao.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-			gridIdentificacao.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-            gridIdentificacao.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto }); //GridLength.Auto
-			gridIdentificacao.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star }); //GridLength.Auto 
+			gridMorada = new Microsoft.Maui.Controls.Grid { Padding = 0, ColumnSpacing = 5 * App.screenWidthAdapter, RowSpacing = 5 * App.screenWidthAdapter };
+            gridMorada.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            gridMorada.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            gridMorada.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            gridMorada.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto }); //GridLength.Auto
+            gridMorada.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star }); //GridLength.Auto 
 
-			FormLabel cc_numberLabel = new FormLabel { Text = "CC" };
-            cc_numberValue = new FormValue (App.member.cc_number);
 
-            FormLabel nifLabel = new FormLabel { Text = "NIF"};
-            nifValue = new FormValue (App.member.nif);
+            FormLabel addressLabel = new FormLabel { Text = "MORADA" };
+            addressValue = new FormValueEdit(App.member.address);
 
-            gridIdentificacao.Add(cc_numberLabel, 0, 0);
-			gridIdentificacao.Add(cc_numberValue, 1, 0);
+            FormLabel cityLabel = new FormLabel { Text = "CIDADE" };
+            cityValue = new FormValueEdit(App.member.city);
 
-			gridIdentificacao.Add(nifLabel, 0, 1);
-			gridIdentificacao.Add(nifValue, 1, 1);
+            FormLabel postalcodeLabel = new FormLabel { Text = "CÓDIGO POSTAL" };
+            postalcodeValue = new FormValueEdit(App.member.postalcode);
+
+            gridMorada.Add(addressLabel, 0, 0);
+            gridMorada.Add(addressValue, 1, 0);
+
+            gridMorada.Add(cityLabel, 0, 1);
+            gridMorada.Add(cityValue, 1, 1);
+
+            gridMorada.Add(postalcodeLabel, 0, 2);
+            gridMorada.Add(postalcodeValue, 1, 2);
 
             /*absoluteLayout.Add(gridIdentificacao,
 				xConstraint: )0),
@@ -673,23 +692,23 @@ namespace SportNow.Views.Profile
 			);*/
         }
 
-		public void CreateGridMorada()
+        public void CreateGridContactos()
 		{
 
-			gridMorada = new Microsoft.Maui.Controls.Grid { Padding = 0, ColumnSpacing = 5 * App.screenWidthAdapter, RowSpacing = 5 * App.screenWidthAdapter };
-			gridMorada.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-			gridMorada.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-			gridMorada.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-			gridMorada.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-			gridMorada.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-			gridMorada.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-            gridMorada.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-            gridMorada.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-            gridMorada.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-            gridMorada.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+			gridContactos = new Microsoft.Maui.Controls.Grid { Padding = 0, ColumnSpacing = 5 * App.screenWidthAdapter, RowSpacing = 5 * App.screenWidthAdapter };
+            gridContactos.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            gridContactos.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            gridContactos.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            gridContactos.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            gridContactos.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            gridContactos.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            gridContactos.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            gridContactos.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            gridContactos.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            gridContactos.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
-            gridMorada.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto }); //GridLength.Auto
-			gridMorada.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star }); //GridLength.Auto 
+            gridContactos.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto }); //GridLength.Auto
+            gridContactos.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star }); //GridLength.Auto 
 
 
 			FormLabel emailLabel = new FormLabel { Text = "EMAIL" };
@@ -698,7 +717,7 @@ namespace SportNow.Views.Profile
 			FormLabel phoneLabel = new FormLabel { Text = "TELEFONE" };
             phoneValue = new FormValueEdit(App.member.phone);
 
-            FormLabel EncEducacao1Label = new FormLabel { Text = "ENCARREGADO DE EDUCAÇÃO", FontSize = App.itemTitleFontSize };
+            FormLabel EncEducacao1Label = new FormLabel { Text = "ENCARREGADO DE EDUCAÇÃO 1", FontSize = App.itemTitleFontSize };
 
             FormLabel EncEducacao1NomeLabel = new FormLabel { Text = "NOME" };
             EncEducacao1NomeValue = new FormValueEdit(App.member.name_enc1);
@@ -706,29 +725,50 @@ namespace SportNow.Views.Profile
             FormLabel EncEducacao1PhoneLabel = new FormLabel { Text = "TELEFONE" };
             EncEducacao1PhoneValue = new FormValueEdit(App.member.phone_enc1);
 
-            FormLabel EncEducacao1MailLabel = new FormLabel { Text = "MAIL" };
+            FormLabel EncEducacao1MailLabel = new FormLabel { Text = "EMAIL" };
             EncEducacao1MailValue = new FormValueEdit(App.member.mail_enc1);
 
+            FormLabel EncEducacao2Label = new FormLabel { Text = "ENCARREGADO DE EDUCAÇÃO 2", FontSize = App.itemTitleFontSize };
 
-            gridMorada.Add(emailLabel, 0, 0);
-			gridMorada.Add(emailValue, 1, 0);
+            FormLabel EncEducacao2NomeLabel = new FormLabel { Text = "NOME" };
+            EncEducacao2NomeValue = new FormValueEdit(App.member.name_enc2);
 
-			gridMorada.Add(phoneLabel, 0, 1);
-			gridMorada.Add(phoneValue, 1, 1);
+            FormLabel EncEducacao2PhoneLabel = new FormLabel { Text = "TELEFONE" };
+            EncEducacao2PhoneValue = new FormValueEdit(App.member.phone_enc2);
 
-            gridMorada.Add(EncEducacao1Label, 0, 2);
+            FormLabel EncEducacao2MailLabel = new FormLabel { Text = "EMAIL" };
+            EncEducacao2MailValue = new FormValueEdit(App.member.mail_enc2);
+
+            gridContactos.Add(emailLabel, 0, 0);
+            gridContactos.Add(emailValue, 1, 0);
+
+            gridContactos.Add(phoneLabel, 0, 1);
+            gridContactos.Add(phoneValue, 1, 1);
+
+            gridContactos.Add(EncEducacao1Label, 0, 2);
             Microsoft.Maui.Controls.Grid.SetColumnSpan(EncEducacao1Label, 2);
 
 
-            gridMorada.Add(EncEducacao1NomeLabel, 0, 3);
-            gridMorada.Add(EncEducacao1NomeValue, 1, 3);
+            gridContactos.Add(EncEducacao1NomeLabel, 0, 3);
+            gridContactos.Add(EncEducacao1NomeValue, 1, 3);
 
-            gridMorada.Add(EncEducacao1PhoneLabel, 0, 4);
-            gridMorada.Add(EncEducacao1PhoneValue, 1, 4);
+            gridContactos.Add(EncEducacao1PhoneLabel, 0, 4);
+            gridContactos.Add(EncEducacao1PhoneValue, 1, 4);
 
-            gridMorada.Add(EncEducacao1MailLabel, 0, 5);
-            gridMorada.Add(EncEducacao1MailValue, 1, 5);
+            gridContactos.Add(EncEducacao1MailLabel, 0, 5);
+            gridContactos.Add(EncEducacao1MailValue, 1, 5);
 
+            gridContactos.Add(EncEducacao2Label, 0, 6);
+            Microsoft.Maui.Controls.Grid.SetColumnSpan(EncEducacao1Label, 6);
+
+            gridContactos.Add(EncEducacao2NomeLabel, 0, 7);
+            gridContactos.Add(EncEducacao2NomeValue, 1, 7);
+
+            gridContactos.Add(EncEducacao2PhoneLabel, 0, 8);
+            gridContactos.Add(EncEducacao2PhoneValue, 1, 8);
+
+            gridContactos.Add(EncEducacao2MailLabel, 0, 9);
+            gridContactos.Add(EncEducacao2MailValue, 1, 9);
 
             /*absoluteLayout.Add(gridMorada,
 				xConstraint: )0),
@@ -808,8 +848,8 @@ namespace SportNow.Views.Profile
 		{
 			Debug.WriteLine("OnGeralButtonClicked");
 			geralButton.activate();
-			identificacaoButton.deactivate();
 			moradaButton.deactivate();
+			contactosButton.deactivate();
 			encEducacaoButton.deactivate();
 
 			scrollView.Content = gridGeral;
@@ -821,30 +861,30 @@ namespace SportNow.Views.Profile
 
         }
 
-		async void OnIdentificacaoButtonClicked(object sender, EventArgs e)
+		async void OnMoradaButtonClicked(object sender, EventArgs e)
 		{
-			Debug.WriteLine("OnIdentificacaoButtonClicked");
+			Debug.WriteLine("OnMoradaButtonClicked");
 			geralButton.deactivate();
-			identificacaoButton.activate();
-			moradaButton.deactivate();
+			moradaButton.activate();
+			contactosButton.deactivate();
 			encEducacaoButton.deactivate();
 
-			scrollView.Content = gridIdentificacao;
+			scrollView.Content = gridMorada;
 
 			await UpdateMemberInfo();
 		}
 
 
-		async void OnMoradaButtonClicked(object sender, EventArgs e)
+		async void OnContactosButtonClicked(object sender, EventArgs e)
 		{
-			Debug.WriteLine("OnMoradaButtonClicked");
+			Debug.WriteLine("OnContactosButtonClicked");
 
 			geralButton.deactivate();
-			identificacaoButton.deactivate();
-			moradaButton.activate();
+			moradaButton.deactivate();
+			contactosButton.activate();
 			encEducacaoButton.deactivate();
 
-			scrollView.Content = gridMorada;
+			scrollView.Content = gridContactos;
 
 			await UpdateMemberInfo();
 		}
@@ -854,8 +894,8 @@ namespace SportNow.Views.Profile
 			Debug.WriteLine("OnEncEducacaoButtonClicked");
 
 			geralButton.deactivate();
-			identificacaoButton.deactivate();
 			moradaButton.deactivate();
+			contactosButton.deactivate();
 			encEducacaoButton.activate();
 
             scrollView.Content = gridFaturacao;
@@ -1050,6 +1090,9 @@ namespace SportNow.Views.Profile
 				App.member.name_enc1 = EncEducacao1NomeValue.entry.Text;
 				App.member.phone_enc1 = EncEducacao1PhoneValue.entry.Text;
 				App.member.mail_enc1 = EncEducacao1MailValue.entry.Text;
+                App.member.name_enc2 = EncEducacao2NomeValue.entry.Text;
+                App.member.phone_enc2 = EncEducacao2PhoneValue.entry.Text;
+                App.member.mail_enc2 = EncEducacao2MailValue.entry.Text;
                 App.member.faturacao_nome = FaturaNomeValue.entry.Text;
                 App.member.faturacao_morada = FaturaMoradaValue.entry.Text;
                 App.member.faturacao_cidade = FaturaCidadeValue.entry.Text;
