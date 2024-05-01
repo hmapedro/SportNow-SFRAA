@@ -23,6 +23,7 @@ namespace SportNow.Model
         public string birthdate { get; set; }
         public DateTime? registrationdate { get; set; }
         public string estado { get; set; }
+        public string documento_identificacao { get; set; }
 
 
         public string nif { get; set; }
