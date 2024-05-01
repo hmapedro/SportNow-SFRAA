@@ -25,10 +25,9 @@ namespace SportNow.Views.CompleteRegistration
 		//private Member member;
 
 
-		FormValue valueQuotaNKS, valueMensalidadeNKS, valueTotal;
-		Picker familiaresPicker;
-		public double valorQuotaNKS, monthFeeValor;
-		string paymentID;
+		FormValue valueQuota, valueTotal;
+		public double valorQuota;
+        string paymentID;
 		Payment payment;
 
 		bool paymentDetected;
@@ -45,9 +44,18 @@ namespace SportNow.Views.CompleteRegistration
 			MemberManager memberManager = new MemberManager();
 			string season = DateTime.Now.ToString("yyyy");
 
-			//TENHO DE METER AQUI VALIDAÇÕES!!!
-			//
-			string feeID = await memberManager.CreateFee(App.original_member.id, App.member.member_type, season);
+
+            Grid gridPayment = new Grid { Padding = 10, RowSpacing = 5 * App.screenHeightAdapter };
+            gridPayment.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            gridPayment.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            gridPayment.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            gridPayment.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            gridPayment.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            gridPayment.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+
+            //TENHO DE METER AQUI VALIDAÇÕES!!!
+            //
+            /*string feeID = await memberManager.CreateFee(App.original_member.id, App.member.member_type, season);
 
             List<Payment> payments = await memberManager.GetFeePayment(feeID);
 			Payment payment = payments[0];
@@ -91,48 +99,19 @@ namespace SportNow.Views.CompleteRegistration
                 Debug.Print("monthFeeValor = " + monthFeeValor);
             }
 
-            int y_index = CreateHeader();
-			y_index = y_index + 10;
+            */
+			
+			Label labelQuota = new Label { FontFamily = "futuracondensedmedium", BackgroundColor = Colors.Transparent, VerticalTextAlignment = TextAlignment.Center, HorizontalTextAlignment = TextAlignment.Start, FontSize = App.titleFontSize, TextColor = App.normalTextColor, LineBreakMode = LineBreakMode.WordWrap };
+            labelQuota.Text = "Quota Sócio";
 
-			Label labelQuotaNKS = new Label { FontFamily = "futuracondensedmedium", BackgroundColor = Colors.Transparent, VerticalTextAlignment = TextAlignment.Center, HorizontalTextAlignment = TextAlignment.Start, FontSize = App.titleFontSize, TextColor = App.normalTextColor, LineBreakMode = LineBreakMode.WordWrap };
-            labelQuotaNKS.Text = "Quota Sócio";
-            absoluteLayout.Add(labelQuotaNKS);
-            absoluteLayout.SetLayoutBounds(labelQuotaNKS, new Rect(20 * App.screenWidthAdapter, y_index * App.screenHeightAdapter, App.screenWidth - 120 * App.screenWidthAdapter, 30 * App.screenHeightAdapter));
-
-            valueQuotaNKS = new FormValue(valorQuotaNKS.ToString("0.00") + "€", App.titleFontSize, Colors.White, App.normalTextColor, TextAlignment.End);
+            valueQuota = new FormValue(valorQuota.ToString("0.00") + "€", App.titleFontSize, Colors.White, App.normalTextColor, TextAlignment.End);
             //valueQuotaADCPN.Text = calculateQuotaADCPN();
-            absoluteLayout.Add(valueQuotaNKS);
-            absoluteLayout.SetLayoutBounds(valueQuotaNKS, new Rect(App.screenWidth - 80 * App.screenWidthAdapter, y_index * App.screenHeightAdapter, 70 * App.screenWidthAdapter, 30 * App.screenHeightAdapter));
-
-			y_index = y_index + 35;
-
-            if (App.member.member_type == "praticante")
-            {
-                Label labelMensalidadeNKS = new Label { FontFamily = "futuracondensedmedium", BackgroundColor = Colors.Transparent, VerticalTextAlignment = TextAlignment.Center, HorizontalTextAlignment = TextAlignment.Start, FontSize = App.titleFontSize, TextColor = App.normalTextColor, LineBreakMode = LineBreakMode.WordWrap };
-                labelMensalidadeNKS.Text = "Mensalidade";
-                absoluteLayout.Add(labelMensalidadeNKS);
-                absoluteLayout.SetLayoutBounds(labelMensalidadeNKS, new Rect(20 * App.screenWidthAdapter, y_index * App.screenHeightAdapter, App.screenWidth - 120 * App.screenWidthAdapter, 30 * App.screenHeightAdapter));
-
-                valueMensalidadeNKS = new FormValue(monthFeeValor.ToString("0.00") + "€", App.titleFontSize, App.backgroundColor, App.normalTextColor, TextAlignment.End);
-				absoluteLayout.Add(valueMensalidadeNKS);
-				absoluteLayout.SetLayoutBounds(valueMensalidadeNKS, new Rect(App.screenWidth - 80 * App.screenWidthAdapter, y_index * App.screenHeightAdapter, 70 * App.screenWidthAdapter, 30 * App.screenHeightAdapter));
-			}
-
-			y_index = y_index + 45;
 
             hideActivityIndicator();
             Label labelTotal = new Label { FontFamily = "futuracondensedmedium", BackgroundColor = Colors.Transparent, VerticalTextAlignment = TextAlignment.Center, HorizontalTextAlignment = TextAlignment.Start, FontSize = App.titleFontSize, TextColor = App.normalTextColor, LineBreakMode = LineBreakMode.WordWrap };
 			labelTotal.Text = "TOTAL";
-            absoluteLayout.Add(labelTotal);
-            absoluteLayout.SetLayoutBounds(labelTotal, new Rect(20 * App.screenWidthAdapter, y_index * App.screenHeightAdapter, App.screenWidth - 120 * App.screenWidthAdapter, 30 * App.screenHeightAdapter));
-
 
 			valueTotal = new FormValue(calculateTotal(0).ToString("0.00") + "€", App.titleFontSize, App.backgroundColor, App.topColor, TextAlignment.End);
-
-            absoluteLayout.Add(valueTotal);
-            absoluteLayout.SetLayoutBounds(valueTotal, new Rect(App.screenWidth - 80 * App.screenWidthAdapter, y_index * App.screenHeightAdapter, 70 * App.screenWidthAdapter, 40 * App.screenHeightAdapter));
-
-            y_index = y_index + 50;
 
             Label selectPaymentModeLabel = new Label
 			{
@@ -145,11 +124,6 @@ namespace SportNow.Views.CompleteRegistration
                 FontFamily = "futuracondensedmedium",
             };
 
-            absoluteLayout.Add(selectPaymentModeLabel);
-            absoluteLayout.SetLayoutBounds(selectPaymentModeLabel, new Rect(20 * App.screenWidthAdapter, y_index * App.screenHeightAdapter, App.screenWidth - 20 * App.screenWidthAdapter, 40 * App.screenHeightAdapter));
-
-			y_index = y_index + 30;
-
 			Image MBLogoImage = new Image
 			{
 				Source = "logomultibanco.png",
@@ -160,24 +134,6 @@ namespace SportNow.Views.CompleteRegistration
 			var tapGestureRecognizerMB = new TapGestureRecognizer();
 			tapGestureRecognizerMB.Tapped += OnMBButtonClicked;
 			MBLogoImage.GestureRecognizers.Add(tapGestureRecognizerMB);
-
-
-            Label TermsPaymentMBLabel = new Label
-            {
-                FontFamily = "futuracondensedmedium",
-                Text = "Ao valor da Quota é acrescido 1.7% e 0.22€ (+ IVA).", // \n Total a pagar:" + CalculateMBPayment(monthFeeValue) + "€",
-                VerticalTextAlignment = TextAlignment.Center,
-                HorizontalTextAlignment = TextAlignment.Center,
-                TextColor = App.normalTextColor,
-                FontSize = App.formLabelFontSize
-            };
-
-            absoluteLayout.Add(MBLogoImage);
-            absoluteLayout.SetLayoutBounds(MBLogoImage, new Rect(40 * App.screenWidthAdapter, y_index * App.screenHeightAdapter, 102 * App.screenHeightAdapter, 120 * App.screenHeightAdapter));
-            absoluteLayout.Add(TermsPaymentMBLabel);
-            absoluteLayout.SetLayoutBounds(TermsPaymentMBLabel, new Rect(0, 210 * App.screenHeightAdapter, App.screenWidth - 20 * App.screenHeightAdapter, 115 * App.screenHeightAdapter));
-
-
 
             Image MBWayLogoImage = new Image
 			{
@@ -191,21 +147,19 @@ namespace SportNow.Views.CompleteRegistration
 			tapGestureRecognizerMBWay.Tapped += OnMBWayButtonClicked;
 			MBWayLogoImage.GestureRecognizers.Add(tapGestureRecognizerMBWay);
 
-            Label TermsPaymentMBWayLabel = new Label
-            {
-                FontFamily = "futuracondensedmedium",
-                Text = "Ao valor da Quota é acrescido 0.7% e 0.07€ (+ IVA).",
-                VerticalTextAlignment = TextAlignment.Center,
-                HorizontalTextAlignment = TextAlignment.Center,
-                TextColor = App.normalTextColor,
-                FontSize = App.formLabelFontSize
-            };
+            gridPayment.Add(labelQuota, 0, 0);
+            gridPayment.Add(valueQuota, 1, 0);
 
-            absoluteLayout.Add(MBWayLogoImage);
-            absoluteLayout.SetLayoutBounds(MBWayLogoImage, new Rect(App.screenWidth - 142 * App.screenWidthAdapter, y_index * App.screenHeightAdapter, 102 * App.screenHeightAdapter, 120 * App.screenHeightAdapter));
-            absoluteLayout.Add(TermsPaymentMBWayLabel);
-            absoluteLayout.SetLayoutBounds(TermsPaymentMBWayLabel, new Rect(0, 380 * App.screenHeightAdapter, App.screenWidth - 20 * App.screenHeightAdapter, 115 * App.screenHeightAdapter));
+            gridPayment.Add(labelTotal, 0, 1);
+            gridPayment.Add(valueTotal, 1, 1);
 
+            gridPayment.Add(selectPaymentModeLabel, 0, 2);
+            Grid.SetColumnSpan(selectPaymentModeLabel, 2);
+
+            gridPayment.Add(MBLogoImage, 0, 3);
+            gridPayment.Add(MBWayLogoImage, 1, 3);
+
+			this.Content = gridPayment;
         }
 
 
@@ -328,7 +282,7 @@ namespace SportNow.Views.CompleteRegistration
 
 		public double calculateTotal(double desconto)
 		{
-			return valorQuotaNKS + monthFeeValor;
+			return valorQuota;
 			//return calculateQuotaADCPN() + calculateFiliacaoFPG() + calculateSeguroFPG() + calculateMensalidade();
 		}
 

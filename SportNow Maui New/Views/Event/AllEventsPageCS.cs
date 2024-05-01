@@ -244,12 +244,11 @@ namespace SportNow.Views
 
 		public void CreateStackButtons()
 		{
-
 			Debug.Print("AllEventsPageCS - CreateStackButtons");
-            var buttonWidth = (App.screenWidth - 15 * App.screenWidthAdapter) / 4;
+            var buttonWidth = (App.screenWidth - 5 * App.screenWidthAdapter) / 2;
 
 
-            proximosEstagiosButton = new MenuButton("ESTÁGIOS", buttonWidth, 60);
+            proximosEstagiosButton = new MenuButton("ESPECTÁCULOS", buttonWidth, 60);
 			proximosEstagiosButton.button.Clicked += OnProximosEstagiosButtonClicked;
 
 
@@ -275,8 +274,8 @@ namespace SportNow.Views
 				Children =
 				{
 					proximosEstagiosButton,
-					proximasCompeticoesButton,
-					proximasSessoesExameButton,
+					//proximasCompeticoesButton,
+					//proximasSessoesExameButton,
 					proximosOutrosEventosButton
 				}
 			};

@@ -280,11 +280,11 @@ namespace SportNow.Views
         public async Task<int> createTabs()
         {
             Children.RemoveAt(0);
-            Children.Add(new DoPageCS() { Title = "HISTÓRICO", IconImageSource = "icondo.png" });
-            Children.Add(new AttendanceOptionsPageCS() { Title = "AULAS", IconImageSource = "presencasicon.png" });
+            Children.Add(new DoPageCS() { Title = "SERVIÇOS", IconImageSource = "icondo.png" });
+            Children.Add(new AttendanceOptionsPageCS() { Title = "MODALIDADES", IconImageSource = "presencasicon.png" });
             Children.Add(new MainPageCS() { Title = "PRINCIPAL", IconImageSource = "iconlogo.png" });
             Children.Add(new AllEventsPageCS() { Title = "EVENTOS", IconImageSource = "eventos.png" });
-            Children.Add(new EquipamentTypePageCS() { Title = "EQUIPAMENTOS", IconImageSource = "kimono.png" });
+            Children.Add(new EquipamentTypePageCS() { Title = "LOJA", IconImageSource = "kimono.png" });
             CurrentPage = Children[2];
             Title = "PRINCIPAL";
             CurrentPageChanged += CurrentPageHasChanged;

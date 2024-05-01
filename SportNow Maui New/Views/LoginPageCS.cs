@@ -2,11 +2,9 @@
 using SportNow.Model;
 using SportNow.Services.Data.JSON;
 using SportNow.CustomViews;
-using Plugin.DeviceOrientation;
-using Plugin.DeviceOrientation.Abstractions;
 using SportNow.Views.Profile;
 
-using Microsoft.Maui.Controls;
+
 using SportNow.Views.CompleteRegistration;
 
 namespace SportNow.Views
@@ -50,7 +48,7 @@ namespace SportNow.Views
 			gridLogin.RowDefinitions.Add(new RowDefinition { Height = 50 * App.screenHeightAdapter });
 			gridLogin.RowDefinitions.Add(new RowDefinition { Height = 60 * App.screenHeightAdapter });
 			gridLogin.RowDefinitions.Add(new RowDefinition { Height = 60 * App.screenHeightAdapter });
-            //gridLogin.RowDefinitions.Add(new RowDefinition { Height = 60 });
+            gridLogin.RowDefinitions.Add(new RowDefinition { Height = 60 * App.screenHeightAdapter });
             //gridLogin.RowDefinitions.Add(new RowDefinition { Height = GridLength.Star });
             gridLogin.ColumnDefinitions.Add(new ColumnDefinition { Width = App.screenWidth - 20 * App.screenWidthAdapter}); //GridLength.Auto 
 
@@ -172,7 +170,7 @@ namespace SportNow.Views
             var newMemberLabel_tap = new TapGestureRecognizer();
             newMemberLabel_tap.Tapped += (s, e) =>
             {
-                Navigation.PushAsync(new ConsentPageCS());
+                Navigation.PushAsync(new BeginPageCS());
             };
             newMemberLabel.GestureRecognizers.Add(newMemberLabel_tap);
 
@@ -183,7 +181,7 @@ namespace SportNow.Views
 			gridLogin.Add(passwordEntry, 0, 4);
 			gridLogin.Add(loginButton, 0, 5);
 			gridLogin.Add(recoverPasswordLabel, 0, 6);
-            //gridLogin.Add(newMemberLabel, 0, 7);
+            gridLogin.Add(newMemberLabel, 0, 7);
 
             absoluteLayout.Add(gridLogin);
             absoluteLayout.SetLayoutBounds(gridLogin, new Rect(0, 0, App.screenWidth - 10 * App.screenWidthAdapter, App.screenHeight));

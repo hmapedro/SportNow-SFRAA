@@ -857,7 +857,6 @@ namespace SportNow.Views
             {
 
                 bool answer = await DisplayAlert("A TUA QUOTA NÃO ESTÁ ATIVA.", "A tua quota para este ano não está ativa. Queres efetuar o pagamento?", "Sim", "Não");
-                Debug.WriteLine("Answer: " + answer);
 				if (answer == true)
 				{
                     await Navigation.PushAsync(new QuotasPageCS());
@@ -887,11 +886,7 @@ namespace SportNow.Views
 
         public async void createDelayedMonthFee()
         {
-
-
-            bool answer = await DisplayAlert("A TUA QUOTA NÃO ESTÁ ATIVA.", "A tua quota para este ano não está ativa. Queres efetuar o pagamento?", "Sim", "Não");
-            Debug.WriteLine("Answer: " + answer);
-                
+            bool answer = await DisplayAlert("A TUA QUOTA NÃO ESTÁ ATIVA.", "A tua quota para este ano não está ativa. Queres efetuar o pagamento?", "Sim", "Não");       
         }
 
         public async void createVersion()

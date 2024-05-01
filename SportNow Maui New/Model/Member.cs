@@ -92,6 +92,8 @@ namespace SportNow.Model
 
         public List<Objective> objectives { get; set; }
 
+        public bool wasCreated { get; set; }
+
         public override string ToString()
             {
                 return name;

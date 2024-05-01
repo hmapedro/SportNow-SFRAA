@@ -355,6 +355,7 @@ namespace SportNow.Views.Profile
             geralButton = new MenuButton("GERAL", buttonWidth, 60);
 			geralButton.button.Clicked += OnGeralButtonClicked;
 			moradaButton = new MenuButton("MORADA",buttonWidth, 60);
+
 			moradaButton.button.Clicked += OnMoradaButtonClicked;
             encEducacaoButton = new MenuButton("ENC.EDUCAÇÃO", buttonWidth, 60);
             encEducacaoButton.button.Clicked += OnEncEducacaoButtonClicked;

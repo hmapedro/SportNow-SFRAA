@@ -60,7 +60,7 @@ namespace SportNow.Views.CompleteRegistration
             scrollView.Content = gridConsent;
             gridConsent.RowDefinitions.Add(new RowDefinition { Height = GridLength.Star });
             gridConsent.RowDefinitions.Add(new RowDefinition { Height = 100 * App.screenHeightAdapter });
-            gridConsent.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            gridConsent.RowDefinitions.Add(new RowDefinition { Height = GridLength.Star });
             gridConsent.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             gridConsent.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto }); //GridLength.Auto 
             gridConsent.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star }); //GridLength.Auto 
@@ -84,27 +84,17 @@ namespace SportNow.Views.CompleteRegistration
             };
             rgpdLabel.GestureRecognizers.Add(rgpdLabel_tap);
 
-
-            Label labelConfirm = new Label { FontFamily = "futuracondensedmedium", BackgroundColor = Colors.Transparent, VerticalTextAlignment = TextAlignment.Center, HorizontalTextAlignment = TextAlignment.Start, FontSize = App.consentFontSize, TextColor = App.normalTextColor, LineBreakMode = LineBreakMode.WordWrap };
-            labelConfirm.Text = "CONFIRMO QUE ACEITO A POLÍTICA DE TRATAMENTO DE DADOS.";
-
-
-            checkboxConfirm = new CheckBox { Color = App.topColor, HorizontalOptions = LayoutOptions.Start};
-
             gridConsent.Add(labelRegulamentoInterno, 0, 0);
             Grid.SetColumnSpan(labelRegulamentoInterno, 2);
 
             gridConsent.Add(rgpdLabel, 0, 1);
             Grid.SetColumnSpan(rgpdLabel, 2);
 
-            gridConsent.Add(checkboxConfirm, 0, 2);
-			gridConsent.Add(labelConfirm, 1, 2);
+            RoundButton closeButton = new RoundButton("FECHAR", App.screenWidth - 20 * App.screenWidthAdapter, 50 * App.screenHeightAdapter);
+            closeButton.button.Clicked += closeConsentButtonClicked;
 
-            RoundButton confirmButton = new RoundButton("CONFIRMAR", App.screenWidth - 20 * App.screenWidthAdapter, 50 * App.screenHeightAdapter);
-			confirmButton.button.Clicked += confirmConsentButtonClicked;
-
-			gridConsent.Add(confirmButton, 0, 3);
-            Microsoft.Maui.Controls.Grid.SetColumnSpan(confirmButton, 2);
+			gridConsent.Add(closeButton, 0, 3);
+            Microsoft.Maui.Controls.Grid.SetColumnSpan(closeButton, 2);
 
             /*absoluteLayout.Add(confirmButton);
             absoluteLayout.SetLayoutBounds(confirmButton, new Rect(10 * App.screenWidthAdapter, App.screenHeight - 160 * App.screenHeightAdapter, App.screenWidth - 20 * App.screenWidthAdapter, 50 * App.screenHeightAdapter));
@@ -118,22 +108,9 @@ namespace SportNow.Views.CompleteRegistration
             this.initSpecificLayout();
         }
 
-		async void confirmConsentButtonClicked(object sender, EventArgs e)
+		async void closeConsentButtonClicked(object sender, EventArgs e)
 		{
-
-            if (checkboxConfirm.IsChecked == false)
-			{
-                await DisplayAlert("Confirmação necessária", "Para prosseguir é necessário confirmar que aceitas as condições expostas.", "OK");
-				return;
-            }
-            //SAVE CONSENTIMENTOS!!!!!
-            showActivityIndicator();
-			MemberManager memberManager = new MemberManager();
-			//App.member = new Member();
-			App.member.consentimento_regulamento = "1";// Convert.ToInt32(checkBoxRegulamentoInterno.IsChecked).ToString();				
-            //var result = await memberManager.Update_Member_Authorizations(App.member.id, App.member.consentimento_regulamento);
-            hideActivityIndicator();
-            await Navigation.PushAsync(new DocumentsPageCS());
+            await Navigation.PopAsync();
         }
 	}
 
