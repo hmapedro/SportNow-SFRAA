@@ -1,7 +1,7 @@
 ﻿
 using SportNow.CustomViews;
 
-namespace SportNow.Views.Profile
+namespace SportNow.Views.CompleteRegistration
 {
     public class NewMemberSuccessPageCS : DefaultPage
 	{
@@ -42,47 +42,26 @@ namespace SportNow.Views.Profile
 				initBaseLayout();
 			}
 
-			/*Frame backgroundFrame= new Frame
-			{
-				CornerRadius = 10,
-				IsClippedToBounds = true,
-				BackgroundColor = Color.FromRgb(60,60,60),
-				HasShadow = false
-			};
-
-			absoluteLayout.Add(backgroundFrame,
-				xConstraint: )10 * App.screenHeightAdapter),
-				yConstraint: )0 * App.screenHeightAdapter),
-				widthConstraint: Constraint.RelativeToParent((parent) =>
-				{
-					return ((parent.Width) - (20 * App.screenHeightAdapter));
-				}),
-				heightConstraint: Constraint.RelativeToParent((parent) =>
-				{
-					return ((parent.Height) - (90 * App.screenHeightAdapter));
-				})
-			);*/
-
-			Label labelSucesso = new Label { BackgroundColor = Colors.Transparent, VerticalTextAlignment = TextAlignment.Start, HorizontalTextAlignment = TextAlignment.Center, FontSize = App.bigTitleFontSize, TextColor = App.normalTextColor, LineBreakMode = LineBreakMode.WordWrap };
-			labelSucesso.Text = "OBRIGADO " + App.member.name.Split(' ')[0].ToUpper() + "!\n\n O teu treinador será avisado que concluíste o processo de registo e logo que ele aprove a tua inscrição poderás começar a utilizar a nossa App.";
+			Label labelSucesso = new Label { FontFamily = "futuracondensedmedium", BackgroundColor = Colors.Transparent, VerticalTextAlignment = TextAlignment.Start, HorizontalTextAlignment = TextAlignment.Center, FontSize = App.bigTitleFontSize, TextColor = App.normalTextColor, LineBreakMode = LineBreakMode.WordWrap };
+			labelSucesso.Text = "OBRIGADO " + App.member.name.Split(' ')[0].ToUpper() + "!\n\n O seu processo de inscrição foi concluído com sucesso pelo que poderá começar a utilizar a nossa Aplicação.";
 			absoluteLayout.Add(labelSucesso);
 			absoluteLayout.SetLayoutBounds(labelSucesso, new Rect(30 * App.screenHeightAdapter, 40 * App.screenHeightAdapter, App.screenWidth - 60 * App.screenWidthAdapter, 300 * App.screenHeightAdapter));
 
 
 			Image logo_ippon = new Image
 			{
-				Source = "logo_aksl_round.png",
+				Source = "company_logo.png",
 				HorizontalOptions = LayoutOptions.Center,
 				HeightRequest = 224 * App.screenHeightAdapter
 			};
 			absoluteLayout.Add(logo_ippon);
 			absoluteLayout.SetLayoutBounds(logo_ippon, new Rect(30 * App.screenHeightAdapter, 350 * App.screenHeightAdapter, App.screenWidth - 60 * App.screenWidthAdapter, 224 * App.screenHeightAdapter));
 
-			RoundButton confirmButton = new RoundButton("VOLTAR AO LOGIN", 100, 50);
+			RoundButton confirmButton = new RoundButton("VOLTAR AO LOGIN", App.screenWidth - 20 * App.screenWidthAdapter, 50 * App.screenHeightAdapter);
 			confirmButton.button.Clicked += confirmConsentButtonClicked;
 
 			absoluteLayout.Add(confirmButton);
-			absoluteLayout.SetLayoutBounds(confirmButton, new Rect(10 * App.screenHeightAdapter, App.screenHeight - 60 * App.screenHeightAdapter, App.screenWidth - 20 * App.screenWidthAdapter, 50 * App.screenHeightAdapter));
+			absoluteLayout.SetLayoutBounds(confirmButton, new Rect(10 * App.screenHeightAdapter, App.screenHeight - 100 - 60 * App.screenHeightAdapter, App.screenWidth - 20 * App.screenWidthAdapter, 50 * App.screenHeightAdapter));
 
         }
 
@@ -94,7 +73,7 @@ namespace SportNow.Views.Profile
 
 		async void confirmConsentButtonClicked(object sender, EventArgs e)
 		{
-            Application.Current.MainPage = new NavigationPage(new LoginPageCS("Aguarda que o treinador aprove a tua inscrição."))
+            Application.Current.MainPage = new NavigationPage(new LoginPageCS(""))
             {
                 BarBackgroundColor = App.backgroundColor,
                 BarTextColor = App.normalTextColor

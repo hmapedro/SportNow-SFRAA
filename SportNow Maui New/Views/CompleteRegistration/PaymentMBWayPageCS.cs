@@ -35,7 +35,7 @@ namespace SportNow.Views.CompleteRegistration
 		public async void initSpecificLayout()
 		{
 
-			payment = await GetPayment(this.paymentID);
+			//payment = await GetPayment(this.paymentID);
 
 			createLayoutPhoneNumber();
 			/*
@@ -120,27 +120,15 @@ namespace SportNow.Views.CompleteRegistration
             absoluteLayout.Add(payButton);
             absoluteLayout.SetLayoutBounds(payButton, new Rect(10 * App.screenWidthAdapter, (App.screenHeight) - (160 * App.screenHeightAdapter), (App.screenWidth - 20 * App.screenHeightAdapter), 50 * App.screenHeightAdapter));
 
-            Label Label = new Label
-            {
-                FontFamily = "futuracondensedmedium",
-                Text = "O valor total desta transação incluiu uma taxa de 0.7% e 0.07€ (+ IVA).",
-                VerticalTextAlignment = TextAlignment.Center,
-                HorizontalTextAlignment = TextAlignment.Start,
-                TextColor = App.normalTextColor,
-                FontSize = App.titleFontSize
-            };
-
-            absoluteLayout.Add(Label);
-            absoluteLayout.SetLayoutBounds(Label, new Rect(22, -10 * App.screenHeightAdapter, App.screenWidth, App.screenHeight - 10 * App.screenHeightAdapter));
 
 
         }
 
 
-        public PaymentMBWayPageCS(string paymentID)
+        public PaymentMBWayPageCS(Payment payment)
 		{
 			//App.event_participation = event_participation;
-			this.paymentID = paymentID;
+			this.payment = payment;
 			this.initLayout();
 			this.initSpecificLayout();
 
@@ -149,9 +137,9 @@ namespace SportNow.Views.CompleteRegistration
             int sleepTime = 5;
             Device.StartTimer(TimeSpan.FromSeconds(sleepTime), () =>
             {
-                if ((paymentID != null) & (paymentID != ""))
+                if (payment != null)
                 {
-                    this.checkPaymentStatus(paymentID);
+                    this.checkPaymentStatus();
                     if (paymentDetected == false)
                     {
                         return true;
@@ -165,10 +153,10 @@ namespace SportNow.Views.CompleteRegistration
             });
         }
 
-        async void checkPaymentStatus(string paymentID)
+        async void checkPaymentStatus()
         {
             Debug.Print("checkPaymentStatus");
-            this.payment = await GetPayment(paymentID);
+            this.payment = await GetPayment(payment.id);
             if ((payment.status == "confirmado") | (payment.status == "fechado") | (payment.status == "recebido"))
             {
                 App.member.estado = "activo";

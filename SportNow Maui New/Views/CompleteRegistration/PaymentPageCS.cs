@@ -25,8 +25,11 @@ namespace SportNow.Views.CompleteRegistration
 		//private Member member;
 
 
-		FormValue valueQuota, valueTotal;
-		public double valorQuota;
+		FormValue valueJoia, valueCartao, valueQuota, valueTotal;
+        Fee fee_joia, fee_cartao, fee_quota;
+        FormValueEditPicker quotaPeriodPickerValue;
+        public double valorQuota;
+
         string paymentID;
 		Payment payment;
 
@@ -44,10 +47,19 @@ namespace SportNow.Views.CompleteRegistration
 			MemberManager memberManager = new MemberManager();
 			string season = DateTime.Now.ToString("yyyy");
 
+            Grid gridPayment = new Grid { Padding = 10, RowSpacing = 5 * App.screenHeightAdapter, ColumnSpacing = 5 * App.screenWidthAdapter };
 
-            Grid gridPayment = new Grid { Padding = 10, RowSpacing = 5 * App.screenHeightAdapter };
             gridPayment.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             gridPayment.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            gridPayment.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            gridPayment.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            gridPayment.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            gridPayment.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+            gridPayment.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            gridPayment.ColumnDefinitions.Add(new ColumnDefinition { Width = 100 * App.screenWidthAdapter });
+
+
+            Grid gridPaymentOptions = new Grid { Padding = 10, RowSpacing = 50 * App.screenHeightAdapter };
             gridPayment.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             gridPayment.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             gridPayment.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
@@ -55,59 +67,86 @@ namespace SportNow.Views.CompleteRegistration
 
             //TENHO DE METER AQUI VALIDAÇÕES!!!
             //
-            /*string feeID = await memberManager.CreateFee(App.original_member.id, App.member.member_type, season);
+            string paymentID = await memberManager.CreateAllFees(App.original_member.id, App.member.id, App.member.name, "3");
 
-            List<Payment> payments = await memberManager.GetFeePayment(feeID);
-			Payment payment = payments[0];
-            paymentID = payment.id;
-
+            
             PaymentManager paymentManager = new PaymentManager();
-            _ = await paymentManager.Update_Payment(paymentID, App.member.id, App.member.dojoid, "Inscrição - "+App.member.name);
+            payment = await paymentManager.GetPayment(paymentID);
+            List<Fee> fees = await paymentManager.GetPaymentFees(paymentID);
+            hideActivityIndicator();
 
+            fee_joia = null;
+			fee_cartao = null;
+			fee_quota = null;
 
-            string year = DateTime.Now.Year.ToString();
-			string month = "";
-			if (DateTime.Now.Month == 8)
+            foreach (Fee fee in fees)
 			{
-				month = "9";
-			}
-			else
-			{
-				month = DateTime.Now.Month.ToString();
-			}
+				if (fee.tipo == "joia")
+				{
+					fee_joia = fee;
 
-			List<Fee> allFees = await memberManager.GetFees(App.member.id, season);
-			Fee fee = allFees[0];
-			valorQuotaNKS = fee.valor;
-			Debug.Print("fee.valor = " + fee.valor);
-
-            monthFeeValor = 0;
-
-            if (App.member.member_type == "praticante")
-            {
-                MonthFeeManager monthFeeManager = new MonthFeeManager();
-                string monthFeeID = "";
-
-                monthFeeID = await monthFeeManager.CreateMonthFee(App.original_member.id, App.member.id, App.member.name, year, month, "emitida", paymentID, "0");
-                //valor_mensalidade = calculateMensalidade(0).ToString("0.00").Replace(",", ".");
-                //await monthFeeManager.Update_MonthFee_Value_byID(monthFeeID, valor_mensalidade);
-                MonthFee monthFee = await monthFeeManager.GetMonthFeebyId(monthFeeID);
-
-                monthFeeValor = double.Parse(monthFee.value, System.Globalization.CultureInfo.InvariantCulture);
-
-                Debug.Print("monthFee.value = " + monthFee.value);
-                Debug.Print("monthFeeValor = " + monthFeeValor);
+                }
+                else if (fee.tipo == "cartao")
+				{
+					fee_cartao = fee;
+				}
+                else if (fee.tipo == "quota")
+                {
+					fee_quota = fee;
+                }
             }
 
-            */
+            paymentID = payment.id;
+
+            Label labelJoia = new Label { FontFamily = "futuracondensedmedium", BackgroundColor = Colors.Transparent, VerticalTextAlignment = TextAlignment.Center, HorizontalTextAlignment = TextAlignment.Start, FontSize = App.titleFontSize, TextColor = App.normalTextColor, LineBreakMode = LineBreakMode.WordWrap };
+            labelJoia.Text = "Jóia";
 			
-			Label labelQuota = new Label { FontFamily = "futuracondensedmedium", BackgroundColor = Colors.Transparent, VerticalTextAlignment = TextAlignment.Center, HorizontalTextAlignment = TextAlignment.Start, FontSize = App.titleFontSize, TextColor = App.normalTextColor, LineBreakMode = LineBreakMode.WordWrap };
-            labelQuota.Text = "Quota Sócio";
+            valueJoia = new FormValue(String.Format("{0:0.00}", fee_joia.valor) + "€", App.titleFontSize, Colors.White, App.normalTextColor, TextAlignment.End);;
 
-            valueQuota = new FormValue(valorQuota.ToString("0.00") + "€", App.titleFontSize, Colors.White, App.normalTextColor, TextAlignment.End);
-            //valueQuotaADCPN.Text = calculateQuotaADCPN();
+            Label labelCartao = new Label { FontFamily = "futuracondensedmedium", BackgroundColor = Colors.Transparent, VerticalTextAlignment = TextAlignment.Center, HorizontalTextAlignment = TextAlignment.Start, FontSize = App.titleFontSize, TextColor = App.normalTextColor, LineBreakMode = LineBreakMode.WordWrap };
+            labelCartao.Text = "Cartão de Sócio";
 
-            hideActivityIndicator();
+            valueCartao = new FormValue(String.Format("{0:0.00}", fee_cartao.valor) + "€", App.titleFontSize, Colors.White, App.normalTextColor, TextAlignment.End);
+
+            Label labelQuotas = new Label { FontFamily = "futuracondensedmedium", BackgroundColor = Colors.Transparent, VerticalTextAlignment = TextAlignment.Center, HorizontalTextAlignment = TextAlignment.Start, FontSize = App.titleFontSize, TextColor = App.normalTextColor, LineBreakMode = LineBreakMode.WordWrap };
+            labelQuotas.Text = "Quotas de Sócio";
+
+            string quotaPeriodtring = "";
+            List<string> quotaPeriodList = new List<string>();
+            foreach (KeyValuePair<string, string> entry in Constants.quotaPeriod)
+            {
+                quotaPeriodList.Add(entry.Value);
+                /*if ( == entry.Key)
+                {
+                    quotaPeriodtring = entry.Value;
+                }*/
+            }
+            quotaPeriodPickerValue = new FormValueEditPicker(quotaPeriodtring, quotaPeriodList);
+
+            quotaPeriodPickerValue.picker.SelectedIndexChanged += async (object sender, EventArgs e) =>
+            {
+				quotaPeriodPickerValue.picker.Unfocus();
+                showActivityIndicator();
+				string durationText = quotaPeriodPickerValue.picker.SelectedItem.ToString();
+				string[] durationArray = durationText.Split();
+                string durationNumber = durationArray[0];
+
+				string res = await memberManager.UpdateFeeDuration(fee_quota.id, paymentID, durationNumber);
+				fee_quota = await memberManager.GetFee(fee_quota.id);
+                payment = await paymentManager.GetPayment(paymentID);
+
+				Debug.Print("Aqui payment.value = "+payment.value);
+
+                valueQuota.label.Text = String.Format("{0:0.00}", fee_quota.valor) + "€";
+
+                valueTotal.label.Text = calculateTotal(0).ToString("0.00") + "€";
+                hideActivityIndicator();
+
+            };
+
+            valueQuota = new FormValue(String.Format("{0:0.00}", fee_quota.valor) + "€", App.titleFontSize, Colors.White, App.normalTextColor, TextAlignment.End);
+            //valueQuota.label.Text = "fee_cartao.valor;
+
             Label labelTotal = new Label { FontFamily = "futuracondensedmedium", BackgroundColor = Colors.Transparent, VerticalTextAlignment = TextAlignment.Center, HorizontalTextAlignment = TextAlignment.Start, FontSize = App.titleFontSize, TextColor = App.normalTextColor, LineBreakMode = LineBreakMode.WordWrap };
 			labelTotal.Text = "TOTAL";
 
@@ -120,7 +159,7 @@ namespace SportNow.Views.CompleteRegistration
 				HorizontalTextAlignment = TextAlignment.Center,
 				TextColor = App.normalTextColor,
 				//LineBreakMode = LineBreakMode.NoWrap,
-				FontSize = App.titleFontSize,
+				FontSize = App.bigTitleFontSize,
                 FontFamily = "futuracondensedmedium",
             };
 
@@ -147,19 +186,34 @@ namespace SportNow.Views.CompleteRegistration
 			tapGestureRecognizerMBWay.Tapped += OnMBWayButtonClicked;
 			MBWayLogoImage.GestureRecognizers.Add(tapGestureRecognizerMBWay);
 
-            gridPayment.Add(labelQuota, 0, 0);
-            gridPayment.Add(valueQuota, 1, 0);
+            gridPayment.Add(labelJoia, 0, 0);
+            gridPayment.Add(valueJoia, 2, 0);
+            Grid.SetColumnSpan(labelJoia, 2);
 
-            gridPayment.Add(labelTotal, 0, 1);
-            gridPayment.Add(valueTotal, 1, 1);
+            gridPayment.Add(labelCartao, 0, 1);
+            gridPayment.Add(valueCartao, 2, 1);
+            Grid.SetColumnSpan(labelCartao, 2);
 
-            gridPayment.Add(selectPaymentModeLabel, 0, 2);
+            gridPayment.Add(labelQuotas, 0, 2);
+            gridPayment.Add(quotaPeriodPickerValue, 1, 2);
+            gridPayment.Add(valueQuota, 2, 2);
+
+            gridPayment.Add(labelTotal, 0, 3);
+            gridPayment.Add(valueTotal, 2, 3);
+            Grid.SetColumnSpan(labelCartao, 2);
+
+            gridPaymentOptions.Add(selectPaymentModeLabel, 0, 0);
             Grid.SetColumnSpan(selectPaymentModeLabel, 2);
 
-            gridPayment.Add(MBLogoImage, 0, 3);
-            gridPayment.Add(MBWayLogoImage, 1, 3);
+            gridPaymentOptions.Add(MBLogoImage, 0, 1);
+            gridPaymentOptions.Add(MBWayLogoImage, 1, 1);
 
-			this.Content = gridPayment;
+            gridPayment.Add(gridPaymentOptions, 0, 4);
+            Grid.SetColumnSpan(gridPaymentOptions, 3);
+
+            absoluteLayout.Add(gridPayment);
+            absoluteLayout.SetLayoutBounds(gridPayment, new Rect(0 * App.screenWidthAdapter, 10 * App.screenHeightAdapter, App.screenWidth, App.screenHeight - 100 -10 * App.screenHeightAdapter));
+
         }
 
 
@@ -267,34 +321,24 @@ namespace SportNow.Views.CompleteRegistration
 			return payment;
 		}
 
-		public double calculateMensalidade(double desconto)
-		{
-			//Debug.Print("calculateMensalidade App.member.aulavalor = " + App.member.aulavalor);
-			Debug.Print("calculateMensalidade desconto = " + desconto);
-			Debug.Print("calculateMensalidade desconto = " + desconto);
-
-			//Debug.Print("App.member.aulavalor = " + String.Format("{0:0}", App.member.aulavalor) + "€");
-			//return String.Format("{0:0}", App.member.aulavalor) + ";
-			double aulavalor = 0;// double.Parse(App.member.aulavalor, CultureInfo.InvariantCulture);
-			return aulavalor * (1 - desconto);
-
-		}
 
 		public double calculateTotal(double desconto)
 		{
-			return valorQuota;
-			//return calculateQuotaADCPN() + calculateFiliacaoFPG() + calculateSeguroFPG() + calculateMensalidade();
+			//return valorQuota;
+			return fee_joia.valor + fee_cartao.valor + fee_quota.valor;
 		}
 
 		async void OnMBButtonClicked(object sender, EventArgs e)
 		{
-			await Navigation.PushAsync(new PaymentMBPageCS(paymentID));
+            Debug.Print("AQUI 1 paymentID = " + payment.id);
+            await Navigation.PushAsync(new PaymentMBPageCS(payment));
 		}
 
 
 		async void OnMBWayButtonClicked(object sender, EventArgs e)
 		{
-			await Navigation.PushAsync(new PaymentMBWayPageCS(paymentID));
+            Debug.Print("AQUI 2 paymentID = " + payment.id);
+            await Navigation.PushAsync(new PaymentMBWayPageCS(payment));
 		}
 
 	}

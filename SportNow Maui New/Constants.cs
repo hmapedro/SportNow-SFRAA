@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Microsoft.Maui.Graphics.Platform;
 using SportNow.Model;
 
 namespace SportNow
@@ -39,11 +40,19 @@ namespace SportNow
 
         public static string RestUrl_Get_Fees= DeviceInfo.Platform == DevicePlatform.Android ? "https://"+server+"/services/service_get_fees.php" : "https://"+server+"/services/service_get_fees.php";
 
+        public static string RestUrl_Get_Fee = DeviceInfo.Platform == DevicePlatform.Android ? "https://" + server + "/services/service_get_fee.php" : "https://" + server + "/services/service_get_fee.php";
+
         public static string RestUrl_Get_Current_Fees = DeviceInfo.Platform == DevicePlatform.Android ? "https://"+server+"/services/service_get_current_fees.php" : "https://"+server+"/services/service_get_current_fees.php";
 
         public static string RestUrl_Get_Past_Fees = DeviceInfo.Platform == DevicePlatform.Android ? "https://"+server+"/services/service_get_past_fees.php" : "https://"+server+"/services/service_get_past_fees.php";
 
         public static string RestUrl_Create_Fee = DeviceInfo.Platform == DevicePlatform.Android ? "https://"+server+"/services/service_create_quota_new.php" : "https://"+server+"/services/service_create_quota_new.php";
+
+        public static string RestUrl_Create_All_Fees = DeviceInfo.Platform == DevicePlatform.Android ? "https://" + server + "/services/service_create_all_fees.php" : "https://" + server + "/services/service_create_all_fees.php";
+
+        public static string RestUrl_Get_Payment_Fees = DeviceInfo.Platform == DevicePlatform.Android ? "https://" + server + "/services/service_get_payment_fees.php" : "https://" + server + "/services/service_get_payment_fees.php";
+
+        public static string RestUrl_Update_Fee_Duration = DeviceInfo.Platform == DevicePlatform.Android ? "https://" + server + "/services/service_update_fee_duration.php" : "https://" + server + "/services/service_update_fee_duration.php";
 
         public static string RestUrl_Update_Password = DeviceInfo.Platform == DevicePlatform.Android ? "https://"+server+"/services/service_update_password.php" : "https://"+server+"/services/service_update_password.php";
 
@@ -376,6 +385,22 @@ namespace SportNow
            {"treinador", "Treinador"}
         };
 
+
+        public static Dictionary<string, string> quotaPeriod { get; } = new Dictionary<string, string>
+        {
+            { "3", "3 meses" },
+            { "6", "6 meses" },
+            { "12", "12 meses" },
+        };
+
+        public static Dictionary<string, string> tipoDocumentoIdentificao { get; } = new Dictionary<string, string>
+        {
+            { "cc", "Cartão de Cidadão" },
+            { "bi", "Bilhete de Identidade" },
+            { "passaporte", "Passaporte" },
+            { "titulo_residencia", "Título de Residência" },
+        };
+
         public static Dictionary<string, string> countries { get; } = new Dictionary<string, string>
         {
           {"", ""},
@@ -691,6 +716,31 @@ namespace SportNow
             return key;
         }
 
+        public static async Task<Stream> ResizePhotoStream(FileResult photo)
+        {
+            byte[] result = null;
 
+            using (var stream = await photo.OpenReadAsync())
+            {
+                if (stream.Length > 512)
+                {
+                    var image = PlatformImage.FromStream(stream);
+                    if (image != null)
+                    {
+                        var newImage = image.Downsize(512, true);
+                        result = newImage.AsBytes();
+                    }
+                }
+                else
+                {
+                    using (var binaryReader = new BinaryReader(stream))
+                    {
+                        result = binaryReader.ReadBytes((int)stream.Length);
+                    }
+                }
+            }
+
+            return new MemoryStream(result);
+        }
     }
 }

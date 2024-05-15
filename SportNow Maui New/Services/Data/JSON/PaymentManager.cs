@@ -100,7 +100,7 @@ namespace SportNow.Services.Data.JSON
                 }
                 else
                 {
-                    Debug.WriteLine("error getting fees");
+                    Debug.WriteLine("PaymentManager.GetPayment - error getting payment");
                     return null;
                 }
 
@@ -113,6 +113,34 @@ namespace SportNow.Services.Data.JSON
             }
         }
 
+        public async Task<List<Fee>> GetPaymentFees(string paymentid)
+        {
+            Debug.WriteLine("GetPayment " + Constants.RestUrl_Get_Payment_Fees + "?pagamentoid=" + paymentid);
+            Uri uri = new Uri(string.Format(Constants.RestUrl_Get_Payment_Fees + "?pagamentoid=" + paymentid, string.Empty));
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(uri);
+                if (response.IsSuccessStatusCode)
+                {
+                    //return true;
+                    string content = await response.Content.ReadAsStringAsync();
+                    List<Fee> fees = JsonConvert.DeserializeObject<List<Fee>>(content);
+                    return fees;
+                }
+                else
+                {
+                    Debug.WriteLine("PaymentManager.GetPaymentFees - error getting fees");
+                    return null;
+                }
+
+                return null;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("PaymentManager.GetPaymentFees http request error " + e.ToString());
+                return null;
+            }
+        }
 
         public async Task<string> Update_Payment_Status(string paymentid, string status)
         {

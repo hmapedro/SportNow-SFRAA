@@ -13,6 +13,8 @@ namespace SportNow.Model
         public string entidade { get; set; }
         public string referencia { get; set; }
         public double valor { get; set; }
+        public string data_inicio { get; set; }
+        public string data_final { get; set; }
 
         public override string ToString()
         {

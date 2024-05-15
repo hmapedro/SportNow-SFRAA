@@ -27,7 +27,7 @@ namespace SportNow.Views.CompleteRegistration
 		public async void initSpecificLayout()
 		{
 
-			payment = await GetPayment(this.paymentID);
+			//payment = await GetPayment(this.paymentID);
 	
 			createMBPaymentLayout();
 		}
@@ -163,26 +163,12 @@ namespace SportNow.Views.CompleteRegistration
 
             absoluteLayout.Add(gridMBPayment);
             absoluteLayout.SetLayoutBounds(gridMBPayment, new Rect(0 * App.screenWidthAdapter, 10 * App.screenHeightAdapter, App.screenWidth, App.screenHeight - 100 * App.screenHeightAdapter));
-
-            Label Label = new Label
-            {
-                FontFamily = "futuracondensedmedium",
-                Text = "O valor total desta transação incluiu uma taxa de 1.7% e 0.22€ (+ IVA).",
-                VerticalTextAlignment = TextAlignment.Center,
-                HorizontalTextAlignment = TextAlignment.Start,
-                TextColor = App.normalTextColor,
-                FontSize = App.titleFontSize
-            };
-
-            absoluteLayout.Add(Label);
-            absoluteLayout.SetLayoutBounds(Label, new Rect(22, 0 * App.screenHeightAdapter, App.screenWidth, App.screenHeight - 10 * App.screenHeightAdapter));
-
         }
     
 
-		public PaymentMBPageCS(string paymentID)
+		public PaymentMBPageCS(Payment paymentID)
 		{
-			this.paymentID = paymentID;
+			this.payment = payment;
 			this.initLayout();
 			this.initSpecificLayout();
 
@@ -191,9 +177,9 @@ namespace SportNow.Views.CompleteRegistration
 			int sleepTime = 5;
 			Device.StartTimer(TimeSpan.FromSeconds(sleepTime), () =>
 			{
-				if ((paymentID != null) & (paymentID != ""))
+				if (payment != null)
 				{
-					this.checkPaymentStatus(paymentID);
+					this.checkPaymentStatus();
 					if (paymentDetected == false)
 					{
 						return true;
@@ -207,10 +193,10 @@ namespace SportNow.Views.CompleteRegistration
 			});
         }
 
-        async void checkPaymentStatus(string paymentID)
+        async void checkPaymentStatus()
         {
             Debug.Print("checkPaymentStatus");
-            this.payment = await GetPayment(paymentID);
+            this.payment = await GetPayment(payment.id);
             if ((payment.status == "confirmado") | (payment.status == "fechado") | (payment.status == "recebido"))
             {
                 App.member.estado = "activo";

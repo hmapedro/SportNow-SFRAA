@@ -288,29 +288,27 @@ namespace SportNow.Services.Data.JSON
 		}
 
 
-		/*public async Task<int> GetFees(Member member)
+		public async Task<Fee> GetFee(string feeID)
 		{
-			Debug.WriteLine("GetFees begin");
-			Uri uri = new Uri(string.Format(Constants.RestUrl_Get_Fees + "?userid=" + member.id, string.Empty));
+			Debug.WriteLine("GetFee "+ Constants.RestUrl_Get_Fee + "feeid=" + feeID);
+			Uri uri = new Uri(string.Format(Constants.RestUrl_Get_Fee + "?feeid=" + feeID, string.Empty));
 			HttpResponseMessage response = await client.GetAsync(uri);
-			var result = 0;
+			Fee fee = new Fee();
 			if (response.IsSuccessStatusCode)
 			{
 				//return true;
 				string content = await response.Content.ReadAsStringAsync();
 				Debug.WriteLine("content=" + content);
 				List<Fee> feesTemp = JsonConvert.DeserializeObject<List<Fee>>(content);
-				member.currentFee = feesTemp[0];
-				result = 1;
+				fee = feesTemp[0];
 			}
 			else
 			{
-				Debug.WriteLine("error getting fees");
-				result = -1;
+				Debug.WriteLine("GetFee - error getting fee");
 			}
 
-			return result;
-		}*/
+			return fee;
+		}
 
 		public async Task<int> GetPastFees(Member member)
 		{
@@ -439,7 +437,67 @@ namespace SportNow.Services.Data.JSON
 			}
 		}
 
-		public async Task<int> ChangePassword(string email, string newpassword)
+        public async Task<string> CreateAllFees(string original_memberid, string memberid, string membername, string duration)
+        {
+            Debug.WriteLine("CreateAllFees begin " + Constants.RestUrl_Create_All_Fees + "?original_memberid=" + original_memberid + "&memberid=" + memberid + "&membername=" + membername + "&duration=" + duration);
+            Uri uri = new Uri(string.Format(Constants.RestUrl_Create_All_Fees + "?original_memberid=" + original_memberid + "&memberid=" + memberid + "&membername=" + membername + "&duration=" + duration, string.Empty));
+
+            List<Fee> feesTemp = new List<Fee>();
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(uri);
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    List<Result> createResultList = JsonConvert.DeserializeObject<List<Result>>(content);
+                    return createResultList[0].result;
+                }
+                else
+                {
+                    Debug.WriteLine("MemberManager.CreateAllFees - error creating all fees");
+                }
+                return "-1";
+            }
+            catch
+            {
+                Debug.WriteLine("MemberManager.CreateAllFees - http request error");
+                return "-1";
+            }
+        }
+
+
+        public async Task<string> UpdateFeeDuration(string feeID, string paymentID, string duration)
+        {
+            Debug.WriteLine("UpdateFeeDuration " + Constants.RestUrl_Update_Fee_Duration + "?feeid=" + feeID + "&paymentid=" + paymentID + "&duration=" + duration);
+            Uri uri = new Uri(string.Format(Constants.RestUrl_Update_Fee_Duration + "?feeid=" + feeID + "&paymentid=" + paymentID + "&duration=" + duration, string.Empty));
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(uri);
+                var result = "0";
+                if (response.IsSuccessStatusCode)
+                {
+                    //return true;
+                    string content = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine("content=" + content);
+                    List<Result> createResultList = JsonConvert.DeserializeObject<List<Result>>(content);
+                    return createResultList[0].result;
+                }
+                else
+                {
+                    Debug.WriteLine("UpdateFeeDuration - error creating fee");
+                    result = "-1";
+                }
+
+                return result;
+            }
+            catch
+            {
+                Debug.WriteLine("UpdateFeeDuration - http request error");
+                return "-1";
+            }
+        }
+
+        public async Task<int> ChangePassword(string email, string newpassword)
 		{
 			Uri uri = new Uri(string.Format(Constants.RestUrl_Update_Password + "?username=" + email + "&password=" + newpassword, string.Empty));
 			try {
@@ -507,16 +565,18 @@ namespace SportNow.Services.Data.JSON
                 + "&memberphone=" + member.phone + "&memberemail=" + member.email + "&memberaddress=" + member.address
                 + "&membercity=" + member.city + "&memberpostalcode=" + member.postalcode + "&birthdate=" + member.birthdate
                 + "&membernameenc1=" + member.name_enc1 + "&memberemailenc1=" + member.mail_enc1 + "&memberphoneenc1=" + member.phone_enc1
+                + "&membernameenc2=" + member.name_enc2 + "&memberemailenc2=" + member.mail_enc2 + "&memberphoneenc2=" + member.phone_enc2
                 + "&faturacao_nome=" + member.faturacao_nome + "&faturacao_morada=" + member.faturacao_morada + "&faturacao_cidade=" + member.faturacao_cidade
-                + "&faturacao_codpostal=" + member.faturacao_codpostal + "&faturacao_nif=" + member.faturacao_nif);
+                + "&faturacao_codpostal=" + member.faturacao_codpostal + "&faturacao_nif=" + member.faturacao_nif + "&documento_identificacao=" + member.documento_identificacao);
 
 			Uri uri = new Uri(string.Format(Constants.RestUrl_Update_Member_Info + "?memberid=" + member.id
 				+ "&memberfirstname=" + member_first_name + "&memberlastname=" + member_last_name + "&membernif=" + member.nif + "&membercc=" + member.cc_number
 				+ "&memberphone=" + member.phone + "&memberemail=" + member.email + "&memberaddress=" + member.address
 				+ "&membercity=" + member.city + "&memberpostalcode=" + member.postalcode + "&birthdate=" + member.birthdate
                 + "&membernameenc1=" + member.name_enc1 + "&memberemailenc1=" + member.mail_enc1 + "&memberphoneenc1=" + member.phone_enc1
-				+ "&faturacao_nome=" + member.faturacao_nome + "&faturacao_morada=" + member.faturacao_morada + "&faturacao_cidade=" + member.faturacao_cidade
-                + "&faturacao_codpostal=" + member.faturacao_codpostal + "&faturacao_nif=" + member.faturacao_nif
+                + "&membernameenc2=" + member.name_enc2 + "&memberemailenc2=" + member.mail_enc2 + "&memberphoneenc2=" + member.phone_enc2
+                + "&faturacao_nome=" + member.faturacao_nome + "&faturacao_morada=" + member.faturacao_morada + "&faturacao_cidade=" + member.faturacao_cidade
+                + "&faturacao_codpostal=" + member.faturacao_codpostal + "&faturacao_nif=" + member.faturacao_nif + "&documento_identificacao=" + member.documento_identificacao
                 , string.Empty));
 			try
 			{
@@ -563,7 +623,7 @@ namespace SportNow.Services.Data.JSON
                 + "&faturacao_nome=" + member.faturacao_nome + "&faturacao_morada=" + member.faturacao_morada + "&faturacao_cidade=" + member.faturacao_cidade
                 + "&faturacao_codpostal=" + member.faturacao_codpostal + "&faturacao_nif=" + member.faturacao_nif
                 + "&emergencycontact=" + member.emergencyContact + "&emergencyphone=" + member.emergencyPhone
-                + "&consentimento_regulamento=" + member.consentimento_regulamento;
+                + "&consentimento_regulamento=" + member.consentimento_regulamento + "&documento_identificacao=" + member.documento_identificacao;
             Debug.Print("createNewMember - " + query);
             Uri uri = new Uri(string.Format(query, string.Empty));
             try
@@ -575,14 +635,14 @@ namespace SportNow.Services.Data.JSON
                 {
                     //return true;
                     string content = await response.Content.ReadAsStringAsync();
-                    Debug.WriteLine("content=" + content);
+                    Debug.WriteLine("MemberManager.createNewMember - content=" + content);
                     List<Result> createResultList = JsonConvert.DeserializeObject<List<Result>>(content);
 
                     return createResultList[0].result;
                 }
                 else
                 {
-                    Debug.WriteLine("error updating member info");
+                    Debug.WriteLine("MemberManager.createNewMember - error updating member info");
                     result = "-3";
                 }
 
@@ -628,7 +688,7 @@ namespace SportNow.Services.Data.JSON
             try
             {
                 //HttpClient client = new HttpClient();
-                client.BaseAddress = new Uri("https://" + Constants.server);
+                //client.BaseAddress = new Uri("https://" + Constants.server);
                 //client.BaseAddress = new Uri(Constants.server);
                 MultipartFormDataContent form = new MultipartFormDataContent();
                 StreamContent content = new StreamContent(stream);

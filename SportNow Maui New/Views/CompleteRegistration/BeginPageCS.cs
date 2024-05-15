@@ -144,7 +144,7 @@ namespace SportNow.Views.CompleteRegistration
             }
             createNewMember();
             App.member.estado = "ativo";
-            App.member.member_type = "individual";
+            App.member.member_type = "socio";
             await Navigation.PushAsync(new NewMemberPageCS());
         }
 
@@ -179,6 +179,7 @@ namespace SportNow.Views.CompleteRegistration
             App.member.address = "Rua 1111";
             App.member.city = "Amadora";
             App.member.postalcode = "1000-000";
+            App.original_member = App.member;
         }
     }
 

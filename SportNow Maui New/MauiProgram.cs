@@ -96,6 +96,7 @@ public static class MauiProgram
         });
         builder.Services.AddSingleton<IPushNotificationHandler, DefaultPushNotificationHandler>();
 
+        builder.Services.AddTransient<IImageService, ImageService>();
 
         return builder.Build();
     }

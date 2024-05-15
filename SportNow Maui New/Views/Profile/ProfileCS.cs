@@ -53,7 +53,7 @@ namespace SportNow.Views.Profile
 			
 		}
 
-		Image quotaImage, objectivesImage;
+		Image quotaImage, historicoImage;
 
 		private ScrollView scrollView;
 
@@ -303,23 +303,23 @@ namespace SportNow.Views.Profile
 
         }
 
-        public async void CreateObjectivesButton()
+        public async void CreateHistoricoButton()
         {
 
 
-			objectivesImage = new Image
+            historicoImage = new Image
             {
                 Aspect = Aspect.AspectFit
             };
 
-            objectivesImage.Source = "iconexpectativas.png";
+            historicoImage.Source = "iconhistorico.png";
 
-            TapGestureRecognizer objectivesImage_tapEvent = new TapGestureRecognizer();
-            objectivesImage_tapEvent.Tapped += OnObjectivesButtonClicked;
-            objectivesImage.GestureRecognizers.Add(objectivesImage_tapEvent);
+            TapGestureRecognizer historicoImage_tapEvent = new TapGestureRecognizer();
+            historicoImage_tapEvent.Tapped += OnObjectivesButtonClicked;
+            historicoImage.GestureRecognizers.Add(historicoImage_tapEvent);
 
-			absoluteLayout.Add(objectivesImage);
-            absoluteLayout.SetLayoutBounds(objectivesImage, new Rect((App.screenWidth) - (47.5 * App.screenHeightAdapter), y_button_right * App.screenHeightAdapter, 35 * App.screenHeightAdapter, 35 * App.screenHeightAdapter));
+			absoluteLayout.Add(historicoImage);
+            absoluteLayout.SetLayoutBounds(historicoImage, new Rect((App.screenWidth) - (47.5 * App.screenHeightAdapter), y_button_right * App.screenHeightAdapter, 35 * App.screenHeightAdapter, 35 * App.screenHeightAdapter));
 
 
             Label objectivesLabel = new Label
@@ -598,7 +598,7 @@ namespace SportNow.Views.Profile
 			//createApproveStudentButton();
 
             createChangePasswordButton();
-            //CreateObjectivesButton();
+            CreateHistoricoButton();
 			CreateQuotaButton();
         }
 
@@ -633,7 +633,9 @@ namespace SportNow.Views.Profile
             registrationdateValue = new FormValue(App.member.registrationdate?.ToString("yyyy-MM-dd"));
 
             FormLabel id_numberLabel = new FormLabel { Text = "Nº ID" };
-            id_numberValue = new FormValue(App.member.cc_number + " - " + App.member.documento_identificacao);
+            string documento_identificacaoText = "";
+            Constants.tipoDocumentoIdentificao.TryGetValue(App.member.documento_identificacao, out documento_identificacaoText );
+            id_numberValue = new FormValue(App.member.cc_number + " - " + documento_identificacaoText);
 
             FormLabel nifLabel = new FormLabel { Text = "NIF" };
             nifValue = new FormValue(App.member.nif);
@@ -1173,89 +1175,45 @@ namespace SportNow.Views.Profile
 
         async void OpenGalleryTapped()
         {
-            var result = await MediaPicker.PickPhotoAsync(new MediaPickerOptions
-            {
-                Title = "Por favor escolha uma foto"
-            });
+            showActivityIndicator();
+
+            ImageService imageService = new ImageService();
+            var result = await imageService.PickPhotoAsync();
+
 
             if (result != null)
             {
-                Stream stream_aux = await result.OpenReadAsync();
-                Stream localstream = await result.OpenReadAsync();
+                stream = await Constants.ResizePhotoStream(result); //result.OpenReadAsync();
+                Stream localstream = await Constants.ResizePhotoStream(result);  //await result.OpenReadAsync();
 
                 memberPhotoImage.Source = ImageSource.FromStream(() => localstream);
-                if (DeviceInfo.Platform == DevicePlatform.iOS)
-                {
-                    memberPhotoImage.Rotation = 0;
-                    stream = RotateBitmap(stream_aux, 0);
-                }
-                else
-                {
-                    memberPhotoImage.Rotation = 0;
-                    stream = RotateBitmap(stream_aux, 90);
-                }
-
                 MemberManager memberManager = new MemberManager();
-                memberManager.Upload_Member_Photo(stream);
-            }
+                await memberManager.Upload_Member_Photo(stream);
 
+            }
+            hideActivityIndicator();
         }
+
 
         async void TakeAPhotoTapped()
         {
-            var result = await MediaPicker.CapturePhotoAsync();
+            showActivityIndicator();
+            ImageService imageService = new ImageService();
+            var result = await imageService.CapturePhotoAsync();
+
 
             if (result != null)
             {
-                Stream stream_aux = await result.OpenReadAsync();
-                Stream localstream = await result.OpenReadAsync();
+                stream = await Constants.ResizePhotoStream(result); //result.OpenReadAsync();
+                Stream localstream = await Constants.ResizePhotoStream(result);  //await result.OpenReadAsync();
 
                 memberPhotoImage.Source = ImageSource.FromStream(() => localstream);
-                if (DeviceInfo.Platform == DevicePlatform.iOS)
-                {
-                    memberPhotoImage.Rotation = 0;
-                    stream = RotateBitmap(stream_aux, 0);
-                }
-                else
-                {
-                    memberPhotoImage.Rotation = 90;
-                    stream = RotateBitmap(stream_aux, 90);
-                }
-                
+
                 MemberManager memberManager = new MemberManager();
-                memberManager.Upload_Member_Photo(stream);
+                await memberManager.Upload_Member_Photo(stream);
             }
 
-        }
-
-        public Stream RotateBitmap(Stream _stream, int angle)
-        {
-            Stream streamlocal = null;
-            SKBitmap bitmap = SKBitmap.Decode(_stream);
-            SKBitmap rotatedBitmap = new SKBitmap(bitmap.Height, bitmap.Width);
-            if (angle != 0)
-            {
-                using (var surface = new SKCanvas(rotatedBitmap))
-                {
-                    //surface.Clear();
-                    surface.Translate(rotatedBitmap.Width, 0);
-                    surface.RotateDegrees(angle);
-                    surface.DrawBitmap(bitmap, 0, 0);
-                }
-            }
-            else
-            {
-                rotatedBitmap = bitmap;
-            }
-
-            using (MemoryStream memStream = new MemoryStream())
-            using (SKManagedWStream wstream = new SKManagedWStream(memStream))
-            {
-                rotatedBitmap.Encode(wstream, SKEncodedImageFormat.Jpeg, 50);
-                byte[] data = memStream.ToArray();
-                streamlocal = new MemoryStream(data);
-            }
-            return streamlocal;
+            hideActivityIndicator();
 
         }
     }
