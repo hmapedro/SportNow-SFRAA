@@ -116,6 +116,7 @@
 	  <Folder Include="Resources\Images\" />
 	  <Folder Include="Views\CompleteRegistration\" />
 	  <Folder Include="Platforms\Android\Resources\drawable\" />
+	  <Folder Include="Views\Services\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <BundleResource Include="Resources\Images\add.png" />
@@ -201,5 +202,6 @@
 	  <None Remove="Resources\Images\iconlogo.png" />
 	  <None Remove="Resources\Images\iconmodalidades.png" />
 	  <None Remove="Resources\Images\iconservicos.png" />
+	  <None Remove="Views\Services\" />
 	</ItemGroup>
 </Project>

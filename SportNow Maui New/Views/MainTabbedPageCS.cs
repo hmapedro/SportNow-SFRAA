@@ -9,6 +9,7 @@ using Microsoft.Maui;
 using SportNow.Views.CompleteRegistration;
 using Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;
 using Plugin.BetterFirebasePushNotification;
+using SportNow.Views.Services;
 //using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 #if IOS
 using Microsoft.Maui.Controls.Handlers.Compatibility;
@@ -280,11 +281,11 @@ namespace SportNow.Views
         public async Task<int> createTabs()
         {
             Children.RemoveAt(0);
-            Children.Add(new DoPageCS() { Title = "SERVIÇOS", IconImageSource = "iconservicos.png" });
+            Children.Add(new ServicesPageCS() { Title = "SERVIÇOS", IconImageSource = "iconservicos.png" });
             Children.Add(new AttendanceOptionsPageCS() { Title = "MODALIDADES", IconImageSource = "iconmodalidades.png" });
             Children.Add(new MainPageCS() { Title = "PRINCIPAL", IconImageSource = "iconlogo.png" });
             Children.Add(new AllEventsPageCS() { Title = "EVENTOS", IconImageSource = "eventos.png" });
-            Children.Add(new EquipamentTypePageCS() { Title = "LOJA", IconImageSource = "kimono.png" });
+            Children.Add(new EquipamentTypePageCS() { Title = "LOJA", IconImageSource = "iconequipamentos.png" });
             CurrentPage = Children[2];
             Title = "PRINCIPAL";
             CurrentPageChanged += CurrentPageHasChanged;
