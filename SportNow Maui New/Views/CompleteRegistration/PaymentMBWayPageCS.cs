@@ -129,7 +129,8 @@ namespace SportNow.Views.CompleteRegistration
 		{
 			//App.event_participation = event_participation;
 			this.payment = payment;
-			this.initLayout();
+            Debug.Print("AQUI 3 paymentID = " + this.payment.id);
+            this.initLayout();
 			this.initSpecificLayout();
 
 			paymentDetected = false;
@@ -137,8 +138,9 @@ namespace SportNow.Views.CompleteRegistration
             int sleepTime = 5;
             Device.StartTimer(TimeSpan.FromSeconds(sleepTime), () =>
             {
-                if (payment != null)
+                if (this.payment != null)
                 {
+                    Debug.Print("AQUI 4 paymentID = " + this.payment.id);
                     this.checkPaymentStatus();
                     if (paymentDetected == false)
                     {
@@ -156,11 +158,12 @@ namespace SportNow.Views.CompleteRegistration
         async void checkPaymentStatus()
         {
             Debug.Print("checkPaymentStatus");
-            this.payment = await GetPayment(payment.id);
+            Debug.Print("AQUI 5 paymentID = " + this.payment.id);
+            this.payment = await GetPayment(this.payment.id);
             if ((payment.status == "confirmado") | (payment.status == "fechado") | (payment.status == "recebido"))
             {
-                App.member.estado = "activo";
-                App.original_member.estado = "activo";
+                App.member.estado = "em_aprovacao";
+                App.original_member.estado = "em_aprovacao";
 
                 if (paymentDetected == false)
                 {
@@ -193,7 +196,7 @@ namespace SportNow.Views.CompleteRegistration
 			Debug.WriteLine("GetPayment");
 			PaymentManager paymentManager = new PaymentManager();
 
-			Payment payment = await paymentManager.GetPayment(this.paymentID);
+			Payment payment = await paymentManager.GetPayment(paymentID);
 
 			if (payment == null)
 			{

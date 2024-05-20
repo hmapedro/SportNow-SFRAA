@@ -166,7 +166,7 @@ namespace SportNow.Views.CompleteRegistration
         }
     
 
-		public PaymentMBPageCS(Payment paymentID)
+		public PaymentMBPageCS(Payment payment)
 		{
 			this.payment = payment;
 			this.initLayout();
@@ -196,7 +196,7 @@ namespace SportNow.Views.CompleteRegistration
         async void checkPaymentStatus()
         {
             Debug.Print("checkPaymentStatus");
-            this.payment = await GetPayment(payment.id);
+            this.payment = await GetPayment(this.payment.id);
             if ((payment.status == "confirmado") | (payment.status == "fechado") | (payment.status == "recebido"))
             {
                 App.member.estado = "activo";
@@ -224,7 +224,7 @@ namespace SportNow.Views.CompleteRegistration
 			Debug.WriteLine("GetPayment");
 			PaymentManager paymentManager = new PaymentManager();
 
-			Payment payment = await paymentManager.GetPayment(this.paymentID);
+			Payment payment = await paymentManager.GetPayment(paymentID);
 
 			if (payment == null)
 			{

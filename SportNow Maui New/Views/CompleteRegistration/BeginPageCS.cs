@@ -143,7 +143,7 @@ namespace SportNow.Views.CompleteRegistration
                 return;
             }
             createNewMember();
-            App.member.estado = "ativo";
+            App.member.estado = "novo";
             App.member.member_type = "socio";
             await Navigation.PushAsync(new NewMemberPageCS());
         }

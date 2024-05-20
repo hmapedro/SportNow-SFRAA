@@ -623,7 +623,8 @@ namespace SportNow.Services.Data.JSON
                 + "&faturacao_nome=" + member.faturacao_nome + "&faturacao_morada=" + member.faturacao_morada + "&faturacao_cidade=" + member.faturacao_cidade
                 + "&faturacao_codpostal=" + member.faturacao_codpostal + "&faturacao_nif=" + member.faturacao_nif
                 + "&emergencycontact=" + member.emergencyContact + "&emergencyphone=" + member.emergencyPhone
-                + "&consentimento_regulamento=" + member.consentimento_regulamento + "&documento_identificacao=" + member.documento_identificacao;
+                + "&consentimento_regulamento=" + member.consentimento_regulamento + "&documento_identificacao=" + member.documento_identificacao
+                + "&status=" + member.estado;
             Debug.Print("createNewMember - " + query);
             Uri uri = new Uri(string.Format(query, string.Empty));
             try

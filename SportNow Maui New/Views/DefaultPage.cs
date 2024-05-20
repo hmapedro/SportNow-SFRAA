@@ -131,7 +131,7 @@ namespace SportNow.Views
                 navigationPage.BarTextColor = App.normalTextColor;
             }
 
-            background_frame = new Frame() { BackgroundColor = App.backgroundColor, Opacity = 0.3 };
+            background_frame = new Frame() { BackgroundColor = App.backgroundColor, BorderColor = Colors.Transparent, Opacity = 0.3 };
 
             border = new Border
             {

@@ -473,7 +473,7 @@ namespace SportNow.Views.CompleteRegistration
 
             if (imageloaded == false)
             {
-                await DisplayAlert("FOTO EM FALTA", "Para criar o novo sócio tem de introduzir uma fotografia.", "Ok" );
+                await DisplayAlert("FOTO EM FALTA", "Para criar o novo utilizador tem de introduzir uma fotografia.", "Ok" );
                 return "-1";
             }
 

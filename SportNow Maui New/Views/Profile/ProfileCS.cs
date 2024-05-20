@@ -315,7 +315,7 @@ namespace SportNow.Views.Profile
             historicoImage.Source = "iconhistorico.png";
 
             TapGestureRecognizer historicoImage_tapEvent = new TapGestureRecognizer();
-            historicoImage_tapEvent.Tapped += OnObjectivesButtonClicked;
+            historicoImage_tapEvent.Tapped += OnHistoricoButtonClicked;
             historicoImage.GestureRecognizers.Add(historicoImage_tapEvent);
 
 			absoluteLayout.Add(historicoImage);
@@ -1036,9 +1036,9 @@ namespace SportNow.Views.Profile
 
 		}
 
-        async void OnObjectivesButtonClicked(object sender, EventArgs e)
+        async void OnHistoricoButtonClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new ObjectivesPageCS());   
+            await Navigation.PushAsync(new DoPageCS());   
         }
 
 
