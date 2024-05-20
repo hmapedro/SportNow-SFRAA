@@ -185,6 +185,8 @@
 	  <BundleResource Include="Resources\Raw\gifTemplate.html" />
 	  <BundleResource Include="GoogleService-Info.plist" />
 	  <BundleResource Include="Resources\Images\iconlogo.png" />
+	  <BundleResource Include="Resources\Images\iconmodalidades.png" />
+	  <BundleResource Include="Resources\Images\iconservicos.png" />
 	</ItemGroup>	
 	<ItemGroup>
 	  <MauiXaml Update="Custom Views\GifImage.xaml">
@@ -197,5 +199,7 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <None Remove="Resources\Images\iconlogo.png" />
+	  <None Remove="Resources\Images\iconmodalidades.png" />
+	  <None Remove="Resources\Images\iconservicos.png" />
 	</ItemGroup>
 </Project>

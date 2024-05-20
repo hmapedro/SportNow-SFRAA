@@ -322,18 +322,18 @@ namespace SportNow.Views.Profile
             absoluteLayout.SetLayoutBounds(historicoImage, new Rect((App.screenWidth) - (47.5 * App.screenHeightAdapter), y_button_right * App.screenHeightAdapter, 35 * App.screenHeightAdapter, 35 * App.screenHeightAdapter));
 
 
-            Label objectivesLabel = new Label
+            Label historicoLabel = new Label
             {
                 FontFamily = "futuracondensedmedium",
-                Text = "Expectativas",
+                Text = "Histórico",
                 TextColor = App.normalTextColor,
                 HorizontalTextAlignment = TextAlignment.Center,
                 VerticalTextAlignment = TextAlignment.Start,
                 FontSize = App.smallTextFontSize
             };
 
-			absoluteLayout.Add(objectivesLabel);
-            absoluteLayout.SetLayoutBounds(objectivesLabel, new Rect((App.screenWidth) - (60 * App.screenHeightAdapter), (y_button_right + 37) * App.screenHeightAdapter, 60 * App.screenHeightAdapter, 15 * App.screenHeightAdapter));
+			absoluteLayout.Add(historicoLabel);
+            absoluteLayout.SetLayoutBounds(historicoLabel, new Rect((App.screenWidth) - (60 * App.screenHeightAdapter), (y_button_right + 37) * App.screenHeightAdapter, 60 * App.screenHeightAdapter, 15 * App.screenHeightAdapter));
         
             y_button_right = y_button_right + 60;
 
