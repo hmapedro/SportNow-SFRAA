@@ -135,7 +135,8 @@ namespace SportNow.Views.Profile
 
             int countStudents = App.original_member.students_count;
 
-			CreatePhoto();
+            CreateAdditionalPhoto();
+            CreatePhoto();
             CreateNameLabel();
             CreateNumSocioLabel();
 			CreateStackButtons();
@@ -164,12 +165,11 @@ namespace SportNow.Views.Profile
             if (birthDate.Date > DateTime.Today.AddYears(-age)) age--;
             return age;
         }
-
+        
         public void CreatePhoto()
 		{
-            //memberPhotoImage = new RoundImage();
-
-            memberPhotoImage = new RoundImage();
+            memberPhotoImage = new RoundImage()
+            { };
 
             WebResponse response;
             HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(Constants.images_URL + App.member.id + "_photo");
@@ -196,7 +196,6 @@ namespace SportNow.Views.Profile
 				{
 					Uri = new Uri(Constants.images_URL + App.member.id + "_photo"),
 					CachingEnabled = false,
-					//CacheValidity = new TimeSpan(0, 0, 0, 0)
 				};
 			}
             else
@@ -209,10 +208,30 @@ namespace SportNow.Views.Profile
             memberPhotoImage.GestureRecognizers.Add(memberPhotoImage_tap);
 
 			absoluteLayout.Add(memberPhotoImage);
-            absoluteLayout.SetLayoutBounds(memberPhotoImage, new Rect((App.screenWidth/2) - (90 * App.screenHeightAdapter), 0, 180 * App.screenHeightAdapter, 180 * App.screenHeightAdapter));
+            absoluteLayout.SetLayoutBounds(memberPhotoImage, new Rect((App.screenWidth / 2) - (75 * App.screenHeightAdapter), 30 * App.screenHeightAdapter, 150 * App.screenHeightAdapter, 150 * App.screenHeightAdapter));
+        }
+        
+       
+
+
+        public void CreateAdditionalPhoto()
+        {
+            var frameImage = new Image
+            {
+                Source = "logo_sfraa_cinzento.png",
+                WidthRequest = 260 * App.screenHeightAdapter,
+                HeightRequest = 260 * App.screenHeightAdapter,
+              
+
+            };
+
+            
+            absoluteLayout.Add(frameImage);
+            absoluteLayout.SetLayoutBounds(frameImage, new Rect((App.screenWidth / 2) - (100 * App.screenHeightAdapter), 20 * App.screenHeightAdapter, 200 * App.screenHeightAdapter, 200 * App.screenHeightAdapter));
         }
 
-         public void CreateNameLabel()
+
+        public void CreateNameLabel()
         {
             Label nameLabel = new Label
             {
@@ -220,13 +239,13 @@ namespace SportNow.Views.Profile
                 Text = App.member.name,
                 VerticalTextAlignment = TextAlignment.Center,
                 HorizontalTextAlignment = TextAlignment.Center,
-                TextColor = App.normalTextColor,
+                TextColor = Color.FromRgb(19, 93, 28),
                 LineBreakMode = LineBreakMode.NoWrap,
                 FontSize = App.bigTitleFontSize
             };
             absoluteLayout.Add(nameLabel);
             //absoluteLayout.SetLayoutBounds(nameLabel, new Rect((App.screenWidth / 2) - (50 * App.screenHeightAdapter), 230 * App.screenHeightAdapter, 100 * App.screenHeightAdapter, 30 * App.screenHeightAdapter));
-            absoluteLayout.SetLayoutBounds(nameLabel, new Rect((App.screenWidth - 200 * App.screenWidthAdapter) / 2, 200 * App.screenHeightAdapter, 200 * App.screenWidthAdapter, 30 * App.screenHeightAdapter));
+            absoluteLayout.SetLayoutBounds(nameLabel, new Rect((App.screenWidth - 200 * App.screenWidthAdapter) / 2, 230 * App.screenHeightAdapter, 200 * App.screenWidthAdapter, 30 * App.screenHeightAdapter));
       
         }
         public void CreateNumSocioLabel()
@@ -243,7 +262,7 @@ namespace SportNow.Views.Profile
             };
 
             absoluteLayout.Add(numSocioLabel);
-            absoluteLayout.SetLayoutBounds(numSocioLabel, new Rect((App.screenWidth - 200 * App.screenWidthAdapter) / 2, 230 * App.screenHeightAdapter, 200 * App.screenWidthAdapter, 30 * App.screenHeightAdapter));
+            absoluteLayout.SetLayoutBounds(numSocioLabel, new Rect((App.screenWidth - 200 * App.screenWidthAdapter) / 2, 260 * App.screenHeightAdapter, 200 * App.screenWidthAdapter, 30 * App.screenHeightAdapter));
 
 
         }
@@ -350,14 +369,23 @@ namespace SportNow.Views.Profile
 		}
 
 		public void CreateStackButtons() {
-            var buttonWidth = (App.screenWidth - 15 * App.screenWidthAdapter) / 4;
+            var buttonWidth = (App.screenWidth - 15 * App.screenWidthAdapter) / 3;
+            DateTime birthDate;
+            if (DateTime.TryParseExact(App.member.birthdate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out birthDate))
+            {
+                int age = CalculateAge(birthDate);
+                if (age < 18)
+                {
+                    buttonWidth = (App.screenWidth - 15 * App.screenWidthAdapter) / 4;
+                }
+            }
+            
 
             geralButton = new MenuButton("GERAL", buttonWidth, 60);
 			geralButton.button.Clicked += OnGeralButtonClicked;
 			moradaButton = new MenuButton("MORADA",buttonWidth, 60);
-
 			moradaButton.button.Clicked += OnMoradaButtonClicked;
-            encEducacaoButton = new MenuButton("ENC.EDUCAÇÃO", buttonWidth, 60);
+            encEducacaoButton = new MenuButton("E.EDUCAÇÃO", buttonWidth, 60);
             encEducacaoButton.button.Clicked += OnEncEducacaoButtonClicked;
             faturacaoButton = new MenuButton("FATURAÇÃO",buttonWidth, 60);
             faturacaoButton.button.Clicked += OnFaturacaoButtonClicked;
@@ -377,7 +405,7 @@ namespace SportNow.Views.Profile
 			};
 
 			absoluteLayout.Add(stackButtons);
-            absoluteLayout.SetLayoutBounds(stackButtons, new Rect(0, 250 * App.screenHeightAdapter, App.screenWidth, 60 * App.screenHeightAdapter));
+            absoluteLayout.SetLayoutBounds(stackButtons, new Rect(0, 280 * App.screenHeightAdapter, App.screenWidth, 60 * App.screenHeightAdapter));
 
 			geralButton.activate();
 			moradaButton.deactivate();
@@ -390,7 +418,7 @@ namespace SportNow.Views.Profile
                 int age = CalculateAge(birthdate);
                 if (age < 18)
                 {
-                    encEducacaoButton = new MenuButton("ENC.EDUCAÇÃO", buttonWidth, 60);
+                    encEducacaoButton = new MenuButton("E.EDUCAÇÃO", buttonWidth, 60);
                     encEducacaoButton.button.Clicked += OnEncEducacaoButtonClicked;
                     stackButtons.Children.Insert(2, encEducacaoButton);
                 }

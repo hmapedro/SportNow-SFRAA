@@ -16,8 +16,8 @@ namespace SportNow.CustomViews
             this.Clip = new EllipseGeometry()
 			{
 				Center = new Point(80 * App.screenHeightAdapter, 80 * App.screenHeightAdapter),
-				RadiusX = 80 * App.screenHeightAdapter,
-				RadiusY = 80 * App.screenHeightAdapter
+				RadiusX = 75 * App.screenHeightAdapter,
+				RadiusY = 75 * App.screenHeightAdapter
 			};
 
         }
