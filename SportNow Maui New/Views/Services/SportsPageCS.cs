@@ -8,7 +8,7 @@ using SportNow.Services.Data.JSON;
 
 namespace SportNow.Views.Services
 {
-	public class ServicesPageCS : DefaultPage
+	public class SportsPageCS : DefaultPage
 	{
 
 		protected async override void OnAppearing()
@@ -39,6 +39,13 @@ namespace SportNow.Views.Services
 		{
 			if (currentServicesLabel != null)
 			{
+				//absoluteLayout.Clear();
+				
+				absoluteLayout.Children.Remove(currentServicesCollectionView);
+				absoluteLayout.Children.Remove(otherServicesCollectionView);
+				absoluteLayout.Children.Remove(currentServicesLabel);
+				absoluteLayout.Children.Remove(otherServicesLabel);
+
                 currentServicesCollectionView = null;
                 otherServicesCollectionView = null;
                 currentServicesLabel = null;
@@ -61,7 +68,7 @@ namespace SportNow.Views.Services
 
 		public async void initSpecificLayout()
 		{
-            gridServices = new Grid { BackgroundColor = Colors.Transparent, Padding = 0, RowSpacing = 10 * App.screenHeightAdapter };
+            gridServices = new Microsoft.Maui.Controls.Grid { BackgroundColor = Colors.Transparent, Padding = 0, RowSpacing = 10 * App.screenHeightAdapter };
             gridServices.RowDefinitions.Add(new RowDefinition { Height = 50 * App.screenHeightAdapter});
             gridServices.RowDefinitions.Add(new RowDefinition { Height = 200 * App.screenHeightAdapter });
             gridServices.RowDefinitions.Add(new RowDefinition { Height = 50 * App.screenHeightAdapter });
@@ -86,14 +93,12 @@ namespace SportNow.Views.Services
             showActivityIndicator();
 
 			currentServicesLabel = new Label
-            {
-                Text = "SERVIÇOS ATUAIS",
+			{
+				Text = "MODALIDADES ATUAIS",
                 TextColor = App.activeTitleTextColor,
                 HorizontalTextAlignment = TextAlignment.Start,
-                FontSize = App.superbigTitleFontSize,
+				FontSize = App.bigTitleFontSize,
                 FontFamily = "futuracondensedmedium",
-                HeightRequest = 50 * App.screenHeightAdapter,
-                WidthRequest = App.screenWidth,
             };
 
 			CreateCurrentServicesColletion();
@@ -193,16 +198,13 @@ namespace SportNow.Views.Services
 
             services = await servicesManager.GetServices();
             CompleteServices();
-
             otherServicesLabel = new Label
             {
                 Text = "SERVIÇOS DISPONÍVEIS",
-                TextColor = App.inactiveTitleTextColor,
+                TextColor = App.activeTitleTextColor,
                 HorizontalTextAlignment = TextAlignment.Start,
-                FontSize = App.superbigTitleFontSize,
+                FontSize = App.bigTitleFontSize,
                 FontFamily = "futuracondensedmedium",
-                HeightRequest = 50 * App.screenHeightAdapter,
-                WidthRequest = App.screenWidth,
             };
 
             CreateOtherServicesColletion();
@@ -230,7 +232,7 @@ namespace SportNow.Views.Services
                         CacheValidity = new TimeSpan(0, 0, 0, 0)
                     };
                 }
-                if ((service.tipo != "desporto") & (service.tipo != "cultura"))
+                if ((service.tipo == "desporto") | (service.tipo == "cultura"))
                 {
                     services_new.Add(service);
                 }
@@ -306,7 +308,7 @@ namespace SportNow.Views.Services
 
         }
 
-        public ServicesPageCS ()
+        public SportsPageCS()
 		{
 
 			this.initLayout();
