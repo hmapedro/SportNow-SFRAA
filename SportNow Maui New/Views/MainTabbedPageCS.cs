@@ -58,7 +58,7 @@ namespace SportNow.Views
             this.BackgroundColor = App.backgroundColor;
             this.BarBackgroundColor = App.backgroundColor;
             this.BarTextColor = App.topColor;// App.normalTextColor;//FromRgb(75, 75, 75);
-            this.SelectedTabColor = App.topColor;
+            this.SelectedTabColor = App.inactiveTitleTextColor;
             this.UnselectedTabColor = App.bottomColor; // App.bottomColor;
 
 
@@ -282,7 +282,7 @@ namespace SportNow.Views
         {
             Children.RemoveAt(0);
             Children.Add(new ServicesPageCS() { Title = "SERVIÇOS", IconImageSource = "iconservicos.png" });
-            Children.Add(new AttendanceOptionsPageCS() { Title = "MODALIDADES", IconImageSource = "iconmodalidades.png" });
+            Children.Add(new SportsPageCS() { Title = "MODALIDADES", IconImageSource = "iconmodalidades.png" });
             Children.Add(new MainPageCS() { Title = "PRINCIPAL", IconImageSource = "iconlogo.png" });
             Children.Add(new AllEventsPageCS() { Title = "EVENTOS", IconImageSource = "eventos.png" });
             Children.Add(new EquipamentTypePageCS() { Title = "LOJA", IconImageSource = "iconequipamentos.png" });
@@ -427,16 +427,29 @@ namespace SportNow.Views
 
             MinimumVersion minimumVersion = await appManager.GetMinimumVersion();
 
-            if (Convert.ToInt32(minimumVersion.build) > Convert.ToInt32(App.BuildNumber))
+            if (minimumVersion != null)
             {
-                await DisplayAlert("ATUALIZAR APP", "Para continuar a utilizar a nossa App deverá efetuar a atualização para uma versão mais recente.", "Ok");
+                if (Convert.ToInt32(minimumVersion.build) > Convert.ToInt32(App.BuildNumber))
+                {
+                    await DisplayAlert("ATUALIZAR APP", "Para continuar a utilizar a nossa App deverá efetuar a atualização para uma versão mais recente.", "Ok");
 
-                Microsoft.Maui.Controls.Application.Current.MainPage = new NavigationPage(new LoginPageCS("Efetue a atualização da App para uma versão mais recente."))
+                    Microsoft.Maui.Controls.Application.Current.MainPage = new NavigationPage(new LoginPageCS("Efetue a atualização da App para uma versão mais recente."))
+                    {
+                        BarBackgroundColor = App.backgroundColor,
+                        BarTextColor = App.normalTextColor
+                    };
+                }
+            }
+            else
+            {
+                Microsoft.Maui.Controls.Application.Current.MainPage = new NavigationPage(new LoginPageCS("Verifique a sua ligação à internet."))
                 {
                     BarBackgroundColor = App.backgroundColor,
                     BarTextColor = App.normalTextColor
                 };
             }
+
+            
             Debug.Print("MainTabbedPageCS.checkMinimumVersion is OK!");
             return 1;
         }

@@ -25,7 +25,7 @@ namespace SportNow
          public static Event_Participation event_participation;
 
         public static double screenWidthAdapter = 1, screenHeightAdapter = 1;
-         public static int consentFontSize = 0, bigTitleFontSize = 0, titleFontSize = 0, menuButtonFontSize = 0, formLabelFontSize = 0, formValueFontSize = 0, itemTitleFontSize = 0, itemTextFontSize = 0, smallTextFontSize = 0, formValueSmallFontSize = 0;
+         public static int consentFontSize = 0, superbigTitleFontSize = 0, bigTitleFontSize = 0, titleFontSize = 0, menuButtonFontSize = 0, formLabelFontSize = 0, formValueFontSize = 0, itemTitleFontSize = 0, itemTextFontSize = 0, smallTextFontSize = 0, formValueSmallFontSize = 0;
 
          public static int ItemWidth = 0, ItemHeight = 0;
 
@@ -40,12 +40,14 @@ namespace SportNow
 
          public static bool isToPop = false;
 
-         public static Color backgroundColor = Color.FromRgb(255, 255, 255);
-         public static Color backgroundOppositeColor = Color.FromRgb(0, 0, 0);
-         public static Color topColor = Color.FromRgb(24, 45, 91); 
-         public static Color bottomColor = Color.FromRgb(98, 98, 98); //Color.FromRgb(100, 150, 215);
-         public static Color normalTextColor = Color.FromRgb(50, 50, 50);
-         public static Color oppositeTextColor = Colors.White;
+        public static Color backgroundColor = Color.FromRgb(255, 255, 255);
+        public static Color backgroundOppositeColor = Color.FromRgb(0, 0, 0);
+        public static Color topColor = Color.FromRgb(24, 45, 91); 
+        public static Color bottomColor = Color.FromRgb(98, 98, 98); //Color.FromRgb(100, 150, 215);
+        public static Color activeTitleTextColor = Color.FromRgb(52, 144, 69);
+        public static Color inactiveTitleTextColor = Color.FromRgb(29, 93, 41);
+        public static Color normalTextColor = Color.FromRgb(50, 50, 50);
+        public static Color oppositeTextColor = Colors.White;
 
         public static double screenWidth = (DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density) - 10 * App.screenWidthAdapter;
         public static double screenHeight = (DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density) - 10 * App.screenWidthAdapter;
@@ -278,7 +280,7 @@ namespace SportNow
                 App.screenHeight = (DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density) - 20 * App.screenWidthAdapter;
 
                 App.ItemWidth = (int)(120 * App.screenHeightAdapter);
-                App.ItemHeight = (int)(App.screenWidth / 2 - 10 * App.screenWidthAdapter); //(int)(155 * App.screenWidthAdapter);
+                App.ItemHeight = (int)(App.screenWidth / 3 - 10 * App.screenWidthAdapter); //(int)(155 * App.screenWidthAdapter);
                 fontresize = screenHeightAdapter;
                 if (fontresize > 2)
                 {
@@ -304,7 +306,8 @@ namespace SportNow
                 }
 
             }
-            App.bigTitleFontSize = (int)(26 * fontresize);
+            App.superbigTitleFontSize = (int)(28 * fontresize);
+            App.bigTitleFontSize = (int)(24 * fontresize);
             App.titleFontSize = (int)(18 * fontresize);
             App.menuButtonFontSize = (int)(14 * fontresize);
             App.formLabelFontSize = (int)(16 * fontresize);

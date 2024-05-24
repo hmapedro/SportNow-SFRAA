@@ -221,9 +221,7 @@ namespace SportNow
 
         public static string RestUrl_Get_Class_Program_byId = DeviceInfo.Platform == DevicePlatform.Android ? "https://" + server + "/services/service_get_class_program_byID.php" : "https://" + server + "/services/service_get_class_program_byID.php";
 
-        //public static string RestUrl_Get_Objectives_bySeason = DeviceInfo.Platform == DevicePlatform.Android ? "https://" + server + "/services/service_get_objectives_bySeason.php" : "https://" + server + "/services/service_get_objectives_bySeason.php";
-
-
+        public static string RestUrl_Get_Services = DeviceInfo.Platform == DevicePlatform.Android ? "https://" + server + "/services/service_get_services.php" : "https://" + server + "/services/service_get_services.php";
 
         public static double ScreenWidth = 0;//Application.Current.MainPage.Width; //DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density; //Application.Current.MainPage.Width;//
         public static double ScreenHeight = 0;//Application.Current.MainPage.Height; //DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density; //Application.Current.MainPage.Height; //DeviceDisplay.MainDisplayInfo.Height;
