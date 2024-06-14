@@ -4,6 +4,7 @@ using System.Diagnostics;
 using SportNow.CustomViews;
 using SportNow.Views.Profile;
 using Microsoft.Maui.Controls.Shapes;
+using System.Collections.ObjectModel;
 
 namespace SportNow.Views
 {
@@ -22,7 +23,9 @@ namespace SportNow.Views
 			this.CleanScreen();
 		}
 
-		private AbsoluteLayout presencasrelativeLayout;
+        Service service;
+
+        private AbsoluteLayout presencasrelativeLayout;
 
 
 		private Microsoft.Maui.Controls.StackLayout stackButtons;
@@ -31,7 +34,7 @@ namespace SportNow.Views
 
 		private CollectionView weekClassesCollectionView;
 
-		private List<Class_Schedule> weekClass_Schedule, cleanClass_Schedule;
+		private ObservableCollection<Class_Schedule> weekClass_Schedule, cleanClass_Schedule;
 
 		public void initLayout()
 		{
@@ -133,9 +136,8 @@ namespace SportNow.Views
 
 		public async Task<int> getClass_DetailData(DateTime startDate)
 		{
-
-			weekClass_Schedule = await GetStudentClass_Schedules(startDate.ToString("yyyy-MM-dd"), startDate.AddDays(6).ToString("yyyy-MM-dd"));//  new List<Class_Schedule>();
-			cleanClass_Schedule = new List<Class_Schedule>();
+            weekClass_Schedule = await GetStudentClass_Schedules_obs(startDate.ToString("yyyy-MM-dd"), startDate.AddDays(6).ToString("yyyy-MM-dd"), service.id);//  new List<Class_Schedule>();
+			cleanClass_Schedule = new ObservableCollection<Class_Schedule>();
 
 			CompleteClass_Schedules();
 
@@ -273,8 +275,9 @@ namespace SportNow.Views
 		}
 
 
-		public AttendancePageCS()
-		{
+		public AttendancePageCS(Service service)
+        {
+            this.service = service;
 			this.initLayout();
 		}
 
@@ -350,28 +353,24 @@ namespace SportNow.Views
 			weekClassesCollectionView.ItemsSource = weekClass_Schedule;
 		}
 
-		async Task<List<Class_Schedule>> GetStudentClass_Schedules(string begindate, string enddate)
-		{
-			Debug.WriteLine("GetStudentClass_Schedules");
-			showActivityIndicator();
-			ClassManager classManager = new ClassManager();
-			List<Class_Schedule> class_schedules_i = await classManager.GetStudentClass_Schedules(App.member.id, begindate, enddate);
-            hideActivityIndicator();
+        async Task<ObservableCollection<Class_Schedule>> GetStudentClass_Schedules_obs(string begindate, string enddate, string serviceid)
+        {
+            ClassManager classManager = new ClassManager();
+            ObservableCollection<Class_Schedule> class_schedules_i = await classManager.GetStudentClass_Schedules_obs(App.member.id, serviceid, begindate, enddate);
             if (class_schedules_i == null)
-			{
-				Application.Current.MainPage = new NavigationPage(new LoginPageCS("Verifique a sua ligação à Internet e tente novamente."))
-				{
-					BarBackgroundColor = Colors.White,
-					BarTextColor = Colors.Black
-				};
-				return null;
-			}
-			
-			return class_schedules_i;
-		}
+            {
+                Application.Current.MainPage = new NavigationPage(new LoginPageCS("Verifique a sua ligação à Internet e tente novamente."))
+                {
+                    BarBackgroundColor = App.backgroundColor,
+                    BarTextColor = App.normalTextColor
+                };
+                return null;
+            }
+            return class_schedules_i;
+        }
 
 
-		async void OnClassScheduleCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
+        async void OnClassScheduleCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			showActivityIndicator();
 			Debug.WriteLine("MainPageCS.OnClassScheduleCollectionViewSelectionChanged");

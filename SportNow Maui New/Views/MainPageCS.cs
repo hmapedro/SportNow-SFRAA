@@ -60,9 +60,10 @@ namespace SportNow.Views
 
 		Label msg;
 
-		private ObservableCollection<Class_Schedule> cleanClass_Schedule, importantClass_Schedule;
+		private ObservableCollection<Class_Schedule> importantClass_Schedule;
+		private ObservableCollection<Class_Schedule> cleanClass_Schedule;
 
-		private List<Class_Schedule> teacherClass_Schedules;
+        private List<Class_Schedule> teacherClass_Schedules;
 
 		private CollectionView importantClassesCollectionView;
 		private CollectionView importantEventsCollectionView;
@@ -431,13 +432,20 @@ namespace SportNow.Views
 			//AULAS LABEL
 			attendanceLabel = new Label
 			{
-				Text = "PRÓXIMAS AULAS COMO ALUNO(A)",
 				TextColor = App.topColor,
 				HorizontalTextAlignment = TextAlignment.Start,
                 FontSize = App.titleFontSize,
                 FontFamily = "futuracondensedmedium",
             };
-			absoluteLayout.Add(attendanceLabel);
+            if (App.member.gender == "female")
+            {
+                attendanceLabel.Text = "PRÓXIMAS AULAS COMO ALUNA";
+            }
+            else
+            {
+                attendanceLabel.Text = "PRÓXIMAS AULAS COMO ALUNO";
+            }
+            absoluteLayout.Add(attendanceLabel);
 			absoluteLayout.SetLayoutBounds(attendanceLabel, new Rect(0, classesY, App.screenWidth, 30 * App.screenHeightAdapter));
 
 			scheduleCollection = new ScheduleCollection();

@@ -24,10 +24,10 @@ namespace SportNow.Views
 		
 		private Microsoft.Maui.Controls.StackLayout stackButtons;
 
-		List<Equipment> equipments, equipmentsKarategi, equipmentsProtecoesCintos, equipmentsMerchandising;
-		public List<EquipmentGroup> equipmentsGroupSelected, equipmentsGroupKarategi, equipmentsGroupProtecoesCintos, equipmentsGroupMerchandising;
+		List<Equipment> equipments, equipmentsVestuario, equipmentsMerchandising;
+		public List<EquipmentGroup> equipmentsGroupSelected, equipmentsGroupVestuario, equipmentsGroupMerchandising;
 
-		private MenuButton karategiButton, protecoescintosButton, merchandisingButton;
+		private MenuButton vestuarioButton, merchandisingButton;
 
 		private CollectionView collectionViewEquipments;
 
@@ -59,14 +59,10 @@ namespace SportNow.Views
 			CreateStackButtons();
 			CreateEquipmentColletionView();
 
-			if (App.EQUIPAMENTOS_activetab == "karategis")
+			if (App.EQUIPAMENTOS_activetab == "vestuario")
             {
-				OnKarategiButtonClicked(null, null);
+				OnVestuarioButtonClicked(null, null);
             }
-			else if (App.EQUIPAMENTOS_activetab == "protecoescintos")
-			{
-				OnProtecoesCintosButtonClicked(null, null);
-			}
 			else if (App.EQUIPAMENTOS_activetab == "merchandising")
 			{
 				OnMerchandisingButtonClicked(null, null);
@@ -77,43 +73,25 @@ namespace SportNow.Views
 		public async Task GetEquipmentsData()
 		{
 			equipments = await GetEquipments();
-			equipmentsKarategi = new List<Equipment>();
-			equipmentsProtecoesCintos = new List<Equipment>();
+			equipmentsVestuario = new List<Equipment>();
 			equipmentsMerchandising = new List<Equipment>();
-			equipmentsGroupKarategi = new List<EquipmentGroup>();
-			equipmentsGroupProtecoesCintos= new List<EquipmentGroup>();
+			equipmentsGroupVestuario = new List<EquipmentGroup>();
 			equipmentsGroupMerchandising = new List<EquipmentGroup>();
 
 			foreach (Equipment equipment in equipments)
 			{
 				equipment.valueFormatted = String.Format("{0:0.00}", equipment.value) + "€";
 
-				if (equipment.type == "karategi")
+				if (equipment.type == "vestuario")
 				{
-					equipmentsKarategi.Add(equipment);
-					EquipmentGroup equipmentGroup = getSubTypeEquipmentGroup(equipmentsGroupKarategi, equipment.subtype);
+					equipmentsVestuario.Add(equipment);
+					EquipmentGroup equipmentGroup = getSubTypeEquipmentGroup(equipmentsGroupVestuario, equipment.subtype);
 
 					if (equipmentGroup == null)
 					{
 						List<Equipment> equipments = new List<Equipment>();
 						equipments.Add(equipment);
-						equipmentsGroupKarategi.Add(new EquipmentGroup(equipment.subtype.ToUpper(), equipments));
-					}
-					else
-					{
-						equipmentGroup.Add(equipment);
-					}
-				}
-				else if ((equipment.type == "protecao") | (equipment.type == "cinto"))
-				{
-					equipmentsProtecoesCintos.Add(equipment);
-					EquipmentGroup equipmentGroup = getSubTypeEquipmentGroup(equipmentsGroupProtecoesCintos, equipment.subtype);
-
-					if (equipmentGroup == null)
-					{
-						List<Equipment> equipments = new List<Equipment>();
-						equipments.Add(equipment);
-						equipmentsGroupProtecoesCintos.Add(new EquipmentGroup(equipment.subtype.ToUpper(), equipments));
+						equipmentsGroupVestuario.Add(new EquipmentGroup(equipment.subtype.ToUpper(), equipments));
 					}
 					else
 					{
@@ -138,7 +116,7 @@ namespace SportNow.Views
 				}
 			}
 
-			/*foreach (EquipmentGroup equipmentGroup in equipmentsGroupKarategi) {
+			/*foreach (EquipmentGroup equipmentGroup in equipmentsGroupVestuario) {
 				equipmentGroup.Print();
 			}*/
 		}
@@ -259,13 +237,10 @@ namespace SportNow.Views
 
 		public void CreateStackButtons()
 		{
-			var buttonWidth = (App.screenWidth - 10 * App.screenWidthAdapter) / 3;
+			var buttonWidth = (App.screenWidth - 5 * App.screenWidthAdapter) / 2;
 
-			karategiButton = new MenuButton("KARATE GIs", buttonWidth, 60);
-			karategiButton.button.Clicked += OnKarategiButtonClicked;
-
-			protecoescintosButton = new MenuButton("PROTEÇÕES E CINTOS", buttonWidth, 60);
-			protecoescintosButton.button.Clicked += OnProtecoesCintosButtonClicked;
+			vestuarioButton = new MenuButton("VESTUÁRIO", buttonWidth, 60);
+			vestuarioButton.button.Clicked += OnVestuarioButtonClicked;
 
 			merchandisingButton = new MenuButton("MERCHANDISING", buttonWidth, 60);
 			merchandisingButton.button.Clicked += OnMerchandisingButtonClicked;
@@ -281,8 +256,7 @@ namespace SportNow.Views
 				HeightRequest = 40,
 				Children =
 				{
-					karategiButton,
-					protecoescintosButton,
+					vestuarioButton,
 					merchandisingButton
 				}
 			};
@@ -317,32 +291,20 @@ namespace SportNow.Views
 			return equipments;
 		}
 
-		async void OnKarategiButtonClicked(object sender, EventArgs e)
+		async void OnVestuarioButtonClicked(object sender, EventArgs e)
 		{
-			karategiButton.activate();
-			protecoescintosButton.deactivate();
+			vestuarioButton.activate();
 			merchandisingButton.deactivate();
 
-			collectionViewEquipments.ItemsSource = equipmentsGroupKarategi;
-			App.EQUIPAMENTOS_activetab = "karategis";
+			collectionViewEquipments.ItemsSource = equipmentsGroupVestuario;
+			App.EQUIPAMENTOS_activetab = "vestuario";
 
 		}
 
-		async void OnProtecoesCintosButtonClicked(object sender, EventArgs e)
-		{
-			karategiButton.deactivate();
-			protecoescintosButton.activate();
-			merchandisingButton.deactivate();
-
-			collectionViewEquipments.ItemsSource = equipmentsGroupProtecoesCintos;
-
-			App.EQUIPAMENTOS_activetab = "protecoescintos";
-		}
 
 		async void OnMerchandisingButtonClicked(object sender, EventArgs e)
 		{
-			karategiButton.deactivate();
-			protecoescintosButton.deactivate();
+			vestuarioButton.deactivate();
 			merchandisingButton.activate();
 
 			collectionViewEquipments.ItemsSource = equipmentsGroupMerchandising;

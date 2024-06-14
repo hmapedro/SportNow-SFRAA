@@ -3,6 +3,7 @@ using System.Diagnostics;
 using SportNow.CustomViews;
 using SportNow.Views.Profile;
 using SportNow.Views.Personal;
+using SportNow.Model;
 
 namespace SportNow.Views
 {
@@ -28,9 +29,11 @@ namespace SportNow.Views
 
 		RoundButton personalClassesButton;
 
+		Service service;
+
         public void initLayout()
 		{
-			Title = "AULAS";
+			Title = service.nome;
 			var toolbarItem = new ToolbarItem
 			{
 				//Text = "Logout",
@@ -85,7 +88,7 @@ namespace SportNow.Views
 			marcarAulaButton_tap.Tapped += (s, e) =>
 			{
 				
-				Navigation.PushAsync(new AttendancePageCS());
+				//Navigation.PushAsync(new AttendancePageCS());
 			};
 			marcarAulaButton.GestureRecognizers.Add(marcarAulaButton_tap);
 
@@ -93,7 +96,7 @@ namespace SportNow.Views
 			var estatisticasButton_tap = new TapGestureRecognizer();
 			estatisticasButton_tap.Tapped += (s, e) =>
 			{
-				Navigation.PushAsync(new AttendanceStatsPageCS());
+				//Navigation.PushAsync(new AttendanceStatsPageCS());
 			};
 			estatisticasButton.GestureRecognizers.Add(estatisticasButton_tap);
 
@@ -102,7 +105,7 @@ namespace SportNow.Views
 			var presencasButton_tap = new TapGestureRecognizer();
 			presencasButton_tap.Tapped += (s, e) =>
 			{
-				Navigation.PushAsync(new AttendanceManagePageCS());
+				//Navigation.PushAsync(new AttendanceManagePageCS());
 			};
 			presencasButton.GestureRecognizers.Add(presencasButton_tap);
 
@@ -110,7 +113,7 @@ namespace SportNow.Views
 			var mensalidadesButton_tap = new TapGestureRecognizer();
 			mensalidadesButton_tap.Tapped += (s, e) =>
 			{
-				Navigation.PushAsync(new MonthFeeListPageCS());
+				Navigation.PushAsync(new MonthFeeListPageCS(new Service()));
 			};
 			mensalidadesButton.GestureRecognizers.Add(mensalidadesButton_tap);
 
@@ -118,7 +121,7 @@ namespace SportNow.Views
 			var mensalidadesStudentButton_tap = new TapGestureRecognizer();
 			mensalidadesStudentButton_tap.Tapped += (s, e) =>
 			{
-				Navigation.PushAsync(new MonthFeeStudentListPageCS());
+				Navigation.PushAsync(new MonthFeeStudentListPageCS(new Service()));
 			};
 			mensalidadesStudentButton.GestureRecognizers.Add(mensalidadesStudentButton_tap);
 
@@ -255,9 +258,10 @@ namespace SportNow.Views
 			//hideActivityIndicator();
         }
 
-        public AttendanceOptionsPageCS()
+        public AttendanceOptionsPageCS(Service service)
 		{
-			this.initLayout();
+			this.service = service;
+            this.initLayout();
 		}
 
 		async void OnPerfilButtonClicked(object sender, EventArgs e)
@@ -269,7 +273,7 @@ namespace SportNow.Views
 		{
 			Debug.WriteLine("GetStudentClass_Schedules");
 			MonthFeeManager monthFeeManager = new MonthFeeManager();
-			string count = await monthFeeManager.Has_MonthFeesStudent(App.member.id);
+			string count = await monthFeeManager.Has_MonthFeesStudent(App.member.id, "");
 			if (count == null)
 			{
 				Application.Current.MainPage = new NavigationPage(new LoginPageCS("Verifique a sua ligação à Internet e tente novamente."))

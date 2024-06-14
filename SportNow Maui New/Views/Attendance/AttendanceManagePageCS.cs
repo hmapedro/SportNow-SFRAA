@@ -1,6 +1,7 @@
 ﻿using Microsoft.Maui.Controls.Shapes;
 using SportNow.Model;
 using SportNow.Services.Data.JSON;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 
 namespace SportNow.Views
@@ -19,14 +20,16 @@ namespace SportNow.Views
 			//this.CleanScreen();
 		}
 
-		private AbsoluteLayout presencasrelativeLayout;
+        Service service;
+
+        private AbsoluteLayout presencasrelativeLayout;
 
 		private Microsoft.Maui.Controls.StackLayout stackButtons, stackWeekSelector;
 
 		private CollectionView classAttendanceCollectionView;
 
-		private List<Class_Schedule> allClass_Schedules;
-		private static List<Class_Schedule> dummyClass_Schedules = new List<Class_Schedule>();
+		private ObservableCollection<Class_Schedule> allClass_Schedules;
+		private static ObservableCollection<Class_Schedule> dummyClass_Schedules = new ObservableCollection<Class_Schedule>();
 
 		DateTime firstDayWeek_datetime;
 		Label currentWeek;
@@ -59,7 +62,7 @@ namespace SportNow.Views
 			string firstDayWeek = firstDayWeek_datetime.ToString("yyyy-MM-dd");
 			string lastdayLastWeek = firstDayWeek_datetime.AddDays(6).ToString("yyyy-MM-dd");
 
-			allClass_Schedules = await GetAllClass_Schedules(firstDayWeek, lastdayLastWeek);
+			allClass_Schedules = await RestUrl_Get_Student_Class_Schedules_byService(firstDayWeek, lastdayLastWeek, this.service.id);
 			CompleteClass_Schedules();
 
 			//CreateStackButtons();
@@ -250,9 +253,10 @@ namespace SportNow.Views
 		}
 
 
-		public AttendanceManagePageCS()
+		public AttendanceManagePageCS(Service service)
 		{
-			this.initLayout();
+            this.service = service;
+            this.initLayout();
 			initSpecificLayout();
 		}
 
@@ -281,7 +285,7 @@ namespace SportNow.Views
 			string firstDayWeek = firstDayWeek_datetime.ToString("yyyy-MM-dd");
 			string lastdayLastWeek = firstDayWeek_datetime.AddDays(6).ToString("yyyy-MM-dd");
 
-			allClass_Schedules = await GetAllClass_Schedules(firstDayWeek, lastdayLastWeek);
+			allClass_Schedules = await RestUrl_Get_Student_Class_Schedules_byService(firstDayWeek, lastdayLastWeek, this.service.id);
 			CompleteClass_Schedules();
 			classAttendanceCollectionView.ItemsSource = dummyClass_Schedules;
 			classAttendanceCollectionView.ItemsSource = allClass_Schedules;
@@ -301,7 +305,7 @@ namespace SportNow.Views
 			string firstDayWeek = firstDayWeek_datetime.ToString("yyyy-MM-dd");
 			string lastdayLastWeek = firstDayWeek_datetime.AddDays(6).ToString("yyyy-MM-dd");
 
-			allClass_Schedules = await GetAllClass_Schedules(firstDayWeek, lastdayLastWeek);
+			allClass_Schedules = await RestUrl_Get_Student_Class_Schedules_byService(firstDayWeek, lastdayLastWeek, this.service.id);
 
 			CompleteClass_Schedules();
 			classAttendanceCollectionView.ItemsSource = dummyClass_Schedules;
@@ -309,24 +313,24 @@ namespace SportNow.Views
 			hideActivityIndicator();
 		}
 
-		async Task<List<Class_Schedule>> GetAllClass_Schedules(string begindate, string enddate)
-		{
-			ClassManager classManager = new ClassManager();
-			List<Class_Schedule> class_schedules_i = await classManager.GetAllClass_Schedules(App.member.id, begindate, enddate);
-			if (class_schedules_i == null)
-			{
-				Application.Current.MainPage = new NavigationPage(new LoginPageCS("Verifique a sua ligação à Internet e tente novamente."))
-				{
-					BarBackgroundColor = App.backgroundColor,
-					BarTextColor = App.normalTextColor
-				};
-				return null;
-			}
-			return class_schedules_i;
-		}
+        async Task<ObservableCollection<Class_Schedule>> RestUrl_Get_Student_Class_Schedules_byService(string begindate, string enddate, string serviceid)
+        {
+            ClassManager classManager = new ClassManager();
+            ObservableCollection<Class_Schedule> class_schedules_i = await classManager.GetStudentClass_Schedules_obs(App.member.id, serviceid, begindate, enddate);
+            if (class_schedules_i == null)
+            {
+                Application.Current.MainPage = new NavigationPage(new LoginPageCS("Verifique a sua ligação à Internet e tente novamente."))
+                {
+                    BarBackgroundColor = App.backgroundColor,
+                    BarTextColor = App.normalTextColor
+                };
+                return null;
+            }
+            return class_schedules_i;
+        }
 
 
-		async void OnClassAttendanceCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
+        async void OnClassAttendanceCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			Debug.WriteLine("AttendanceManagePageCS OnClassAttendanceCollectionViewSelectionChanged");
 

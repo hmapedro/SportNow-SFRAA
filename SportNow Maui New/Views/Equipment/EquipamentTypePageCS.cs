@@ -85,22 +85,14 @@ namespace SportNow.Views
 			var buttonWidth = (width) / 2;
 
 
-			karategiButton = new OptionButton("KARATE GIs", "karategis.png", buttonWidth, 100 * App.screenHeightAdapter);
+			karategiButton = new OptionButton("VESTUÁRIO", "karategis.png", buttonWidth, 100 * App.screenHeightAdapter);
 			//minhasGraduacoesButton.button.Clicked += OnMinhasGraduacoesButtonClicked;
 			var karategiButton_tap = new TapGestureRecognizer();
 			karategiButton_tap.Tapped += (s, e) =>
 			{
-				Navigation.PushAsync(new EquipamentsPageCS("karategis"));
+				Navigation.PushAsync(new EquipamentsPageCS("vestuario"));
 			};
 			karategiButton.GestureRecognizers.Add(karategiButton_tap);
-
-			protecoescintosButton = new OptionButton("PROTEÇÕES E CINTOS", "protecoescintos.png", buttonWidth, 100 * App.screenHeightAdapter);
-			var protecoescintosButton_tap = new TapGestureRecognizer();
-			protecoescintosButton_tap.Tapped += (s, e) =>
-			{
-				Navigation.PushAsync(new EquipamentsPageCS("protecoescintos"));
-			};
-			protecoescintosButton.GestureRecognizers.Add(protecoescintosButton_tap);
 
 			merchandisingButton = new OptionButton("MERCHANDISING", "merchandising.png", buttonWidth, 100 * App.screenHeightAdapter);
 			var merchandisingButton_tap = new TapGestureRecognizer();
@@ -119,17 +111,16 @@ namespace SportNow.Views
 				Orientation = StackOrientation.Vertical,
 				HorizontalOptions = LayoutOptions.FillAndExpand,
 				VerticalOptions = LayoutOptions.FillAndExpand,
-				HeightRequest = 500 * App.screenHeightAdapter,
+				HeightRequest = 400 * App.screenHeightAdapter,
 				Children =
 				{
 					karategiButton,
-					protecoescintosButton,
 					merchandisingButton,
 				}
 			};
 
 			equipamentosabsoluteLayout.Add(stackEquipamentosButtons);
-			equipamentosabsoluteLayout.SetLayoutBounds(stackEquipamentosButtons, new Rect(App.screenWidth / 4, 0, App.screenWidth / 2, 500 * App.screenHeightAdapter));
+			equipamentosabsoluteLayout.SetLayoutBounds(stackEquipamentosButtons, new Rect(App.screenWidth / 4, 0, App.screenWidth / 2, 400 * App.screenHeightAdapter));
 
 		}
 

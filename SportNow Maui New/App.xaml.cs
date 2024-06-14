@@ -17,7 +17,7 @@ namespace SportNow
         public static Member member;
 
         public static string VersionNumber = "1.0";
-        public static string BuildNumber = "3";
+        public static string BuildNumber = "4";
 
         public static Competition competition;
 
@@ -42,7 +42,7 @@ namespace SportNow
 
         public static Color backgroundColor = Color.FromRgb(255, 255, 255);
         public static Color backgroundOppositeColor = Color.FromRgb(0, 0, 0);
-        public static Color topColor = Color.FromRgb(24, 45, 91); 
+        public static Color topColor = Color.FromRgb(52, 145, 70); //24, 45, 91); 52, 145, 70
         public static Color bottomColor = Color.FromRgb(98, 98, 98); //Color.FromRgb(100, 150, 215);
         public static Color activeTitleTextColor = Color.FromRgb(52, 144, 69);
         public static Color inactiveTitleTextColor = Color.FromRgb(29, 93, 41);
@@ -368,6 +368,13 @@ namespace SportNow
                 return currentYear + "-" + (currentYear + 1);
             }
             //return "";
+        }
+
+        public static string ToTitleCase(string str)
+        {
+            var firstword = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(str.Split(' ')[0].ToLower());
+            str = str.Replace(str.Split(' ')[0], firstword);
+            return str;
         }
 
         /*protected override Window CreateWindow(IActivationState activationState)

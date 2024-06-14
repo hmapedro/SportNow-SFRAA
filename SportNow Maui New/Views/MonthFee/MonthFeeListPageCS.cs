@@ -20,6 +20,8 @@ namespace SportNow.Views
 			this.CleanScreen();
 		}
 
+		Service service;
+
 		private CollectionView monthFeesCollectionView;
 
 		public Label currentMonth;
@@ -59,7 +61,7 @@ namespace SportNow.Views
 
 			CreateMonthSelector();
 			_ = await CreateDojoPicker();
-			monthFees = await GetMonthFeesbyDojo();
+			monthFees = await GetMonthFeesbyDojo_byService();
 			CreateMonthFeesColletion();
 
 			hideActivityIndicator();
@@ -104,7 +106,7 @@ namespace SportNow.Views
 
 				Debug.Print("DojoPicker selectedItem = " + dojoPicker.SelectedItem.ToString());
 
-				monthFees = await GetMonthFeesbyDojo();
+				monthFees = await GetMonthFeesbyDojo_byService();
 
 				monthFeesCollectionView.ItemsSource = monthFees;
 
@@ -203,7 +205,7 @@ namespace SportNow.Views
 					{
 						Children =
 							{
-								new Label { FontFamily = "futuracondensedmedium", Text = "Não existem Mensalidades deste Dojo para este mês.", HorizontalTextAlignment = TextAlignment.Center, TextColor = App.normalTextColor, FontSize = 20 },
+								new Label { FontFamily = "futuracondensedmedium", Text = "Não existem Mensalidades deste Serviço para este mês.", HorizontalTextAlignment = TextAlignment.Center, TextColor = App.normalTextColor, FontSize = 20 },
 							}
 					}
 				}
@@ -310,10 +312,10 @@ namespace SportNow.Views
             absoluteLayout.SetLayoutBounds(approveAllButton, new Rect(0, App.screenHeight - 160 * App.screenHeightAdapter, App.screenWidth, 50 * App.screenHeightAdapter));
         }
 
-        public MonthFeeListPageCS()
+        public MonthFeeListPageCS(Service service)
 		{
-
-			this.initLayout();
+            this.service = service;
+            this.initLayout();
 			//this.initSpecificLayout();
 
 		}
@@ -333,7 +335,7 @@ namespace SportNow.Views
 			selectedTime = selectedTime.AddMonths(-1);
 			currentMonth.Text = selectedTime.Year + " - " + selectedTime.Month;
 
-			monthFees = await GetMonthFeesbyDojo();
+			monthFees = await GetMonthFeesbyDojo_byService();
 
 			monthFeesCollectionView.ItemsSource = monthFees;
 
@@ -347,18 +349,18 @@ namespace SportNow.Views
 			selectedTime = selectedTime.AddMonths(1);
 			Debug.Print("selectedTime = " + selectedTime.ToShortDateString());
 			currentMonth.Text = selectedTime.Year + " - " + selectedTime.Month;
-			monthFees = await GetMonthFeesbyDojo();
+			monthFees = await GetMonthFeesbyDojo_byService();
 
 			monthFeesCollectionView.ItemsSource = monthFees;
 
 			hideActivityIndicator();
 		}
 
-		async Task<ObservableCollection<MonthFee>> GetMonthFeesbyDojo()
+		async Task<ObservableCollection<MonthFee>> GetMonthFeesbyDojo_byService()
 		{
 			Debug.WriteLine("GetMonthFeesbyDojo " + dojoPicker.SelectedItem.ToString());
 			MonthFeeManager monthFeeManager = new MonthFeeManager();
-			ObservableCollection<MonthFee> monthFees = await monthFeeManager.GetMonthFeesbyDojo(dojoPicker.SelectedItem.ToString(), selectedTime.Year.ToString(), selectedTime.Month.ToString());
+			ObservableCollection<MonthFee> monthFees = await monthFeeManager.GetMonthFeesbyDojo_byService(dojoPicker.SelectedItem.ToString(), this.service.id, selectedTime.Year.ToString(), selectedTime.Month.ToString());
 			if (monthFees == null)
 			{
 				Application.Current.MainPage = new NavigationPage(new LoginPageCS("Verifique a sua ligação à Internet e tente novamente."))

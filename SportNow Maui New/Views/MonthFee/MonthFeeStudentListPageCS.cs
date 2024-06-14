@@ -19,7 +19,8 @@ namespace SportNow.Views
 			this.CleanScreen();
 		}
 
-		private CollectionView monthFeesCollectionView;
+        Service service;
+        private CollectionView monthFeesCollectionView;
 
 		public Label currentMonth;
 
@@ -211,9 +212,9 @@ namespace SportNow.Views
 
 		}
 
-		public MonthFeeStudentListPageCS()
+		public MonthFeeStudentListPageCS(Service service)
 		{
-
+			this.service = service;
 			this.initLayout();
 			//this.initSpecificLayout();
 
@@ -253,7 +254,7 @@ namespace SportNow.Views
 		async Task<ObservableCollection<MonthFee>> GetMonthFeesbyStudent()
 		{
 			MonthFeeManager monthFeeManager = new MonthFeeManager();
-			ObservableCollection<MonthFee> monthFees = await monthFeeManager.GetMonthFeesbyStudent(App.member.id, selectedTime.Year.ToString());
+			ObservableCollection<MonthFee> monthFees = await monthFeeManager.GetMonthFees_byStudent_byService(App.member.id, this.service.id, selectedTime.Year.ToString());
 			if (monthFees == null)
 			{
 				Application.Current.MainPage = new NavigationPage(new LoginPageCS("Verifique a sua ligação à Internet e tente novamente."))

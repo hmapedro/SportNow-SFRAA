@@ -227,7 +227,7 @@ namespace SportNow.Services.Data.JSON
 
 		public async Task<int> GetMemberStudents_Count(string memberid)
 		{
-			Debug.WriteLine("MemberManager.GetMemberStudents_Count");
+			Debug.WriteLine("MemberManager.GetMemberStudents_Count  "+Constants.RestUrl_Get_Member_Students_Count + "?userid=" + memberid);
 			Uri uri = new Uri(string.Format(Constants.RestUrl_Get_Member_Students_Count + "?userid=" + memberid));
 			try
 			{
@@ -236,20 +236,20 @@ namespace SportNow.Services.Data.JSON
 				if (response.IsSuccessStatusCode)
 				{
 					string content = await response.Content.ReadAsStringAsync();
-					Debug.WriteLine("content = " + content);
+					Debug.WriteLine("MemberManager.GetMemberStudents_Count - content = " + content);
 					List<Result> createResultList = JsonConvert.DeserializeObject<List<Result>>(content);
 
 					return Convert.ToInt32(createResultList[0].result);
 				}
 				else
 				{
-					Debug.WriteLine("login not ok");
+					Debug.WriteLine("MemberManager.GetMemberStudents_Count - login not ok");
 					return -1;
 				}	
 			}
 			catch (Exception e)
 			{
-				Debug.WriteLine("http request error");
+				Debug.WriteLine("MemberManager.GetMemberStudents_Count - http request error");
 				Debug.Print(e.StackTrace);
 				return -2;
 			}

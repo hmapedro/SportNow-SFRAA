@@ -29,6 +29,7 @@ public static class MauiProgram
 				options.SetShouldSuppressExceptionsInAnimations(true);
 			})
 #endif
+            //.UseMauiCommunityToolkit()
             .UseMauiCommunityToolkitMarkup()//.UseMauiCommunityToolkitMarkup()
             .UseMauiApp<App>()
             .ConfigureSyncfusionCore()

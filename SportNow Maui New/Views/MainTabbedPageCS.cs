@@ -330,12 +330,12 @@ namespace SportNow.Views
             else if (actiontype == "opentodayclass")
             {
                 App.notification = App.notification + " actiontype == opentodayclass ";
-                await Navigation.PushAsync(new AttendancePageCS());
+                await Navigation.PushAsync(new AttendancePageCS(new Service()));
             }
             else if (actiontype == "opentodayclassinstructor")
             {
                 App.notification = App.notification + " actiontype == opentodayclassinstructor ";
-                await Navigation.PushAsync(new AttendanceManagePageCS());
+                await Navigation.PushAsync(new AttendanceManagePageCS(new Service()));
             }
             else if (actiontype == "authorizeregistration")
             {

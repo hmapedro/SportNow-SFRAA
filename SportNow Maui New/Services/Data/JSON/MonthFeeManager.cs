@@ -87,41 +87,102 @@ namespace SportNow.Services.Data.JSON
 			}
 		}
 
-		public async Task<ObservableCollection<MonthFee>> GetMonthFeesbyDojo(string dojo, string year, string month)
-		{
-			Debug.WriteLine("GetMonthFeesbyDojo");
-			Uri uri = new Uri(string.Format(Constants.RestUrl_Get_MonthFees_byDojo + "?dojo=" + dojo+ "&year="+ year + "&month="+month));
-			try
-			{
-				HttpResponseMessage response = await client.GetAsync(uri);
-			
+        public async Task<ObservableCollection<MonthFee>> GetMonthFeesbyDojo(string dojo, string year, string month)
+        {
+            Debug.WriteLine("GetMonthFeesbyDojo");
+            Uri uri = new Uri(string.Format(Constants.RestUrl_Get_MonthFees_byDojo + "?dojo=" + dojo + "&year=" + year + "&month=" + month));
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(uri);
 
-				if (response.IsSuccessStatusCode)
-				{
-					string content = await response.Content.ReadAsStringAsync();
-					monthFees = JsonConvert.DeserializeObject<ObservableCollection<MonthFee>>(content);
 
-				}
-				else
-				{
-					Debug.WriteLine("login not ok");
-				}
-				return monthFees;
-			}
-			catch (Exception e)
-			{
-				Debug.WriteLine("http request error");
-				Debug.Print(e.StackTrace);
-				return null;
-			}
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    monthFees = JsonConvert.DeserializeObject<ObservableCollection<MonthFee>>(content);
 
-		}
+                }
+                else
+                {
+                    Debug.WriteLine("login not ok");
+                }
+                return monthFees;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("http request error");
+                Debug.Print(e.StackTrace);
+                return null;
+            }
+
+        }
+
+        public async Task<ObservableCollection<MonthFee>> GetMonthFeesbyDojo_byService(string dojo, string serviceid, string year, string month)
+        {
+            Debug.WriteLine("GetMonthFeesbyDojo_byService "+ Constants.RestUrl_Get_MonthFees_byDojo_byService + "?dojo=" + dojo + "&serviceid=" + serviceid + "&year=" + year + "&month=" + month);
+            Uri uri = new Uri(string.Format(Constants.RestUrl_Get_MonthFees_byDojo_byService + "?dojo=" + dojo + "&serviceid=" + serviceid + "&year=" + year + "&month=" + month));
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(uri);
+
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    monthFees = JsonConvert.DeserializeObject<ObservableCollection<MonthFee>>(content);
+
+                }
+                else
+                {
+                    Debug.WriteLine("GetMonthFeesbyDojo_byService - not ok");
+                }
+                return monthFees;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("GetMonthFeesbyDojo_byService - http request error");
+                Debug.Print(e.StackTrace);
+                return null;
+            }
+
+        }
 
         public async Task<ObservableCollection<MonthFee>> GetMonthFeesbyStudent(string userid, string year)
         {
             Debug.WriteLine("GetMonthFeesbyStudent");
             Uri uri = new Uri(string.Format(Constants.RestUrl_Get_MonthFees_byStudent + "?userid=" + userid + "&year=" + year));
             Debug.WriteLine(Constants.RestUrl_Get_MonthFees_byStudent + "?userid=" + userid + "&year=" + year);
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(uri);
+
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine("content=" + content);
+                    monthFees = JsonConvert.DeserializeObject<ObservableCollection<MonthFee>>(content);
+                }
+                else
+                {
+                    Debug.WriteLine("login not ok");
+                }
+                return monthFees;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("http request error");
+                Debug.Print(e.StackTrace);
+                return null;
+            }
+
+        }
+
+        public async Task<ObservableCollection<MonthFee>> GetMonthFees_byStudent_byService(string userid, string serviceid, string year)
+        {
+            Debug.WriteLine("GetMonthFeesbyStudent");
+            Uri uri = new Uri(string.Format(Constants.RestUrl_Get_MonthFees_byStudent_byService + "?userid=" + userid + "&serviceid=" + serviceid + "&year=" + year));
+            Debug.WriteLine(Constants.RestUrl_Get_MonthFees_byStudent_byService + "?userid=" + userid + "&serviceid=" + serviceid + "&year=" + year);
             try
             {
                 HttpResponseMessage response = await client.GetAsync(uri);
@@ -182,10 +243,10 @@ namespace SportNow.Services.Data.JSON
 
         }
 
-        public async Task<string> Has_MonthFeesStudent(string userid)
+        public async Task<string> Has_MonthFeesStudent(string userid, string serviceid)
 		{
-			Debug.WriteLine("Get_has_MonthFeesStudent - " + Constants.RestUrl_Has_MonthFeesStudent + "?userid=" + userid);
-			Uri uri = new Uri(string.Format(Constants.RestUrl_Has_MonthFeesStudent + "?userid=" + userid));
+			Debug.WriteLine("Has_MonthFeesStudent - " + Constants.RestUrl_Has_MonthFeesStudent + "?userid=" + userid + "&serviceid=" + serviceid);
+			Uri uri = new Uri(string.Format(Constants.RestUrl_Has_MonthFeesStudent + "?userid=" + userid + "&serviceid=" + serviceid));
 			try
 			{
 				HttpResponseMessage response = await client.GetAsync(uri);
@@ -194,7 +255,7 @@ namespace SportNow.Services.Data.JSON
 				{
 					//return true;
 					string content = await response.Content.ReadAsStringAsync();
-					Debug.WriteLine("content=" + content);
+					Debug.WriteLine("Has_MonthFeesStudent=" + content);
 					List<Result> createResultList = JsonConvert.DeserializeObject<List<Result>>(content);
 
 					return createResultList[0].result;

@@ -28,6 +28,8 @@ namespace SportNow
 
         public static string RestUrl_Get_Member_Students_Count = DeviceInfo.Platform == DevicePlatform.Android ? "https://"+server+"/services/service_get_member_students_count.php" : "https://"+server+"/services/service_get_member_students_count.php";
 
+        public static string RestUrl_Get_Member_Students_Service_Count = DeviceInfo.Platform == DevicePlatform.Android ? "https://" + server + "/services/service_get_member_students_service_count.php" : "https://" + server + "/services/service_get_member_students_service_count.php";
+
         public static string RestUrl_Get_Students_Dojo_ByClass_Info = DeviceInfo.Platform == DevicePlatform.Android ? "https://"+server+"/services/service_get_all_students_dojo_byclass_info.php" : "https://"+server+"/services/service_get_all_students_dojo_byclass_info.php";
 
         public static string RestUrl_Get_Students_Dojo_Info = DeviceInfo.Platform == DevicePlatform.Android ? "https://"+server+"/services/service_get_all_students_dojo_info.php" : "https://"+server+"/services/service_get_all_students_dojo_info.php";
@@ -124,9 +126,13 @@ namespace SportNow
 
         public static string RestUrl_Get_Future_Classes_Attendances = DeviceInfo.Platform == DevicePlatform.Android ? "https://"+server+"/services/service_get_future_classes_attendances.php" : "https://"+server+"/services/service_get_future_classes_attendances.php";
 
-        public static string RestUrl_Get_Student_Class_Schedules = DeviceInfo.Platform == DevicePlatform.Android ? "https://"+server+"/services/service_get_student_classes_schedules.php" : "https://"+server+"/services/service_get_student_classes_schedules.php";
+        public static string RestUrl_Get_Student_Class_Schedules_byService = DeviceInfo.Platform == DevicePlatform.Android ? "https://"+server+ "/services/service_get_student_classes_schedules_byservice.php" : "https://"+server+"/services/service_get_student_classes_schedules_byservice.php";
+
+        public static string RestUrl_Get_Student_Class_Schedules = DeviceInfo.Platform == DevicePlatform.Android ? "https://" + server + "/services/service_get_student_classes_schedules.php" : "https://" + server + "/services/service_get_student_classes_schedules.php";
 
         public static string RestUrl_Get_All_Class_Schedules = DeviceInfo.Platform == DevicePlatform.Android ? "https://"+server+"/services/service_get_all_classes_schedules.php" : "https://"+server+"/services/service_get_all_classes_schedules.php";
+
+        public static string RestUrl_Get_All_Class_Schedules_byService = DeviceInfo.Platform == DevicePlatform.Android ? "https://" + server + "/services/service_get_all_classes_schedules_byservice.php" : "https://" + server + "/services/service_get_all_classes_schedules_byservice.php";
 
         public static string RestUrl_Get_Past_Classes_AttendanceStats= DeviceInfo.Platform == DevicePlatform.Android ? "https://"+server+"/services/service_get_past_classes_attendances_stats.php" : "https://"+server+"/services/service_get_past_classes_attendances_stats.php";
 
@@ -176,8 +182,12 @@ namespace SportNow
 
         public static string RestUrl_Get_MonthFees_byDojo = DeviceInfo.Platform == DevicePlatform.Android ? "https://"+server+"/services/service_get_monthfee_byDojo.php" : "https://"+server+"/services/service_get_monthfee_byDojo.php";
 
+        public static string RestUrl_Get_MonthFees_byDojo_byService = DeviceInfo.Platform == DevicePlatform.Android ? "https://" + server + "/services/service_get_monthfee_byDojo_byService.php" : "https://" + server + "/services/service_get_monthfee_byDojo_byService.php";
+
         public static string RestUrl_Get_MonthFees_byStudent = DeviceInfo.Platform == DevicePlatform.Android ? "https://"+server+"/services/service_get_monthfee_byStudent.php" : "https://"+server+"/services/service_get_monthfee_byStudent.php";
 
+        public static string RestUrl_Get_MonthFees_byStudent_byService = DeviceInfo.Platform == DevicePlatform.Android ? "https://" + server + "/services/service_get_monthfee_byStudent_byService.php" : "https://" + server + "/services/service_get_monthfee_byStudent_byService.php";
+        
         public static string RestUrl_Get_MonthFee_byId = DeviceInfo.Platform == DevicePlatform.Android ? "https://" + server + "/services/service_get_monthfee_byId.php" : "https://" + server + "/services/service_get_monthfee_byId.php";
 
         public static string RestUrl_Update_MonthFee_Status_byID = DeviceInfo.Platform == DevicePlatform.Android ? "https://"+server+"/services/service_update_monthfee_status_byID.php" : "https://"+server+"/services/service_update_monthfee_status_byID.php";
@@ -222,6 +232,10 @@ namespace SportNow
         public static string RestUrl_Get_Class_Program_byId = DeviceInfo.Platform == DevicePlatform.Android ? "https://" + server + "/services/service_get_class_program_byID.php" : "https://" + server + "/services/service_get_class_program_byID.php";
 
         public static string RestUrl_Get_Services = DeviceInfo.Platform == DevicePlatform.Android ? "https://" + server + "/services/service_get_services.php" : "https://" + server + "/services/service_get_services.php";
+
+        public static string RestUrl_Get_Current_Services = DeviceInfo.Platform == DevicePlatform.Android ? "https://" + server + "/services/service_get_current_services.php" : "https://" + server + "/services/service_get_current_services.php";
+
+        public static string RestUrl_SendMail_Service = DeviceInfo.Platform == DevicePlatform.Android ? "https://" + server + "/services/service_sendmail_service.php" : "https://" + server + "/services/service_sendmail_service.php";
 
         public static double ScreenWidth = 0;//Application.Current.MainPage.Width; //DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density; //Application.Current.MainPage.Width;//
         public static double ScreenHeight = 0;//Application.Current.MainPage.Height; //DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density; //Application.Current.MainPage.Height; //DeviceDisplay.MainDisplayInfo.Height;

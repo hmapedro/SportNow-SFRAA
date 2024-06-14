@@ -40,7 +40,7 @@ namespace SportNow.Views
 			
 
 			Label subtypeLabel = new Label { FontFamily = "futuracondensedmedium", BackgroundColor = Colors.Transparent, VerticalTextAlignment = TextAlignment.Center, HorizontalTextAlignment = TextAlignment.Start, FontSize = App.itemTitleFontSize, TextColor = App.topColor, LineBreakMode = LineBreakMode.WordWrap };
-			subtypeLabel.Text = equipment.type + " - " + equipment.subtype;
+			subtypeLabel.Text = App.ToTitleCase(equipment.type) + " - " + equipment.subtype;
 
 			absoluteLayout.Add(subtypeLabel);
             absoluteLayout.SetLayoutBounds(subtypeLabel, new Rect(0, 0, (App.screenWidth / 5 * 4) - (10 * App.screenHeightAdapter), 30 * App.screenHeightAdapter));

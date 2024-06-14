@@ -10,6 +10,15 @@ namespace SportNow.Model
         public string tipo { get; set; }
         public string imagem { get; set; }
         public object imagemSource { get; set; }
+        public string descricao { get; set; }
+        public string responsavel { get; set; }
+        public string responsavel_email { get; set; }
+        public string valores { get; set; }
+        public string horario { get; set; }
+        public string local { get; set; }
+        public string observacoes { get; set; }
+        public string nickname { get; set; }
+        public string aula_nome { get; set; }
 
         public override string ToString()
         {

@@ -157,14 +157,14 @@ namespace SportNow.Services.Data.JSON
 				{
 					//return true;
 					string content = await response.Content.ReadAsStringAsync();
-					Debug.WriteLine("content=" + content);
+					Debug.WriteLine("CreateClass_Attendance - content=" + content);
 					List<Result> createResultList = JsonConvert.DeserializeObject<List<Result>>(content);
 				
 					return createResultList[0].result;
 				}
 				else
 				{
-					Debug.WriteLine("error creating class attendance");
+					Debug.WriteLine("CreateClass_Attendance - error creating class attendance");
 					result = "-1";
 				}
 
@@ -172,7 +172,7 @@ namespace SportNow.Services.Data.JSON
 			}
 			catch
 			{
-				Debug.WriteLine("http request error");
+				Debug.WriteLine("CreateClass_Attendance - http request error");
 				return "-2";
 			}
 		}
@@ -260,10 +260,10 @@ namespace SportNow.Services.Data.JSON
 			}
 		}
 
-		public async Task<List<Class_Schedule>> GetStudentClass_Schedules(string memberid, string begindate, string enddate)
+		public async Task<List<Class_Schedule>> GetStudentClass_Schedules(string memberid, string begindate, string enddate, string serviceid)
 		{
-			Debug.WriteLine("ClassManager.GetStudentClass_Schedules"); 
-			Uri uri = new Uri(string.Format(Constants.RestUrl_Get_Student_Class_Schedules + "?userid=" + memberid + "&begindate=" + begindate + "&enddate=" + enddate, string.Empty));
+			Debug.WriteLine("ClassManager.GetStudentClass_Schedules " + Constants.RestUrl_Get_Student_Class_Schedules + "?userid=" + memberid + "&begindate=" + begindate + "&enddate=" + enddate + "&serviceid=" + serviceid); 
+			Uri uri = new Uri(string.Format(Constants.RestUrl_Get_Student_Class_Schedules + "?userid=" + memberid + "&begindate=" + begindate + "&enddate=" + enddate + "&serviceid=" + serviceid, string.Empty));
 			try
 			{
 				HttpResponseMessage response = await client.GetAsync(uri);
@@ -283,11 +283,11 @@ namespace SportNow.Services.Data.JSON
 			}
 		}
 
-		public async Task<ObservableCollection<Class_Schedule>> GetStudentClass_Schedules_obs(string memberid, string begindate, string enddate)
+		public async Task<ObservableCollection<Class_Schedule>> GetStudentClass_Schedules_obs(string memberid, string serviceid, string begindate, string enddate)
 		{
-			Debug.WriteLine("ClassManager.GetStudentClass_Schedules");
+			Debug.WriteLine("ClassManager.GetStudentClass_Schedules "+ Constants.RestUrl_Get_Student_Class_Schedules_byService + "?userid=" + memberid + "&serviceid=" + serviceid + "&begindate=" + begindate + "&enddate=" + enddate);
 			ObservableCollection<Class_Schedule> class_schedules_obs = new ObservableCollection<Class_Schedule>();
-			Uri uri = new Uri(string.Format(Constants.RestUrl_Get_Student_Class_Schedules + "?userid=" + memberid + "&begindate=" + begindate + "&enddate=" + enddate, string.Empty));
+			Uri uri = new Uri(string.Format(Constants.RestUrl_Get_Student_Class_Schedules_byService + "?userid=" + memberid + "&serviceid=" + serviceid + "&begindate=" + begindate + "&enddate=" + enddate, string.Empty));
 			try
 			{
 				HttpResponseMessage response = await client.GetAsync(uri);
@@ -307,7 +307,31 @@ namespace SportNow.Services.Data.JSON
 			}
 		}
 
-		public async Task<List<Class_Schedule>> GetAllClass_Schedules(string memberid, string begindate, string enddate)
+        public async Task<ObservableCollection<Class_Schedule>> GetStudentClass_Schedules_obs(string memberid, string begindate, string enddate)
+        {
+            Debug.WriteLine("ClassManager.GetStudentClass_Schedules " + Constants.RestUrl_Get_Student_Class_Schedules + "?userid=" + memberid + "&begindate=" + begindate + "&enddate=" + enddate);
+            ObservableCollection<Class_Schedule> class_schedules_obs = new ObservableCollection<Class_Schedule>();
+            Uri uri = new Uri(string.Format(Constants.RestUrl_Get_Student_Class_Schedules + "?userid=" + memberid + "&begindate=" + begindate + "&enddate=" + enddate, string.Empty));
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine("ClassManager.GetStudentClass_Schedules content=" + content);
+                    class_schedules_obs = JsonConvert.DeserializeObject<ObservableCollection<Class_Schedule>>(content);
+                }
+                return class_schedules_obs;
+            }
+            catch
+            {
+                Debug.WriteLine("ClassManager.GetStudentClass_Schedules http request error");
+                return null;
+            }
+        }
+
+        public async Task<List<Class_Schedule>> GetAllClass_Schedules(string memberid, string begindate, string enddate)
 		{
             Debug.WriteLine("GetAllClass_Schedules "+ Constants.RestUrl_Get_All_Class_Schedules + "?userid=" + memberid + "&begindate=" + begindate + "&enddate=" + enddate);
             Uri uri = new Uri(string.Format(Constants.RestUrl_Get_All_Class_Schedules + "?userid=" + memberid + "&begindate=" + begindate + "&enddate=" + enddate, string.Empty));
@@ -329,6 +353,29 @@ namespace SportNow.Services.Data.JSON
 				return null;
 			}
 		}
+
+        public async Task<List<Class_Schedule>> GetAllClass_Schedules_byService(string memberid, string serviceid, string begindate, string enddate)
+        {
+            Debug.WriteLine("GetAllClass_Schedules_byService " + Constants.RestUrl_Get_All_Class_Schedules_byService + "?userid=" + memberid + "&serviceid=" + serviceid + "&begindate=" + begindate + "&enddate=" + enddate);
+            Uri uri = new Uri(string.Format(Constants.RestUrl_Get_All_Class_Schedules_byService + "?userid=" + memberid + "&serviceid=" + serviceid + "&begindate=" + begindate + "&enddate=" + enddate, string.Empty));
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine("GetAllClass_Schedules_byService - content=" + content);
+                    class_schedules = JsonConvert.DeserializeObject<List<Class_Schedule>>(content);
+                }
+                return class_schedules;
+            }
+            catch
+            {
+                Debug.WriteLine("GetAllClass_Schedules_byService - http request error");
+                return null;
+            }
+        }
 
         public async Task<List<Class_Detail>> GetAllClasses(string dojoid)
         {

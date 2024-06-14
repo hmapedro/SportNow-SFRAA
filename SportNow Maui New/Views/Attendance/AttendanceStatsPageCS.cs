@@ -5,6 +5,8 @@ using SportNow.Model.Charts;
 using Syncfusion.Maui.Charts;
 using Syncfusion.Maui.Core;
 using Microsoft.Maui.Controls.Shapes;
+using System.Collections.ObjectModel;
+using System.Security.Cryptography;
 
 namespace SportNow.Views
 {
@@ -22,9 +24,11 @@ namespace SportNow.Views
 			this.CleanScreen();
 		}
 
-		private AbsoluteLayout graphabsoluteLayout;
+        Service service;
 
-		private List<Class_Schedule> pastclass_schedules, pastclass_schedules_dummy;
+        private AbsoluteLayout graphabsoluteLayout;
+
+		private ObservableCollection<Class_Schedule> pastclass_schedules, pastclass_schedules_dummy;
 		private CollectionView classesCollectionView;
 
         SfCircularChart chart;
@@ -53,8 +57,8 @@ namespace SportNow.Views
             string firstDayWeek = currentTime.AddDays(-Constants.daysofWeekInt[currentTime.DayOfWeek.ToString()]).ToString("yyyy-MM-dd");
 			string currentTime_string = currentTime.ToString("yyyy-MM-dd");
 			Debug.Print("firstDayWeek = " + firstDayWeek+ " currentTime_string = "+ currentTime_string);
-			pastclass_schedules = await GetStudentClass_Schedules(firstDayWeek, currentTime_string);
-			pastclass_schedules_dummy = new List<Class_Schedule>();
+			pastclass_schedules = await GetStudentClass_Schedules_obs(firstDayWeek, currentTime_string, service.id);
+			pastclass_schedules_dummy = new ObservableCollection<Class_Schedule>();
 			CompleteClass_Schedules();
 
 			CreatePeriodSelection();
@@ -182,15 +186,15 @@ namespace SportNow.Views
 				Debug.Print("begindate = " + begindate + " enddate = " + enddate);
 				showActivityIndicator();
 
-				pastclass_schedules = await GetStudentClass_Schedules(begindate, enddate);
+				pastclass_schedules = await GetStudentClass_Schedules_obs(begindate, enddate, this.service.id);
 				CompleteClass_Schedules();
 				classesCollectionView.ItemsSource = pastclass_schedules_dummy;
 				classesCollectionView.ItemsSource = pastclass_schedules;
 
 				
-				chart.BindingContext = new Attendance_Stats(pastclass_schedules_dummy);
+				chart.BindingContext = new Attendance_Stats(new List<Class_Schedule>(pastclass_schedules_dummy));
                 //this.BindingContext = new Attendance_Stats(pastclass_schedules_dummy);
-                pastClass_Attendances = new Attendance_Stats(pastclass_schedules);
+                pastClass_Attendances = new Attendance_Stats(new List<Class_Schedule>(pastclass_schedules));
 				chart.BindingContext = pastClass_Attendances;
                 //this.BindingContext = pastClass_Attendances;
 
@@ -240,7 +244,7 @@ namespace SportNow.Views
 			chart = new SfCircularChart();
 			chart.BackgroundColor = App.backgroundColor;
 
-			Attendance_Stats pastClass_Attendances = new Attendance_Stats(pastclass_schedules);
+			Attendance_Stats pastClass_Attendances = new Attendance_Stats(new List<Class_Schedule>(pastclass_schedules));
 			this.BindingContext = pastClass_Attendances;
 
 
@@ -500,15 +504,16 @@ namespace SportNow.Views
             absoluteLayout.SetLayoutBounds(classesCollectionView, new Rect(3 * App.screenWidthAdapter, 80 * App.screenHeightAdapter + ((App.screenHeight - 180 * App.screenHeightAdapter) * 3 / 5), App.screenWidth - (0 * App.screenWidthAdapter), ((App.screenHeight - 180 * App.screenHeightAdapter) * 2 / 5)));
 		}
 
-		public AttendanceStatsPageCS()
+		public AttendanceStatsPageCS(Service service)
 		{
-			this.initLayout();
+            this.service = service;
+            this.initLayout();
 		}
 
-		async Task<List<Class_Schedule>> GetStudentClass_Schedules(string begindate, string enddate)
+		async Task<ObservableCollection<Class_Schedule>> GetStudentClass_Schedules_obs(string begindate, string enddate, string serviceid)
 		{
 			ClassManager classManager = new ClassManager();
-			List<Class_Schedule> class_schedules_i = await classManager.GetStudentClass_Schedules(App.member.id, begindate, enddate);
+            ObservableCollection<Class_Schedule> class_schedules_i = await classManager.GetStudentClass_Schedules_obs(App.member.id, serviceid, begindate, enddate);
 			if (class_schedules_i == null)
 			{
 								Application.Current.MainPage = new NavigationPage(new LoginPageCS("Verifique a sua ligação à Internet e tente novamente."))
