@@ -75,7 +75,7 @@
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appicon.svg" Color="#FFFFFF" />
-		<MauiSplashScreen Include="Resources\Splash\splash_logo.svg" Color="#ffffff" />
+		<MauiSplashScreen Include="Resources\Splash\splash_logo.svg" Color="#ffffff" BaseSize="300,300" />
 		
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -94,12 +94,12 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Plugin.DeviceOrientation" Version="1.0.7" />
-		<PackageReference Include="Syncfusion.Maui.Charts" Version="26.1.35" />
+		<PackageReference Include="Syncfusion.Maui.Charts" Version="26.1.38" />
 		<PackageReference Include="SkiaSharp" Version="2.88.8" />
-		<PackageReference Include="Syncfusion.Maui.Core" Version="26.1.35" />
-		<PackageReference Include="Syncfusion.Maui.Expander" Version="26.1.35" />
+		<PackageReference Include="Syncfusion.Maui.Core" Version="26.1.38" />
+		<PackageReference Include="Syncfusion.Maui.Expander" Version="26.1.38" />
 		<PackageReference Include="Plugin.BetterFirebasePushNotification" Version="3.2.1" />
-		<PackageReference Include="Syncfusion.Maui.PdfViewer" Version="26.1.35" />
+		<PackageReference Include="Syncfusion.Maui.PdfViewer" Version="26.1.38" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.60" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.60" />
 		<PackageReference Include="CommunityToolkit.Maui.Markup" Version="4.0.0" />

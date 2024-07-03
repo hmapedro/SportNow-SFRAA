@@ -281,8 +281,8 @@ namespace SportNow.Views
         public async Task<int> createTabs()
         {
             Children.RemoveAt(0);
-            Children.Add(new ServicesPageCS() { Title = "SERVIÇOS", IconImageSource = "iconservicos.png" });
-            Children.Add(new SportsPageCS() { Title = "MODALIDADES", IconImageSource = "iconmodalidades.png" });
+            Children.Add(new ServicesPageCS("services") { Title = "SERVIÇOS", IconImageSource = "iconservicos.png" });
+            Children.Add(new ServicesPageCS("sports") { Title = "MODALIDADES", IconImageSource = "iconmodalidades.png" });
             Children.Add(new MainPageCS() { Title = "PRINCIPAL", IconImageSource = "iconlogo.png" });
             Children.Add(new AllEventsPageCS() { Title = "EVENTOS", IconImageSource = "eventos.png" });
             Children.Add(new EquipamentTypePageCS() { Title = "LOJA", IconImageSource = "iconequipamentos.png" });

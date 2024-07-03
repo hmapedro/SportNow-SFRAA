@@ -27,7 +27,7 @@ namespace SportNow
         public static double screenWidthAdapter = 1, screenHeightAdapter = 1;
          public static int consentFontSize = 0, superbigTitleFontSize = 0, bigTitleFontSize = 0, titleFontSize = 0, menuButtonFontSize = 0, formLabelFontSize = 0, formValueFontSize = 0, itemTitleFontSize = 0, itemTextFontSize = 0, smallTextFontSize = 0, formValueSmallFontSize = 0;
 
-         public static int ItemWidth = 0, ItemHeight = 0;
+         public static int ItemWidth = 0, ItemHeight = 0, ServiceItemHeigth = 0;
 
          //SELECTED TABS
          public static string DO_activetab = "graduacoes";
@@ -281,6 +281,7 @@ namespace SportNow
 
                 App.ItemWidth = (int)(120 * App.screenHeightAdapter);
                 App.ItemHeight = (int)(App.screenWidth / 3 - 10 * App.screenWidthAdapter); //(int)(155 * App.screenWidthAdapter);
+                App.ServiceItemHeigth = App.ItemHeight / 3 * 2;
                 fontresize = screenHeightAdapter;
                 if (fontresize > 2)
                 {
@@ -299,6 +300,7 @@ namespace SportNow
 
                 App.ItemWidth = (int)(App.screenWidth / 2 - 10 * App.screenWidthAdapter); //(int)(155 * App.screenWidthAdapter);
                 App.ItemHeight = (int)(120 * App.screenHeightAdapter);
+                App.ServiceItemHeigth = App.ItemHeight / 3 * 2;
                 fontresize = screenWidthAdapter;
                 if (fontresize > 2)
                 {

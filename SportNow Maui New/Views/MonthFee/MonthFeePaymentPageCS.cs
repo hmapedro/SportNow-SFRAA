@@ -73,20 +73,8 @@ namespace SportNow.Views
 			MBLogoImage.GestureRecognizers.Add(tapGestureRecognizerMB);
 
 
-            Label TermsPaymentMBLabel = new Label
-            {
-                FontFamily = "futuracondensedmedium",
-                Text = "Ao valor da mensalidade é acrescido 1.7% e 0.22€ (+ IVA).", // \n Total a pagar:" + CalculateMBPayment(monthFeeValue) + "€",
-                VerticalTextAlignment = TextAlignment.Center,
-                HorizontalTextAlignment = TextAlignment.Center,
-                TextColor = App.normalTextColor,
-                FontSize = App.formLabelFontSize
-            };
             absoluteLayout.Add(MBLogoImage);
             absoluteLayout.SetLayoutBounds(MBLogoImage, new Rect(0, 130 * App.screenHeightAdapter, App.screenWidth - 20 * App.screenHeightAdapter, 115 * App.screenHeightAdapter));
-            absoluteLayout.Add(TermsPaymentMBLabel);
-            absoluteLayout.SetLayoutBounds(TermsPaymentMBLabel, new Rect(0, 210 * App.screenHeightAdapter, App.screenWidth - 20 * App.screenHeightAdapter, 115 * App.screenHeightAdapter));
-
 			
             Image MBWayLogoImage = new Image
 			{
@@ -100,22 +88,9 @@ namespace SportNow.Views
 			var tapGestureRecognizerMBWay = new TapGestureRecognizer();
 			tapGestureRecognizerMBWay.Tapped += OnMBWayButtonClicked;
 			MBWayLogoImage.GestureRecognizers.Add(tapGestureRecognizerMBWay);
-
-            Label TermsPaymentMBWayLabel = new Label
-            {
-                FontFamily = "futuracondensedmedium",
-                Text = "Ao valor da mensalidade é acrescido 0.7% e 0.07€ (+ IVA).",
-                VerticalTextAlignment = TextAlignment.Center,
-                HorizontalTextAlignment = TextAlignment.Center,
-                TextColor = App.normalTextColor,
-                FontSize = App.formLabelFontSize
-            };
-
+           
             absoluteLayout.Add(MBWayLogoImage);
             absoluteLayout.SetLayoutBounds(MBWayLogoImage, new Rect(0, 300 * App.screenHeightAdapter, App.screenWidth - 20 * App.screenHeightAdapter, 115 * App.screenHeightAdapter));
-            absoluteLayout.Add(TermsPaymentMBWayLabel);
-            absoluteLayout.SetLayoutBounds(TermsPaymentMBWayLabel, new Rect(0, 380 * App.screenHeightAdapter, App.screenWidth - 20 * App.screenHeightAdapter, 115 * App.screenHeightAdapter));
-
         }
 
         public MonthFeePaymentPageCS(MonthFee monthFee)

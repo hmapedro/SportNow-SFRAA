@@ -235,6 +235,10 @@ namespace SportNow
 
         public static string RestUrl_Get_Current_Services = DeviceInfo.Platform == DevicePlatform.Android ? "https://" + server + "/services/service_get_current_services.php" : "https://" + server + "/services/service_get_current_services.php";
 
+        public static string RestUrl_Get_Service_Appointments = DeviceInfo.Platform == DevicePlatform.Android ? "https://" + server + "/services/service_get_service_appointments.php" : "https://" + server + "/services/service_get_service_appointments.php";
+
+        public static string RestUrl_Create_Service_Appointment = DeviceInfo.Platform == DevicePlatform.Android ? "https://" + server + "/services/service_create_service_appointment.php" : "https://" + server + "/services/service_create_service_appointment.php";
+
         public static string RestUrl_SendMail_Service = DeviceInfo.Platform == DevicePlatform.Android ? "https://" + server + "/services/service_sendmail_service.php" : "https://" + server + "/services/service_sendmail_service.php";
 
         public static double ScreenWidth = 0;//Application.Current.MainPage.Width; //DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density; //Application.Current.MainPage.Width;//
@@ -753,6 +757,13 @@ namespace SportNow
             }
 
             return new MemoryStream(result);
+        }
+
+        public static string ToTitleCase(string str)
+        {
+            var firstword = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(str.Split(' ')[0].ToLower());
+            str = str.Replace(str.Split(' ')[0], firstword);
+            return str;
         }
     }
 }

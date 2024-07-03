@@ -10,7 +10,7 @@ using SportNow.CustomViews;
 
 namespace SportNow.Views.Services
 {
-	public class CurrentServicesDetailPageCS : DefaultPage
+	public class CurrentServicesClassPageCS : DefaultPage
 	{
 
 		protected async override void OnAppearing()
@@ -115,14 +115,8 @@ namespace SportNow.Views.Services
                 gridService.Add(gridPresencasButtons, 0, 3);
 
             }
-            
-
-
-
-
             absoluteLayout.Add(gridService);
             absoluteLayout.SetLayoutBounds(gridService, new Rect(0 * App.screenWidthAdapter, 5 * App.screenHeightAdapter, App.screenWidth, App.screenHeight - 100));
-
         }
 
         public async Task<int> createImportantClasses()
@@ -378,8 +372,6 @@ namespace SportNow.Views.Services
                     WidthRequest = App.ItemWidth
                 };
 
-                Debug.Print("App.ItemHeight  = " + (App.ItemHeight - 10) * App.screenHeightAdapter);
-
                 Border itemFrame = new Border
                 {
                     StrokeShape = new RoundRectangle
@@ -548,7 +540,7 @@ namespace SportNow.Views.Services
             return 0;
         }
 
-        public CurrentServicesDetailPageCS(Service service)
+        public CurrentServicesClassPageCS(Service service)
 		{
             this.service = service;
 			this.initLayout();

@@ -19,6 +19,7 @@ namespace SportNow.Model
         public string observacoes { get; set; }
         public string nickname { get; set; }
         public string aula_nome { get; set; }
+        public string tipo_evento { get; set; }
 
         public override string ToString()
         {

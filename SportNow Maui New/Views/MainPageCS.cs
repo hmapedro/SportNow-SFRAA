@@ -360,8 +360,6 @@ namespace SportNow.Views
 					WidthRequest = App.ItemWidth
 				};
 
-				Debug.Print("App.ItemHeight  = " + (App.ItemHeight  - 10) * App.screenHeightAdapter);
-
                 Border itemFrame = new Border
                 {
                     StrokeShape = new RoundRectangle

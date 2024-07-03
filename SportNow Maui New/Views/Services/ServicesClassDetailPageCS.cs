@@ -9,7 +9,7 @@ using SportNow.CustomViews;
 
 namespace SportNow.Views.Services
 {
-	public class ServicesDetailPageCS : DefaultPage
+	public class ServicesClassDetailPageCS : DefaultPage
 	{
 
 		protected async override void OnAppearing()
@@ -193,7 +193,7 @@ namespace SportNow.Views.Services
 
         }
 
-        public ServicesDetailPageCS(Service service)
+        public ServicesClassDetailPageCS(Service service)
 		{
             this.service = service;
 			this.initLayout();

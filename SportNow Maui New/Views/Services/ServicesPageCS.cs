@@ -4,7 +4,7 @@ using SportNow.Views.Profile;
 using Microsoft.Maui.Controls.Shapes;
 
 using SportNow.Services.Data.JSON;
-
+using SportNow.CustomViews;
 
 namespace SportNow.Views.Services
 {
@@ -16,14 +16,14 @@ namespace SportNow.Views.Services
             
             showActivityIndicator();
 
-			//initSpecificLayout();
+			initSpecificLayout();
 
 			hideActivityIndicator();
 		}
 
 		protected override void OnDisappearing()
 		{
-			//this.CleanScreen();
+			
 		}
 
 		private CollectionView currentServicesCollectionView, otherServicesCollectionView;
@@ -32,23 +32,35 @@ namespace SportNow.Views.Services
 
 		private List<Event> currentServicesList, otherServicesList;
 
+        RoundButton confirmButton;
+
         Grid gridServices;
-        List<Service> services;
+        List<Service> other_services, current_services;
+
+        string serviceType;
 
         public void CleanScreen()
 		{
-			if (currentServicesLabel != null)
+			if (gridServices != null)
 			{
-                currentServicesCollectionView = null;
-                otherServicesCollectionView = null;
-                currentServicesLabel = null;
-                otherServicesLabel = null;
+				//absoluteLayout.Clear();
+				
+				absoluteLayout.Children.Remove(gridServices);
+                gridServices = null;
 			}
         }
 
         public void initLayout()
 		{
-			Title = "SERVIÇOS";
+            if (serviceType == "sports")
+            {
+                Title = "MODALIDADES";
+            }
+            else if (serviceType == "services")
+            {
+                Title = "SERVIÇOS";
+            }
+            
 
 			ToolbarItem toolbarItem = new ToolbarItem();
             toolbarItem.IconImageSource = "perfil.png";
@@ -61,11 +73,13 @@ namespace SportNow.Views.Services
 
 		public async void initSpecificLayout()
 		{
-            gridServices = new Grid { BackgroundColor = Colors.Transparent, Padding = 0, RowSpacing = 10 * App.screenHeightAdapter };
-            gridServices.RowDefinitions.Add(new RowDefinition { Height = 50 * App.screenHeightAdapter});
-            gridServices.RowDefinitions.Add(new RowDefinition { Height = 200 * App.screenHeightAdapter });
-            gridServices.RowDefinitions.Add(new RowDefinition { Height = 50 * App.screenHeightAdapter });
-            gridServices.RowDefinitions.Add(new RowDefinition { Height = 400 * App.screenHeightAdapter });
+            this.CleanScreen();
+
+            gridServices = new Grid { BackgroundColor = Colors.Transparent, Padding = 0, RowSpacing = 5 * App.screenHeightAdapter };
+            gridServices.RowDefinitions.Add(new RowDefinition { Height = 40 * App.screenHeightAdapter});
+            gridServices.RowDefinitions.Add(new RowDefinition { Height = 2 * App.ItemHeight });
+            gridServices.RowDefinitions.Add(new RowDefinition { Height = 60 * App.screenHeightAdapter });
+            gridServices.RowDefinitions.Add(new RowDefinition { Height = 300 * App.screenHeightAdapter });
             gridServices.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star }); //GridLength.Auto
 
             _ = await createCurrentServices();
@@ -85,18 +99,28 @@ namespace SportNow.Views.Services
 		{
             showActivityIndicator();
 
-			currentServicesLabel = new Label
-            {
-                Text = "SERVIÇOS ATUAIS",
+            ServicesManager servicesManager = new ServicesManager();
+
+            current_services = await servicesManager.GetCurrentServices(App.member.id);
+            current_services = CompleteServices(current_services);
+
+            currentServicesLabel = new Label
+			{
                 TextColor = App.activeTitleTextColor,
                 HorizontalTextAlignment = TextAlignment.Start,
-                FontSize = App.superbigTitleFontSize,
+				FontSize = App.bigTitleFontSize,
                 FontFamily = "futuracondensedmedium",
-                HeightRequest = 50 * App.screenHeightAdapter,
-                WidthRequest = App.screenWidth,
             };
+            if (serviceType == "sports")
+            {
+                currentServicesLabel.Text = "MODALIDADES ATUAIS";
+            }
+            else if (serviceType == "services")
+            {
+                currentServicesLabel.Text = "SERVIÇOS ATUAIS";
+            }
 
-			CreateCurrentServicesColletion();
+            CreateCurrentServicesColletion();
 			hideActivityIndicator();
 			return 1;
 		}
@@ -109,7 +133,7 @@ namespace SportNow.Views.Services
             currentServicesCollectionView = new CollectionView
 			{
 				SelectionMode = SelectionMode.Single,
-				ItemsSource = null,
+				ItemsSource = current_services,
                  
 				ItemsLayout = new GridItemsLayout(2, ItemsLayoutOrientation.Vertical) { VerticalItemSpacing = 5 * App.screenHeightAdapter, HorizontalItemSpacing = 5 * App.screenWidthAdapter, },
 				EmptyView = new ContentView
@@ -127,151 +151,12 @@ namespace SportNow.Views.Services
             currentServicesCollectionView.SelectionChanged += OnCurrentServicesCollectionViewSelectionChanged;
 
             currentServicesCollectionView.ItemTemplate = new DataTemplate(() =>
-			{
-
-				AbsoluteLayout itemabsoluteLayout = new AbsoluteLayout
-				{
-					HeightRequest = App.ItemHeight ,
-					WidthRequest = App.ItemWidth
-				};
-
-				Debug.Print("App.ItemHeight  = " + (App.ItemHeight  - 10) * App.screenHeightAdapter);
-
-                Border itemFrame = new Border
-                {
-                    StrokeShape = new RoundRectangle
-                    {
-                        CornerRadius = 5 * (float)App.screenHeightAdapter,
-                    },
-                    Stroke = App.topColor,
-                    BackgroundColor = App.backgroundOppositeColor,
-					Padding = new Thickness(0, 0, 0, 0),
-					HeightRequest = App.ItemHeight,
-                    WidthRequest = App.ItemWidth,
-                    VerticalOptions = LayoutOptions.Center,
-				};
-
-				Image eventoImage = new Image { Aspect = Aspect.AspectFill, Opacity = 0.40 }; //, HeightRequest = 60, WidthRequest = 60
-				eventoImage.SetBinding(Image.SourceProperty, "imagesourceObject");
-
-				itemFrame.Content = eventoImage;
-
-                itemabsoluteLayout.Add(itemFrame);
-                itemabsoluteLayout.SetLayoutBounds(itemFrame, new Rect(0, 0, App.ItemWidth, App.ItemHeight));
-
-				Label dateLabel = new Label { VerticalTextAlignment = TextAlignment.Center, HorizontalTextAlignment = TextAlignment.Center, FontSize = App.itemTextFontSize, TextColor = App.oppositeTextColor, FontFamily = "futuracondensedmedium", LineBreakMode = LineBreakMode.WordWrap };
-				dateLabel.SetBinding(Label.TextProperty, "datestring");
-
-                itemabsoluteLayout.Add(dateLabel);
-                itemabsoluteLayout.SetLayoutBounds(dateLabel, new Rect(25 * App.screenWidthAdapter, App.ItemHeight - (45 * App.screenHeightAdapter), App.ItemWidth - (50 * App.screenWidthAdapter), 40 * App.screenHeightAdapter));
-
-				Label nameLabel = new Label { BackgroundColor = Colors.Transparent, VerticalTextAlignment = TextAlignment.Start, HorizontalTextAlignment = TextAlignment.Center, FontSize = App.itemTitleFontSize, TextColor = App.oppositeTextColor, FontFamily = "futuracondensedmedium", LineBreakMode = LineBreakMode.WordWrap };
-				nameLabel.SetBinding(Label.TextProperty, "name");
-
-
-                itemabsoluteLayout.Add(nameLabel);
-                itemabsoluteLayout.SetLayoutBounds(nameLabel, new Rect(3 * App.screenWidthAdapter, 25 * App.screenHeightAdapter, App.ItemWidth - (6 * App.screenWidthAdapter), 50 * App.screenHeightAdapter));
-
-				Image participationImagem = new Image { Aspect = Aspect.AspectFill }; //, HeightRequest = 60, WidthRequest = 60
-				participationImagem.SetBinding(Image.SourceProperty, "participationimage");
-
-
-                itemabsoluteLayout.Add(participationImagem);
-                itemabsoluteLayout.SetLayoutBounds(participationImagem, new Rect((App.ItemWidth - 25 * App.screenWidthAdapter), 5 * App.screenWidthAdapter, 20 * App.screenWidthAdapter, 20 * App.screenWidthAdapter));
-
-				return itemabsoluteLayout;
-			});
-
-  		}
-
-
-        public async Task<int> createOtherServices()
-        {
-            showActivityIndicator();
-
-            ServicesManager servicesManager = new ServicesManager();
-
-            services = await servicesManager.GetServices();
-            CompleteServices();
-
-            otherServicesLabel = new Label
             {
-                Text = "SERVIÇOS DISPONÍVEIS",
-                TextColor = App.inactiveTitleTextColor,
-                HorizontalTextAlignment = TextAlignment.Start,
-                FontSize = App.superbigTitleFontSize,
-                FontFamily = "futuracondensedmedium",
-                HeightRequest = 50 * App.screenHeightAdapter,
-                WidthRequest = App.screenWidth,
-            };
-
-            CreateOtherServicesColletion();
-            hideActivityIndicator();
-            return 1;
-        }
-
-        public void CompleteServices()
-        {
-            List<Service> services_new = new List<Service>();
-
-            foreach (Service service in services)
-            {
-
-                if ((service.imagem == "") | (service.imagem is null))
-                {
-                    service.imagemSource = "company_logo_square.png";
-                }
-                else
-                {
-                    service.imagemSource = new UriImageSource
-                    {
-                        Uri = new Uri(Constants.images_URL + service.id + "_imagem"),
-                        CachingEnabled = false,
-                        CacheValidity = new TimeSpan(0, 0, 0, 0)
-                    };
-                }
-                if ((service.tipo != "desporto") & (service.tipo != "cultura"))
-                {
-                    services_new.Add(service);
-                }
-            }
-
-            services = services_new;
-        }
-
-
-        public void CreateOtherServicesColletion()
-        {
-            //COLLECTION TEACHER CLASSES
-            otherServicesCollectionView = new CollectionView
-            {
-                SelectionMode = SelectionMode.Single,
-                ItemsSource = services,
-                ItemsLayout = new GridItemsLayout(2, ItemsLayoutOrientation.Vertical) { VerticalItemSpacing = 5 * App.screenHeightAdapter, HorizontalItemSpacing = 5 * App.screenWidthAdapter, },
-                EmptyView = new ContentView
-                {
-                    Content = new Microsoft.Maui.Controls.StackLayout
-                    {
-                        Children =
-                            {
-                                new Label { Text = "Não existem Serviços.", HorizontalTextAlignment = TextAlignment.Start, TextColor = App.normalTextColor, FontFamily = "futuracondensedmedium", FontSize = App.itemTitleFontSize },
-                            }
-                    }
-                }
-            };
-
-            otherServicesCollectionView.SelectionChanged += OnOtherServicesCollectionViewSelectionChanged;
-
-            otherServicesCollectionView.ItemTemplate = new DataTemplate(() =>
-            {
-
                 AbsoluteLayout itemabsoluteLayout = new AbsoluteLayout
                 {
                     HeightRequest = App.ItemHeight,
                     WidthRequest = App.ItemWidth
                 };
-
-                Debug.Print("App.ItemHeight  = " + (App.ItemHeight - 10) * App.screenHeightAdapter);
 
                 Border itemFrame = new Border
                 {
@@ -306,11 +191,149 @@ namespace SportNow.Views.Services
 
         }
 
-        public ServicesPageCS ()
-		{
 
-			this.initLayout();
-			this.initSpecificLayout();
+        public async Task<int> createOtherServices()
+        {
+            showActivityIndicator();
+
+            ServicesManager servicesManager = new ServicesManager();
+
+            other_services = await servicesManager.GetServices();
+            other_services = CompleteServices(other_services);
+            otherServicesLabel = new Label
+            {
+                TextColor = App.activeTitleTextColor,
+                HorizontalTextAlignment = TextAlignment.Start,
+                VerticalTextAlignment = TextAlignment.End,
+                FontSize = App.bigTitleFontSize,
+                FontFamily = "futuracondensedmedium",
+            };
+            if (serviceType == "sports")
+            {
+                otherServicesLabel.Text = "MODALIDADES DISPONÍVEIS";
+            }
+            else if (serviceType == "services")
+            {
+                otherServicesLabel.Text = "SERVIÇOS DISPONÍVEIS";
+            }
+
+            CreateOtherServicesColletion();
+            hideActivityIndicator();
+            return 1;
+        }
+
+        public List<Service> CompleteServices(List<Service> services_local)
+        {
+            List<Service> services_new = new List<Service>();
+
+            if (services_local != null)
+            {
+                foreach (Service service in services_local)
+                {
+
+                    if ((service.imagem == "") | (service.imagem is null))
+                    {
+                        service.imagemSource = "company_logo_square.png";
+                    }
+                    else
+                    {
+                        service.imagemSource = new UriImageSource
+                        {
+                            Uri = new Uri(Constants.images_URL + service.id + "_imagem"),
+                            CachingEnabled = false,
+                            CacheValidity = new TimeSpan(0, 0, 0, 0)
+                        };
+                    }
+                    if (serviceType == "sports")
+                    {
+                        if ((service.tipo == "desporto") | (service.tipo == "cultura"))
+                        {
+                            services_new.Add(service);
+                        }
+                    }
+                    else if (serviceType == "services")
+                    {
+                        if ((service.tipo != "desporto") & (service.tipo != "cultura"))
+                        {
+                            services_new.Add(service);
+                        }
+                    }
+                }
+            }
+
+            return services_new;
+        }
+
+
+        public void CreateOtherServicesColletion()
+        {
+            //COLLECTION TEACHER CLASSES
+            otherServicesCollectionView = new CollectionView
+            {
+                SelectionMode = SelectionMode.Single,
+                ItemsSource = other_services,
+                ItemsLayout = new GridItemsLayout(2, ItemsLayoutOrientation.Vertical) { VerticalItemSpacing = 5 * App.screenHeightAdapter, HorizontalItemSpacing = 5 * App.screenWidthAdapter, },
+                EmptyView = new ContentView
+                {
+                    Content = new Microsoft.Maui.Controls.StackLayout
+                    {
+                        Children =
+                            {
+                                new Label { Text = "Não existem Serviços.", HorizontalTextAlignment = TextAlignment.Start, TextColor = App.normalTextColor, FontFamily = "futuracondensedmedium", FontSize = App.itemTitleFontSize },
+                            }
+                    }
+                }
+            };
+
+            otherServicesCollectionView.SelectionChanged += OnOtherServicesCollectionViewSelectionChanged;
+
+            otherServicesCollectionView.ItemTemplate = new DataTemplate(() =>
+            {
+
+                AbsoluteLayout itemabsoluteLayout = new AbsoluteLayout
+                {
+                    HeightRequest = App.ServiceItemHeigth,
+                    WidthRequest = App.ItemWidth
+                };
+
+                Border itemFrame = new Border
+                {
+                    StrokeShape = new RoundRectangle
+                    {
+                        CornerRadius = 5 * (float)App.screenHeightAdapter,
+                    },
+                    Stroke = Colors.Transparent,
+                    BackgroundColor = App.backgroundColor,
+                    Padding = new Thickness(0, 0, 0, 0),
+                    HeightRequest = App.ServiceItemHeigth,
+                    WidthRequest = App.ItemWidth,
+                    VerticalOptions = LayoutOptions.Center,
+                };
+
+                Image eventoImage = new Image { Aspect = Aspect.AspectFill, Opacity = 0.4 }; //, HeightRequest = 60, WidthRequest = 60
+                eventoImage.SetBinding(Image.SourceProperty, "imagemSource");
+
+                itemFrame.Content = eventoImage;
+
+                itemabsoluteLayout.Add(itemFrame);
+                itemabsoluteLayout.SetLayoutBounds(itemFrame, new Rect(0, 0, App.ItemWidth, App.ServiceItemHeigth));
+
+                Label nameLabel = new Label { BackgroundColor = Colors.Transparent, VerticalTextAlignment = TextAlignment.Center, HorizontalTextAlignment = TextAlignment.Center, FontSize = App.bigTitleFontSize, TextTransform = TextTransform.Uppercase, TextColor = App.inactiveTitleTextColor, FontFamily = "futuracondensedmedium", LineBreakMode = LineBreakMode.WordWrap };
+                nameLabel.SetBinding(Label.TextProperty, "nome");
+
+                itemabsoluteLayout.Add(nameLabel);
+                itemabsoluteLayout.SetLayoutBounds(nameLabel, new Rect(3 * App.screenWidthAdapter, App.ServiceItemHeigth / 2 - 40 * App.screenHeightAdapter, App.ItemWidth - (6 * App.screenWidthAdapter), 80 * App.screenHeightAdapter));
+
+                return itemabsoluteLayout;
+            });
+
+        }
+
+        public ServicesPageCS(string serviceType)
+		{
+            this.serviceType = serviceType;
+            this.initLayout();
+		//	this.initSpecificLayout();
 
 		}
 
@@ -322,40 +345,68 @@ namespace SportNow.Views.Services
 		async void OnCurrentServicesCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			showActivityIndicator();
-			Debug.WriteLine("ServicesPageCS.OnOtherServicesCollectionViewSelectionChanged");
+            Debug.WriteLine("ServicesPageCS.OnCurrentServicesCollectionViewSelectionChanged");
 
-			if ((sender as CollectionView).SelectedItems.Count != 0)
-			{
-				/*ClassManager classmanager = new ClassManager();
+            if ((sender as CollectionView).SelectedItem != null)
+            {
 
-				Class_Schedule class_schedule = (sender as CollectionView).SelectedItems[0] as Class_Schedule;
-				if (class_schedule.classattendanceid == null)
-				{
-                    /*Task.Run(async () =>
-                    {
-                        string class_attendance_id = await classmanager.CreateClass_Attendance(App.member.id, class_schedule.classid, "confirmada", class_schedule.date);
-                        class_schedule.classattendanceid = class_attendance_id;
-                        return true;
-                    });*/
-                    //string class_attendance_id = await classmanager.CreateClass_Attendance(App.member.id, class_schedule.classid, "confirmada", class_schedule.date);
-                    /*                    string class_attendance_id =  classmanager.CreateClass_Attendance_sync(App.member.id, class_schedule.classid, "confirmada", class_schedule.date);
-                                        */
-                   // class_schedule.classattendancestatus = "confirmada";
-                   // class_schedule.participationimage = "iconcheck.png";
+                Service service = (sender as CollectionView).SelectedItem as Service;
+                (sender as CollectionView).SelectedItem = null;
+                Debug.WriteLine("ServicesPageCS.OnCurrentServicesCollectionViewSelectionChanged service.tipo_evento = " + service.tipo_evento);
+
+                if (service.tipo_evento == "marcação")
+                {
+                    await Navigation.PushAsync(new CurrentServicesAppointmentPageCS(service));
+                }
+                if (service.tipo_evento == "classe")
+                {
+                    await Navigation.PushAsync(new CurrentServicesClassPageCS(service));
+                }
+                if (service.tipo_evento == "educacao")
+                {
+                    await Navigation.PushAsync(new CurrentServicesEducationPageCS(service));
+                }
 
 
-                //}
-
-				((CollectionView)sender).SelectedItems.Clear();
-
-				hideActivityIndicator();
-			}
-		}
+            }
+            hideActivityIndicator();
+        }
 
 
         async void OnOtherServicesCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Debug.WriteLine("ServicesPageCS.OnOtherServicesCollectionViewSelectionChanged");
+            showActivityIndicator();
+
+            if ((sender as CollectionView).SelectedItem != null)
+            {
+                Service service = (sender as CollectionView).SelectedItem as Service;
+                (sender as CollectionView).SelectedItem = null;
+
+                Debug.WriteLine("ServicesPageCS service.tipo_evento = "+ service.tipo_evento);
+
+                /*if (service.tipo_evento == "marcação")
+                {
+                    await Navigation.PushAsync(new ServicesAppointmentDetailPageCS(service));
+                }
+                if (service.tipo_evento == "classe")
+                {
+                    await Navigation.PushAsync(new ServicesClassDetailPageCS(service));
+                }*/
+                await Navigation.PushAsync(new ServicesClassDetailPageCS(service));
+
+
+            }
+            hideActivityIndicator();
+        }
+
+        async void OnConfirmButtonClicked(object sender, EventArgs e)
+        {
+            showActivityIndicator();
+
+            Debug.WriteLine("OnConfirmButtonClicked");
+
+            hideActivityIndicator();
 
         }
     }

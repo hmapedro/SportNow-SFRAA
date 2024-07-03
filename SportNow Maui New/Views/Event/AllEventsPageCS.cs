@@ -86,7 +86,7 @@ namespace SportNow.Views
 			CreateStackButtons();
 			CreateProximosEventosColletion();
 			activateLastSelectedTab();
-			CreateCalendarioLink();
+			//CreateCalendarioLink();
 			//OnProximosEstagiosButtonClicked(null, null);
 
 			hideActivityIndicator();
