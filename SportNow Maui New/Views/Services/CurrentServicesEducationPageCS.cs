@@ -17,7 +17,7 @@ namespace SportNow.Views.Services
 		{
             
             showActivityIndicator();
-
+             
 			//initSpecificLayout();
 
 			hideActivityIndicator();
