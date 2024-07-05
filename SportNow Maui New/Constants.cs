@@ -8,7 +8,7 @@ namespace SportNow
 {
     public static class Constants
     {
-
+         
         public static string servername = "sfraa.ippon.pt";
         public static string serverbase = "https://"+ servername;
         public static string server = servername;
