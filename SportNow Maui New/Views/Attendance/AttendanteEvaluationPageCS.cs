@@ -152,7 +152,7 @@ namespace SportNow.Views.Profile
             string res = await classManager.CreateClass_Evaluation(evaluationname, class_Attendance.classattendanceid, "insatisfeito", result);
 
             
-            //await DisplayAlert("OBRIGADO PELO FEEDBACK", "Obrigado por partilhares connosco a tua avaliação deste treino.", "OK");
+            //await DisplayAlert("OBRIGADO PELO FEEDBACK", "Obrigado por partilhar connosco a sua avaliação deste treino.", "OK");
             hideActivityIndicator();
 
             App.Current.MainPage = new NavigationPage(new MainTabbedPageCS("", ""))
@@ -167,7 +167,7 @@ namespace SportNow.Views.Profile
             showActivityIndicator();
             ClassManager classManager = new ClassManager();
             string res = await classManager.CreateClass_Evaluation(evaluationname, class_Attendance.classattendanceid, "neutro", "");
-            await DisplayAlert("OBRIGADO PELO FEEDBACK", "Obrigado por partilhares connosco a tua avaliação deste treino.", "OK");
+            await DisplayAlert("OBRIGADO PELO FEEDBACK", "Obrigado por partilhar connosco a sua avaliação deste treino.", "OK");
             hideActivityIndicator();
 
             App.Current.MainPage = new NavigationPage(new MainTabbedPageCS("", ""))
@@ -182,7 +182,7 @@ namespace SportNow.Views.Profile
             showActivityIndicator();
             ClassManager classManager = new ClassManager();
             string res = await classManager.CreateClass_Evaluation(evaluationname, class_Attendance.classattendanceid, "satisfeito", "");
-            await DisplayAlert("OBRIGADO PELO FEEDBACK", "Obrigado por partilhares connosco a tua avaliação deste treino.", "OK");
+            await DisplayAlert("OBRIGADO PELO FEEDBACK", "Obrigado por partilhar connosco a sua avaliação deste treino.", "OK");
             hideActivityIndicator();
 
             App.Current.MainPage = new NavigationPage(new MainTabbedPageCS("", ""))

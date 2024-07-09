@@ -6,19 +6,12 @@ using SportNow.Services.Data.JSON;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Linq;
 using SportNow.ViewModel;
-using Microsoft.Maui;
-using Plugin.DeviceOrientation;
-using Plugin.DeviceOrientation.Abstractions;
 using SportNow.Views.Profile;
 using SportNow.CustomViews;
 using SportNow.Views.Personal;
-using System.Xml;
 using Microsoft.Maui.Controls.Shapes;
-using System.Runtime.CompilerServices;
-using Plugin.BetterFirebasePushNotification;
+
 
 namespace SportNow.Views
 {
@@ -61,7 +54,8 @@ namespace SportNow.Views
 		Label msg;
 
 		private ObservableCollection<Class_Schedule> importantClass_Schedule;
-		private ObservableCollection<Class_Schedule> cleanClass_Schedule;
+        private ObservableCollection<Appointment> importantAppointments;
+        
 
         private List<Class_Schedule> teacherClass_Schedules;
 
@@ -437,11 +431,11 @@ namespace SportNow.Views
             };
             if (App.member.gender == "female")
             {
-                attendanceLabel.Text = "PRÓXIMAS AULAS COMO ALUNA";
+                attendanceLabel.Text = "PRÓXIMAS AULAS/MARCAÇÕES COMO ALUNA";
             }
             else
             {
-                attendanceLabel.Text = "PRÓXIMAS AULAS COMO ALUNO";
+                attendanceLabel.Text = "PRÓXIMAS AULAS/MARCAÇÕES COMO ALUNO";
             }
             absoluteLayout.Add(attendanceLabel);
 			absoluteLayout.SetLayoutBounds(attendanceLabel, new Rect(0, classesY, App.screenWidth, 30 * App.screenHeightAdapter));
@@ -459,11 +453,18 @@ namespace SportNow.Views
 			DateTime firstDayWeek = currentTime.AddDays(-Constants.daysofWeekInt[currentTime.DayOfWeek.ToString()]);
 
 			importantClass_Schedule = await GetStudentClass_Schedules(currentTime.ToString("yyyy-MM-dd"), currentTime.AddDays(7).ToString("yyyy-MM-dd"));//  new List<Class_Schedule>();
-			cleanClass_Schedule = new ObservableCollection<Class_Schedule>();
 
-			CompleteClass_Schedules();
+            importantAppointments = await GetImportantAppointments(currentTime.ToString("yyyy-MM-dd"), currentTime.AddDays(7).ToString("yyyy-MM-dd"));//  new List<Class_Schedule>();
 
-			return 1;
+            CompleteClass_Schedules();
+            CompleteAppointments();
+
+			List<Class_Schedule> class_Schedules_tmp = importantClass_Schedule.ToList();
+            class_Schedules_tmp.Sort((l, r) => l.date.CompareTo(r.date));
+
+            importantClass_Schedule = new ObservableCollection<Class_Schedule>(class_Schedules_tmp);
+
+            return 1;
 		}
 
 
@@ -505,12 +506,44 @@ namespace SportNow.Views
 				{
 					class_schedule.participationimage = "iconinativo.png";
 				}
-
 			}
-
 		}
 
-		public void createClassesCollection()
+
+		public void CompleteAppointments()
+		{
+			foreach (Appointment appointment in importantAppointments)
+			{
+				Class_Schedule class_schedule = new Class_Schedule("", "", appointment.name, appointment.date_start, appointment.date_string, appointment.imagem, "");
+
+                if ((appointment.imagem == "") | (appointment.imagem is null))
+                {
+                    class_schedule.imagesourceObject = "company_logo_square.png";
+                }
+                else
+                {
+                    class_schedule.imagesourceObject = new UriImageSource
+                    {
+                        Uri = new Uri(Constants.images_URL + class_schedule.classid + "_imagem_c"),
+                        CachingEnabled = false,
+                        CacheValidity = new TimeSpan(0, 0, 0, 0)
+                    };
+                }
+
+
+                if (appointment.estado == "confirmada")
+                {
+                    class_schedule.participationimage = "iconcheck.png";
+                }
+                else
+                {
+                    class_schedule.participationimage = "iconinativo.png";
+                }
+				importantClass_Schedule.Add(class_schedule);
+            }
+		}
+
+                public void createClassesCollection()
 		{
 			importantClassesCollectionView = new CollectionView
 			{
@@ -659,7 +692,7 @@ namespace SportNow.Views
 					{
 						Children =
 							{
-								new Label { Text = "Não existem Eventos agendados.", HorizontalTextAlignment = TextAlignment.Start, TextColor = App.normalTextColor, FontFamily = "futuracondensedmedium", FontSize = App.itemTitleFontSize },
+								new Label { Text = "Não existem Eventos agendados este mês.", HorizontalTextAlignment = TextAlignment.Start, TextColor = App.normalTextColor, FontFamily = "futuracondensedmedium", FontSize = App.itemTitleFontSize },
 							}
 					}
 				}
@@ -862,7 +895,7 @@ namespace SportNow.Views
 			if (hasQuotaPayed == false)
             {
 
-                bool answer = await DisplayAlert("A TUA QUOTA NÃO ESTÁ ATIVA.", "A tua quota para este ano não está ativa. Queres efetuar o pagamento?", "Sim", "Não");
+                bool answer = await DisplayAlert("A SUA QUOTA NÃO ESTÁ ATIVA.", "A sua quota para este ano não está ativa. Queres efetuar o pagamento?", "Sim", "Não");
 				if (answer == true)
 				{
                     await Navigation.PushAsync(new QuotasPageCS());
@@ -870,7 +903,7 @@ namespace SportNow.Views
 
                 currentFeeLabel = new Label
 				{
-					Text = "A TUA QUOTA PARA ESTE ANO NÃO ESTÁ ATIVA. \n DESTA FORMA NÃO PODERÁS PARTICIPAR NOS NOSSOS EVENTOS :(. \n ATIVA AQUI A TUA QUOTA.",
+					Text = "A SUA QUOTA PARA ESTE ANO NÃO ESTÁ ATIVA. \n DESTA FORMA NÃO PODERÁS PARTICIPAR NOS NOSSOS EVENTOS :(. \n ATIVA AQUI A sua QUOTA.",
 					TextColor = Colors.Red,
 					HorizontalTextAlignment = TextAlignment.Center,
 					FontSize = App.itemTextFontSize,
@@ -892,7 +925,7 @@ namespace SportNow.Views
 
         public async void createDelayedMonthFee()
         {
-            bool answer = await DisplayAlert("A TUA QUOTA NÃO ESTÁ ATIVA.", "A tua quota para este ano não está ativa. Queres efetuar o pagamento?", "Sim", "Não");       
+            bool answer = await DisplayAlert("A SUA QUOTA NÃO ESTÁ ATIVA.", "A sua quota para este ano não está ativa. Queres efetuar o pagamento?", "Sim", "Não");       
         }
 
         public async void createVersion()
@@ -964,7 +997,24 @@ namespace SportNow.Views
 			return class_schedules_i;
 		}
 
-		async Task<List<Event>> GetImportantEvents()
+        async Task<ObservableCollection<Appointment>> GetImportantAppointments(string begindate, string enddate)
+        {
+            Debug.WriteLine("GetImportantAppointments");
+            ServicesManager servicesManager = new ServicesManager();
+            ObservableCollection<Appointment> appointments = await servicesManager.GetAppointments(App.member.id, begindate, enddate);
+            if (appointments == null)
+            {
+                Application.Current.MainPage = new NavigationPage(new LoginPageCS("Verifique a sua ligação à Internet e tente novamente."))
+                {
+                    BarBackgroundColor = App.backgroundColor,
+                    BarTextColor = App.normalTextColor
+                };
+                return null;
+            }
+            return appointments;
+        }
+
+        async Task<List<Event>> GetImportantEvents()
 		{
 			Debug.WriteLine("GetImportantEvents");
 			EventManager eventManager = new EventManager();
@@ -1059,7 +1109,7 @@ namespace SportNow.Views
 					}
 					else if (class_schedule.classattendancestatus == "fechada")
 					{
-						await DisplayAlert("PRESENÇA EM AULA", "A tua presença nesta aula já foi validada pelo instrutor pelo que não é possível alterar o seu estado.", "Ok" );
+						await DisplayAlert("PRESENÇA EM AULA", "A sua presença nesta aula já foi validada pelo instrutor pelo que não é possível alterar o seu estado.", "Ok" );
 					}
 					//int result = await classmanager.UpdateClass_Attendance(class_schedule.classattendanceid, class_schedule.classattendancestatus);
 				}

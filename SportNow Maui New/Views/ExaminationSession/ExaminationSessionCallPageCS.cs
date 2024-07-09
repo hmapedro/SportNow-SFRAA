@@ -297,7 +297,7 @@ namespace SportNow.Views
             }
             else
             {
-                bool answer = await DisplayAlert("Inscrição Exame", "Para poderes efetuar a tua inscrição na Sessão de Exames tens de ter a Quota Associativa em dia.", "Pagar Quota", "Cancelar");
+                bool answer = await DisplayAlert("Inscrição Exame", "Para poderes efetuar a sua inscrição na Sessão de Exames tem de ter a Quota Associativa em dia.", "Pagar Quota", "Cancelar");
                 if (answer == true)
                 {
                     await Navigation.PushAsync(new QuotasPageCS());

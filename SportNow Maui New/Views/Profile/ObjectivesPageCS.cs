@@ -67,7 +67,7 @@ namespace SportNow.Views.Profile
 
             Label objetivosExplicacaoLabel = new Label
             {
-                Text = "Agora que vamos começar a época gostávamos de obter informação relativamente às expectativas que tens para este ano. " +
+                Text = "Agora que vamos começar a época gostávamos de obter informação relativamente às expectativas que tem para este ano. " +
                 "Diz-nos o que te levou a inscrever no Karate este ano, o que gostavas de alcançar ou quais as experiências que gostavas de ter." +
                 "\nNa Ippon queremos que todos se sintam especiais, e só assim o conseguimos!",
                 TextColor = App.normalTextColor,
@@ -120,7 +120,7 @@ namespace SportNow.Views.Profile
                 await memberManager.CreateObjective(App.member.id, "Objetivos - " + App.member.nickname + " - " + App.getSeasonString(), App.getSeason(), objetivosEntry.entry.Text);
                 hideActivityIndicator();
 
-                await DisplayAlert("OBRIGADO", "Obrigado por partilhares connosco as tuas expectativas para esta época.", "OK");
+                await DisplayAlert("OBRIGADO", "Obrigado por partilhar connosco as suas expectativas para esta época.", "OK");
                 App.Current.MainPage = new NavigationPage(new MainTabbedPageCS("", ""))
                 {
                     BarBackgroundColor = App.backgroundColor,
@@ -129,7 +129,7 @@ namespace SportNow.Views.Profile
             }
             else
             {
-                bool res = await DisplayAlert("Informação em falta", "Tens a certeza que não queres dizer-nos as tuas expectativas para esta época?", "Agora Não", "Quero");
+                bool res = await DisplayAlert("Informação em falta", "Tens a certeza que não queres dizer-nos as suas expectativas para esta época?", "Agora Não", "Quero");
                 if (res == true)
                 {
                     showActivityIndicator();

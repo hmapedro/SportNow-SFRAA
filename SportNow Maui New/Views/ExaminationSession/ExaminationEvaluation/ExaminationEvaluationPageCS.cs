@@ -537,7 +537,7 @@ namespace SportNow.Views
 			}
 
 			hideActivityIndicator();  //Hide loader
-												  //UserDialogs.Instance.Alert(new AlertConfig() { Title = "EQUIPAMENTO SOLICITADO", Message = "A tua encomenda foi realizada com sucesso. Fala com o teu instrutor para saber quando te conseguirá entregar a mesma.", OkText = "Ok" });
+												  //UserDialogs.Instance.Alert(new AlertConfig() { Title = "EQUIPAMENTO SOLICITADO", Message = "A sua encomenda foi realizada com sucesso. Fala com o teu instrutor para saber quando te conseguirá entregar a mesma.", OkText = "Ok" });
 
 			return 0;
 		}

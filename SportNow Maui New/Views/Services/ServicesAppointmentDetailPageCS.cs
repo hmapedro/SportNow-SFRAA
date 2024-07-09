@@ -17,7 +17,7 @@ namespace SportNow.Views.Services
             
             showActivityIndicator();
              
-			//initSpecificLayout();
+			initSpecificLayout();
 
 			hideActivityIndicator();
 		}
@@ -32,13 +32,14 @@ namespace SportNow.Views.Services
         ScrollView scrollView;
         Service service;
         Image serviceImage;
-        RoundButton contactButton;
+        RoundButton solicitarMarcacaoButton;
 
         public void CleanScreen()
 		{
-			if (serviceDescriptionLabel != null)
+			if (gridService != null)
 			{
-                serviceDescriptionLabel = null;
+                absoluteLayout.Remove(gridService);
+                gridService = null;
 			}
         }
 
@@ -136,11 +137,11 @@ namespace SportNow.Views.Services
 
             }
 
-            contactButton = new RoundButton("MAIS INFORMAÇÕES", App.screenWidth - 20 * App.screenWidthAdapter, 50 * App.screenHeightAdapter);
-            contactButton.button.Clicked += OnContactButtonClicked;
+            solicitarMarcacaoButton = new RoundButton("SOLICITAR MARCAÇÃO", App.screenWidth - 20 * App.screenWidthAdapter, 50);
+            solicitarMarcacaoButton.button.Clicked += OnSolicitarMarcacaoButtonClicked;
 
-            gridServiceDetail.Add(contactButton, 0, 5);
-            Grid.SetColumnSpan(contactButton, 2);
+            gridServiceDetail.Add(solicitarMarcacaoButton, 0, 5);
+            Grid.SetColumnSpan(solicitarMarcacaoButton, 2);
 
             scrollView.Content = gridServiceDetail;
 
@@ -197,29 +198,45 @@ namespace SportNow.Views.Services
 		{
             this.service = service;
 			this.initLayout();
-			this.initSpecificLayout();
+			//this.initSpecificLayout();
 
 		}
 
-        async void OnContactButtonClicked(object sender, EventArgs e)
+        async void OnSolicitarMarcacaoButtonClicked(object sender, EventArgs e)
         {
-
             showActivityIndicator();
-            contactButton.IsEnabled = false;
-            bool answer = await DisplayAlert("Pedido Informações", "Será enviada uma mensagem ao responsável deste serviço com o pedido de informações agora realizado.", "Ok", "Cancelar");
-            if (answer == true)
-            {
-                ServicesManager servicesManager = new ServicesManager();
-                string result = await servicesManager.SendMailService(this.service.id, this.service.nome, this.service.responsavel, this.service.responsavel_email, App.member.id, App.member.nickname, App.member.email, App.member.phone);
 
-                if (result == "0")
+            Debug.WriteLine("OnSolicitarMarcacaoButtonClicked");
+
+            string input = await DisplayPromptAsync("Disponibilidade", "Indique-nos a sua disponibilidade para esta marcação.", "Enviar", "Cancelar", "", keyboard: Keyboard.Text);
+
+            if (input != null)
+            {
+                Debug.Print("A disponibilidade é " + input);
+
+                ServicesManager servicesManager = new ServicesManager();
+
+                string res = await servicesManager.createServiceAppointment(App.member.id, this.service.id, this.service.nome, "pedida", input, App.member.nickname, App.member.phone, App.member.email);
+
+                Debug.Print("App.member.gender = " + App.member.gender);
+
+                if (App.member.gender == "male")
                 {
-                    await DisplayAlert("Pedido Informações Enviado", "Mensagem enviada com sucesso.", "Ok");
+                    await DisplayAlert("Pedido Marcação enviado", "O seu pedido de Marcação foi enviado para os serviços da SFRAA. Será contactado brevemente para confirmar a sua Marcação.", "Ok");
+                    CleanScreen();
+                    initSpecificLayout();
                 }
+                else
+                {
+                    await DisplayAlert("Pedido Marcação enviado", "O seu pedido de Marcação foi enviado para os serviços da SFRAA. Será contactada brevemente para confirmar a sua Marcação", "Sim");
+                    CleanScreen();
+                    initSpecificLayout();
+                }
+
             }
-            contactButton.IsEnabled = true;
-            
+
             hideActivityIndicator();
+
         }
 
     }

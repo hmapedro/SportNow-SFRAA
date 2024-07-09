@@ -13,26 +13,22 @@ namespace SportNow.Views.Services
 
 		protected async override void OnAppearing()
 		{
-            
             showActivityIndicator();
-             
-			initSpecificLayout();
+
+            this.CleanScreen();
+            initSpecificLayout();
 
 			hideActivityIndicator();
 		}
 
 		protected override void OnDisappearing()
 		{
-			
-		}
+            this.CleanScreen();
+        }
 
 		private CollectionView currentServicesCollectionView, otherServicesCollectionView;
 
 		Label currentServicesLabel, otherServicesLabel;
-
-		private List<Event> currentServicesList, otherServicesList;
-
-        RoundButton confirmButton;
 
         Grid gridServices;
         List<Service> other_services, current_services;
@@ -43,9 +39,9 @@ namespace SportNow.Views.Services
 		{
 			if (gridServices != null)
 			{
-				//absoluteLayout.Clear();
+				absoluteLayout.Clear();
 				
-				absoluteLayout.Children.Remove(gridServices);
+				//absoluteLayout.Children.Remove(gridServices);
                 gridServices = null;
 			}
         }
@@ -73,17 +69,28 @@ namespace SportNow.Views.Services
 
 		public async void initSpecificLayout()
 		{
-            this.CleanScreen();
+
+
+            _ = await createCurrentServices();
+            _ = await createOtherServices();
 
             gridServices = new Grid { BackgroundColor = Colors.Transparent, Padding = 0, RowSpacing = 5 * App.screenHeightAdapter };
             gridServices.RowDefinitions.Add(new RowDefinition { Height = 40 * App.screenHeightAdapter});
-            gridServices.RowDefinitions.Add(new RowDefinition { Height = 2 * App.ItemHeight });
-            gridServices.RowDefinitions.Add(new RowDefinition { Height = 60 * App.screenHeightAdapter });
-            gridServices.RowDefinitions.Add(new RowDefinition { Height = 300 * App.screenHeightAdapter });
-            gridServices.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star }); //GridLength.Auto
 
-            _ = await createCurrentServices();
-			_ = await createOtherServices();
+            if (current_services.Count() > 2)
+            {
+                gridServices.RowDefinitions.Add(new RowDefinition { Height = 2 * App.ItemHeight });
+                gridServices.RowDefinitions.Add(new RowDefinition { Height = 60 * App.screenHeightAdapter });
+                gridServices.RowDefinitions.Add(new RowDefinition { Height = 300 });
+            }
+            else
+            {
+                gridServices.RowDefinitions.Add(new RowDefinition { Height = App.ItemHeight });
+                gridServices.RowDefinitions.Add(new RowDefinition { Height = 60 * App.screenHeightAdapter });
+                gridServices.RowDefinitions.Add(new RowDefinition { Height = 400 });
+            }
+            
+            gridServices.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star }); //GridLength.Auto
 
             gridServices.Add(currentServicesLabel, 0, 0);
             gridServices.Add(currentServicesCollectionView, 0, 1);
@@ -352,20 +359,25 @@ namespace SportNow.Views.Services
 
                 Service service = (sender as CollectionView).SelectedItem as Service;
                 (sender as CollectionView).SelectedItem = null;
-                Debug.WriteLine("ServicesPageCS.OnCurrentServicesCollectionViewSelectionChanged service.tipo_evento = " + service.tipo_evento);
+                Debug.WriteLine("ServicesPageCS.OnCurrentServicesCollectionViewSelectionChanged service.nome = " + service.nome +" service.tipo_evento = " + service.tipo_evento);
 
-                if (service.tipo_evento == "marcação")
+                if (service.tipo_evento == "marcacao")
                 {
                     await Navigation.PushAsync(new CurrentServicesAppointmentPageCS(service));
                 }
                 if (service.tipo_evento == "classe")
                 {
-                    await Navigation.PushAsync(new CurrentServicesClassPageCS(service));
+                    if (service.tipo == "educacao")
+                    {
+                        await Navigation.PushAsync(new CurrentServicesEducationPageCS(service));
+                    }
+                    else
+                    {
+                        await Navigation.PushAsync(new CurrentServicesClassPageCS(service));
+                    }
+                    
                 }
-                if (service.tipo_evento == "educacao")
-                {
-                    await Navigation.PushAsync(new CurrentServicesEducationPageCS(service));
-                }
+                
 
 
             }
@@ -385,17 +397,14 @@ namespace SportNow.Views.Services
 
                 Debug.WriteLine("ServicesPageCS service.tipo_evento = "+ service.tipo_evento);
 
-                /*if (service.tipo_evento == "marcação")
+                if (service.tipo_evento == "marcacao")
                 {
                     await Navigation.PushAsync(new ServicesAppointmentDetailPageCS(service));
                 }
-                if (service.tipo_evento == "classe")
+                else
                 {
                     await Navigation.PushAsync(new ServicesClassDetailPageCS(service));
-                }*/
-                await Navigation.PushAsync(new ServicesClassDetailPageCS(service));
-
-
+                }
             }
             hideActivityIndicator();
         }

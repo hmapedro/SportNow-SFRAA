@@ -410,7 +410,7 @@ namespace SportNow.Views
 
 					{
                         await Navigation.PushAsync(new AttendanteEvaluationPageCS(class_schedule.classattendanceid));
-                        //await DisplayAlert("PRESENÇA EM AULA", "A tua presença nesta aula já foi validada pelo treinador pelo que não é possível alterar o seu estado.", "OK");
+                        //await DisplayAlert("PRESENÇA EM AULA", "A sua presença nesta aula já foi validada pelo treinador pelo que não é possível alterar o seu estado.", "OK");
 					}
 					
 				}

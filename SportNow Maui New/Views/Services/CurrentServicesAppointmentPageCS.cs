@@ -30,7 +30,7 @@ namespace SportNow.Views.Services
 
         Service service;
 
-        List<Appointment> appointments, pastAppointments, futureAppointments;
+        ObservableCollection<Appointment> appointments, pastAppointments, futureAppointments;
 
         Label pastAttendanceLabel, futureAttendanceLabel;
 
@@ -74,7 +74,6 @@ namespace SportNow.Views.Services
 
             ServicesManager servicesManager = new ServicesManager();
             appointments = await servicesManager.GetServiceAppointments(App.member.id, service.id);
-
             completeAppointments();
 
             
@@ -96,8 +95,8 @@ namespace SportNow.Views.Services
         public void completeAppointments()
         {
 
-            futureAppointments = new List<Appointment>();
-            pastAppointments = new List<Appointment>();
+            futureAppointments = new ObservableCollection<Appointment>();
+            pastAppointments = new ObservableCollection<Appointment>();
 
             foreach (Appointment appointment in appointments)
             {
@@ -367,7 +366,7 @@ namespace SportNow.Views.Services
 
                 ServicesManager servicesManager = new ServicesManager();
 
-                string res = await servicesManager.createServiceAppointment(App.member.id, this.service.id, "pedida", input);
+                string res = await servicesManager.createServiceAppointment(App.member.id, this.service.id, this.service.nome, "pedida", input, App.member.nickname, App.member.phone, App.member.email);
 
                 Debug.Print("App.member.gender = " + App.member.gender);
 
@@ -379,7 +378,10 @@ namespace SportNow.Views.Services
                 {
                     await DisplayAlert("Pedido Marcação enviado", "O seu pedido de Marcação foi enviado para os serviços da SFRAA. Será contactada brevemente para confirmar a sua Marcação", "Sim");
                 }
-
+                futureAppointments = await servicesManager.GetServiceAppointments(App.member.id, service.id);
+                completeAppointments();
+                /*futureAppointmentsCollectionView.ItemsSource = null;
+                futureAppointmentsCollectionView.ItemsSource = futureAppointments;*/
             }
 
             hideActivityIndicator();

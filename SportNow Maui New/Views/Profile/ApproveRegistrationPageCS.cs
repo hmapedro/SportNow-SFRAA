@@ -52,11 +52,11 @@ namespace SportNow.Views.Profile
 			titleLabel = new Label { FontFamily = "futuracondensedmedium", VerticalTextAlignment = TextAlignment.Center, HorizontalTextAlignment = TextAlignment.Center, FontSize = App.titleFontSize, TextColor = App.topColor, LineBreakMode = LineBreakMode.WordWrap };
 			if (members_To_Approve.Count == 0)
 			{
-				titleLabel.Text = "Não tens novos sócios para aprovar.";
+				titleLabel.Text = "Não tem novos sócios para aprovar.";
 			}
 			else
 			{
-				titleLabel.Text = "Tens os seguintes novos sócios para aprovar:";
+				titleLabel.Text = "Tem os seguintes novos sócios para aprovar:";
 			}
 
 			absoluteLayout.Add(titleLabel);
@@ -306,11 +306,11 @@ namespace SportNow.Views.Profile
 
 						if (members_To_Approve.Count == 0)
 						{
-							titleLabel.Text = "Não tens novos sócios para aprovar.";
+							titleLabel.Text = "Não tem novos sócios para aprovar.";
 						}
 						else
 						{
-							titleLabel.Text = "Tens os seguintes novos sócios para aprovar:";
+							titleLabel.Text = "Tem os seguintes novos sócios para aprovar:";
 						}
 
 						collectionViewMembers.ItemsSource = members_To_Approve;
@@ -360,11 +360,11 @@ namespace SportNow.Views.Profile
             members_To_Approve = await GetMembers_To_Approve();
             if (members_To_Approve.Count == 0)
 			{
-				titleLabel.Text = "Não tens novos sócios para aprovar.";
+				titleLabel.Text = "Não tem novos sócios para aprovar.";
 			}
 			else
 			{
-				titleLabel.Text = "Tens os seguintes novos sócios para aprovar:";
+				titleLabel.Text = "Tem os seguintes novos sócios para aprovar:";
 			}
 
             collectionViewMembers.ItemsSource = members_To_Approve;

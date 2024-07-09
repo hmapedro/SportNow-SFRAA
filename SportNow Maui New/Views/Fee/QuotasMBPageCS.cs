@@ -64,7 +64,7 @@ namespace SportNow.Views
 			Label feeYearLabel = new Label
 			{
                 FontFamily = "futuracondensedmedium",
-                Text = "Para ativares a tua Quota \n " + member.currentFee.name + "\n efetua o pagamento MB com os dados apresentados em baixo:",
+                Text = "Para ativares a sua Quota \n " + member.currentFee.name + "\n efetua o pagamento MB com os dados apresentados em baixo:",
                 VerticalTextAlignment = TextAlignment.Center,
 				HorizontalTextAlignment = TextAlignment.Center,
 				TextColor = App.normalTextColor,

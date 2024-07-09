@@ -57,7 +57,7 @@ namespace SportNow.Views
 
 			Label eventParticipationNameLabel = new Label
 			{
-				Text = "Para confirmares a tua presença no(a) " + competition_v.name + " efetua o pagamento de " + String.Format("{0:0.00}", payment.value) + "€.",
+				Text = "Para confirmares a sua presença no(a) " + competition_v.name + " efetua o pagamento de " + String.Format("{0:0.00}", payment.value) + "€.",
 				VerticalTextAlignment = TextAlignment.Center,
 				HorizontalTextAlignment = TextAlignment.Center,
 				TextColor = App.normalTextColor,
@@ -184,8 +184,8 @@ namespace SportNow.Views
 				return null;
 			}
 			hideActivityIndicator();
-            await DisplayAlert("VALIDAÇÃO DE PAGAMENTO?", "Valida o pagamento na App MBWay ou no teu Home Banking. Logo que o faças podes voltar a consultar o estado da tua inscrição e verificares que já te encontras inscrito.", "Ok");
-            //await UserDialogs.Instance.AlertAsync(new AlertConfig() { Title = "VALIDAÇÃO DE PAGAMENTO", "Valida o pagamento na App MBWay ou no teu Home Banking. Logo que o faças podes voltar a consultar o estado da tua inscrição e verificares que já te encontras inscrito.", "Ok" );
+            await DisplayAlert("VALIDAÇÃO DE PAGAMENTO?", "Valida o pagamento na App MBWay ou no teu Home Banking. Logo que o faças podes voltar a consultar o estado da sua inscrição e verificares que já te encontras inscrito.", "Ok");
+            //await UserDialogs.Instance.AlertAsync(new AlertConfig() { Title = "VALIDAÇÃO DE PAGAMENTO", "Valida o pagamento na App MBWay ou no teu Home Banking. Logo que o faças podes voltar a consultar o estado da sua inscrição e verificares que já te encontras inscrito.", "Ok" );
 
 /*			App.isToPop = true;
 			await Navigation.PopAsync();*/

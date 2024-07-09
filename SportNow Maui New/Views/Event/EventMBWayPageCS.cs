@@ -57,7 +57,7 @@ namespace SportNow.Views
 			Label eventParticipationNameLabel = new Label
 			{
                 FontFamily = "futuracondensedmedium",
-                Text = "Para confirmares a tua presença no(a) " + event_participation.evento_name + " efetua o pagamento de "+ String.Format("{0:0.00}", payments[0].value) + "€",
+                Text = "Para confirmares a sua presença no(a) " + event_participation.evento_name + " efetua o pagamento de "+ String.Format("{0:0.00}", payments[0].value) + "€",
 				VerticalTextAlignment = TextAlignment.Center,
 				HorizontalTextAlignment = TextAlignment.Center,
 				TextColor = App.normalTextColor,
@@ -188,7 +188,7 @@ namespace SportNow.Views
 				return null;
 			}
 			hideActivityIndicator();
-			await DisplayAlert("VALIDAÇÃO DE PAGAMENTO", "Valida o pagamento na App MBWay ou no teu Home Banking. Logo que o faças podes voltar a consultar o estado da tua inscrição e verificares que já te encontras inscrito.", "Ok" );
+			await DisplayAlert("VALIDAÇÃO DE PAGAMENTO", "Valida o pagamento na App MBWay ou no teu Home Banking. Logo que o faças podes voltar a consultar o estado da sua inscrição e verificares que já te encontras inscrito.", "Ok" );
 
 /*			App.isToPop = true;
 			await Navigation.PopAsync();*/

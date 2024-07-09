@@ -658,7 +658,7 @@ namespace SportNow.Views.Services
                     }
                     else if (class_schedule.classattendancestatus == "fechada")
                     {
-                        await DisplayAlert("PRESENÇA EM AULA", "A tua presença nesta aula já foi validada pelo instrutor pelo que não é possível alterar o seu estado.", "Ok");
+                        await DisplayAlert("PRESENÇA EM AULA", "A sua presença nesta aula já foi validada pelo instrutor pelo que não é possível alterar o seu estado.", "Ok");
                     }
                     //int result = await classmanager.UpdateClass_Attendance(class_schedule.classattendanceid, class_schedule.classattendancestatus);
                 }

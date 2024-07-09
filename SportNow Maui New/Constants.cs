@@ -88,6 +88,8 @@ namespace SportNow
 
         public static string RestUrl_Get_Future_Events_All = DeviceInfo.Platform == DevicePlatform.Android ? "https://"+server+"/services/service_get_future_events_all.php" : "https://"+server+"/services/service_get_future_events_all.php";
 
+        public static string RestUrl_Get_Future_Events_Service = DeviceInfo.Platform == DevicePlatform.Android ? "https://" + server + "/services/service_get_future_events_service.php" : "https://" + server + "/services/service_get_future_events_service.php";
+
         public static string RestUrl_Get_Important_Events = DeviceInfo.Platform == DevicePlatform.Android ? "https://"+server+"/services/service_get_important_events.php" : "https://"+server+"/services/service_get_important_events.php";
         
         public static string RestUrl_Get_Event_byID = DeviceInfo.Platform == DevicePlatform.Android ? "https://"+server+"/services/service_get_event_byID.php" : "https://"+server+"/services/service_get_event_byID.php";
@@ -237,6 +239,8 @@ namespace SportNow
 
         public static string RestUrl_Get_Service_Appointments = DeviceInfo.Platform == DevicePlatform.Android ? "https://" + server + "/services/service_get_service_appointments.php" : "https://" + server + "/services/service_get_service_appointments.php";
 
+        public static string RestUrl_Get_Appointments = DeviceInfo.Platform == DevicePlatform.Android ? "https://" + server + "/services/service_get_appointments.php" : "https://" + server + "/services/service_get_appointments.php";
+
         public static string RestUrl_Create_Service_Appointment = DeviceInfo.Platform == DevicePlatform.Android ? "https://" + server + "/services/service_create_service_appointment.php" : "https://" + server + "/services/service_create_service_appointment.php";
 
         public static string RestUrl_SendMail_Service = DeviceInfo.Platform == DevicePlatform.Android ? "https://" + server + "/services/service_sendmail_service.php" : "https://" + server + "/services/service_sendmail_service.php";
@@ -258,11 +262,8 @@ namespace SportNow
 
         public static Dictionary<string, string> event_type { get; } = new Dictionary<string, string>
         {
-            { "estagio", "Estágio" },
-            { "convivio", "Convívio" },
-            { "summer_camp", "Summer Camp" },
-            { "formacao", "Formação" },
-            { "treino", "Treino" }
+            { "espetaculo", "Espetáculo" },
+            { "outro", "Outro" }
         };
 
 
@@ -671,12 +672,12 @@ namespace SportNow
             "Sabias que o Karate tem origem no Japão, nomeadamente na ilha de Okinawa.",*/
             "Luta sempre como se fosse a última vez.",
             "Karate é como a água a ferver, se você não aquece constantemente, vai ficar fria.",
-            "Sê mais forte do que a tua melhor desculpa.",
+            "Sê mais forte do que a sua melhor desculpa.",
             "“Quem não tem coragem para arriscar não conquistará nada na vida.” – Muhammad Ali, boxeador",
             "“Se falhar na preparação, estará preparado para falhar.” – Mark Spitz, nadador",
             "“Um campeão tem medo de perder. Todo o resto tem medo de vencer.” – Billie Jean King, tenista",
             "“Obstáculos não te devem impedir. Se encontrares uma parede, não desistas. Descubre como escalá-la.” – Michael Jordan, jogador de basket",
-            "“Se não tens confiança, encontrarás sempre uma maneira de não vencer.” – Carl Lewis",
+            "“Se não tem confiança, encontrarás sempre uma maneira de não vencer.” – Carl Lewis",
             "“A excelência física vem da excelência mental.” – Clara Hughes, ciclista e patinadora",
             "“Treina como se nunca tivesses ganho e joga como se nunca tivesses perdido“ - Michael Jordan, jogador de basket",
             "“Consigo aceitar a falha, mas não consigo aceitar o não se tentar“ - Michael Jordan, jogador de basket",

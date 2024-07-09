@@ -50,7 +50,7 @@ namespace SportNow.Views.Personal
             Label descricaoLabel = new Label
             {
                 FontFamily = "futuracondensedmedium",
-                Text = "Caso queiras treinar mais horas ou ter aulas dedicadas especificamente às tuas necessidades.",
+                Text = "Caso queiras treinar mais horas ou ter aulas dedicadas especificamente às suas necessidades.",
                 TextColor = App.bottomColor,
                 HorizontalTextAlignment = TextAlignment.Center,
                 FontSize = App.titleFontSize,
@@ -126,7 +126,7 @@ namespace SportNow.Views.Personal
             Label textLabel = new Label
             {
                 FontFamily = "futuracondensedmedium",
-                Text = "Escolhe o treinador que pretendes, o tipo de aula e o horário mais conveniente para as tuas aulas pessoais.",
+                Text = "Escolhe o treinador que pretendes, o tipo de aula e o horário mais conveniente para as suas aulas pessoais.",
                 TextColor = App.bottomColor,
                 HorizontalTextAlignment = TextAlignment.Center,
                 FontSize = App.titleFontSize,

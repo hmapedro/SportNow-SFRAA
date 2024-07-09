@@ -72,7 +72,7 @@ namespace SportNow.Views
 			}
 			else
 			{
-				await DisplayAlert("QUOTA ", "A tua quota não está válida.", "Ok" );
+				await DisplayAlert("QUOTA ", "A sua quota não está válida.", "Ok" );
 				await Navigation.PopAsync();
 			}
 
@@ -86,7 +86,7 @@ namespace SportNow.Views
 			Label inscricaoOKLabel = new Label
 			{
                 FontFamily = "futuracondensedmedium",
-                Text = "A tua Inscrição no Evento \n " + event_participation.evento_name + " \n está Confirmada. \n\n BOA SORTE\n e nunca te esqueças de te divertir!",
+                Text = "A sua Inscrição no Evento \n " + event_participation.evento_name + " \n está Confirmada. \n\n BOA SORTE\n e nunca te esqueças de te divertir!",
 				VerticalTextAlignment = TextAlignment.Center,
 				HorizontalTextAlignment = TextAlignment.Center,
 				TextColor = App.normalTextColor,

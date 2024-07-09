@@ -50,7 +50,7 @@ namespace SportNow.Views
 		{
 			Label inscricaoOKLabel = new Label
 			{
-				Text = "A tua Inscrição no Evento \n " + event_participation.evento_name + " \n está Confirmada. \n\n BOA SORTE\n e nunca te esqueças de te divertir!",
+				Text = "A sua Inscrição no Evento \n " + event_participation.evento_name + " \n está Confirmada. \n\n BOA SORTE\n e nunca te esqueças de te divertir!",
 				VerticalTextAlignment = TextAlignment.Center,
 				HorizontalTextAlignment = TextAlignment.Center,
 				TextColor = App.normalTextColor,
@@ -83,7 +83,7 @@ namespace SportNow.Views
 			Label competitionParticipationNameLabel = new Label
 			{
                 FontFamily = "futuracondensedmedium",
-                Text = "Para confirmares a tua presença no\n " + event_participation.evento_name + "\n efetua o pagamento MB com os dados apresentados em baixo:",
+                Text = "Para confirmares a sua presença no\n " + event_participation.evento_name + "\n efetua o pagamento MB com os dados apresentados em baixo:",
 				VerticalTextAlignment = TextAlignment.Center,
 				HorizontalTextAlignment = TextAlignment.Center,
 				TextColor = App.normalTextColor,

@@ -67,7 +67,7 @@ namespace SportNow.Views
 			Label competitionParticipationNameLabel = new Label
 			{
                 FontFamily = "futuracondensedmedium",
-                Text = "Para efetuares o pagamento da tua " + monthFee.name + " - "+ payments[0].value + "€ usa os dados indicados em baixo.",
+                Text = "Para efetuares o pagamento da sua " + monthFee.name + " - "+ payments[0].value + "€ usa os dados indicados em baixo.",
 				VerticalTextAlignment = TextAlignment.Center,
 				HorizontalTextAlignment = TextAlignment.Center,
 				TextColor = App.normalTextColor,

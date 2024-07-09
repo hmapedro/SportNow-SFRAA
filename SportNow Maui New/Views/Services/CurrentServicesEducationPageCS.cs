@@ -34,8 +34,6 @@ namespace SportNow.Views.Services
 
         private OptionButton eventosButton, mensalidadesButton, mensalidadesStudentButton;
 
-        Label otherOptionsLabel;
-
         int service_students_count;
 
         public void CleanScreen()
@@ -51,19 +49,10 @@ namespace SportNow.Views.Services
 
 		public async void initSpecificLayout()
 		{
-            gridService = new Grid { BackgroundColor = Colors.Blue, Padding = 0, RowSpacing = 10 * App.screenHeightAdapter, ColumnSpacing = 10 * App.screenWidthAdapter };
-
-            gridService.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star}); //GridLength.Auto
-
             service_students_count = await GetStudents_Service_Count();
 
             _ = await CreatePresencasOptionButtonsAsync();
 
-            gridService.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-            gridService.Add(gridPresencasButtons, 0, 0);
-           
-            absoluteLayout.Add(gridService);
-            absoluteLayout.SetLayoutBounds(gridService, new Rect(0 * App.screenWidthAdapter, 5 * App.screenHeightAdapter, App.screenWidth, App.screenHeight - 100));
         }
 
 
@@ -73,14 +62,14 @@ namespace SportNow.Views.Services
 
             //showActivityIndicator();
             var width = App.screenWidth;
-            var buttonWidth = (width) / 2 - 10 * App.screenWidthAdapter;
+            var buttonWidth = (width) / 2;
 
             eventosButton = new OptionButton("EVENTOS", "attendances.png", buttonWidth, 80 * App.screenHeightAdapter);
             //minhasGraduacoesButton.button.Clicked += OnMinhasGraduacoesButtonClicked;
             var eventosButton_tap = new TapGestureRecognizer();
             eventosButton_tap.Tapped += (s, e) =>
             {
-                Navigation.PushAsync(new AttendanceManagePageCS(this.service));
+                Navigation.PushAsync(new ServiceEventsPageCS(this.service));
             };
             eventosButton.GestureRecognizers.Add(eventosButton_tap);
 
@@ -104,7 +93,7 @@ namespace SportNow.Views.Services
             string monthFeeStudentCount = await Get_has_StudentMonthFees();
 
 
-            gridPresencasButtons = new Grid { BackgroundColor = Colors.Transparent, Padding = 0, RowSpacing = 5 * App.screenHeightAdapter, ColumnSpacing = 0 * App.screenWidthAdapter };
+            gridPresencasButtons = new Grid { VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center, BackgroundColor = Colors.Transparent, Padding = 0, RowSpacing = 100 * App.screenHeightAdapter, ColumnSpacing = 0 * App.screenWidthAdapter };
             gridPresencasButtons.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             gridPresencasButtons.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             gridPresencasButtons.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
@@ -138,6 +127,10 @@ namespace SportNow.Views.Services
                     gridPresencasButtons.Add(eventosButton, 0, 0);
                 }
             }
+
+            absoluteLayout.Add(gridPresencasButtons);
+            absoluteLayout.SetLayoutBounds(gridPresencasButtons, new Rect(0 * App.screenWidthAdapter, 5 * App.screenHeightAdapter, App.screenWidth, App.screenHeight - 100));
+
             return 0;
         }
 
@@ -259,7 +252,7 @@ namespace SportNow.Views.Services
                     }
                     else if (class_schedule.classattendancestatus == "fechada")
                     {
-                        await DisplayAlert("PRESENÇA EM AULA", "A tua presença nesta aula já foi validada pelo instrutor pelo que não é possível alterar o seu estado.", "Ok");
+                        await DisplayAlert("PRESENÇA EM AULA", "A sua presença nesta aula já foi validada pelo instrutor pelo que não é possível alterar o seu estado.", "Ok");
                     }
                     //int result = await classmanager.UpdateClass_Attendance(class_schedule.classattendanceid, class_schedule.classattendancestatus);
                 }

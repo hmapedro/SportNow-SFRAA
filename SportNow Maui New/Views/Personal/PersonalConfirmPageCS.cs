@@ -194,13 +194,13 @@ namespace SportNow.Views.Personal
             showActivityIndicator();
             if (objetivosEntry.entry.Text == "")
             {
-                await DisplayAlert("Indica por favor os Objetivos", "Para prosseguir é necessário indicares os objetivos que tens para estas aulas.", "OK");
+                await DisplayAlert("Indica por favor os Objetivos", "Para prosseguir é necessário indicar os objetivos que tem para estas aulas.", "OK");
                 hideActivityIndicator();
                 return;
             }
             if (disponibilidadeEntry.entry.Text == "")
             {
-                await DisplayAlert("Indica por favor a Disponibilidade", "Para prosseguir é necessário indicares a tua disponibilidade para estas aulas.", "OK");
+                await DisplayAlert("Indica por favor a Disponibilidade", "Para prosseguir é necessário indicar a sua disponibilidade para estas aulas.", "OK");
                 hideActivityIndicator();
                 return;
             }
@@ -210,7 +210,7 @@ namespace SportNow.Views.Personal
 
             string message = "Olá " + selectedCoach.nickname + "!\n" +
                 "O meu nome é " + App.member.nickname + " e gostava de ter Aulas Pessoais contigo.\n" +
-                "Gostava de fazer " + numeroAulasPicker.SelectedItem + " aula(s) por semana contigo de " + this.personalClass_type + " com o objetivo de:\n" + objetivosEntry.entry.Text + "\n" +
+                "Gostava de fazer " + numeroAulasPicker.SelectedItem + " aula(s) por semana consigo de " + this.personalClass_type + " com o objetivo de:\n" + objetivosEntry.entry.Text + "\n" +
                 "Tenho a seguinte disponibilidade:\n" + disponibilidadeEntry.entry.Text;
 
             LogManager logManager = new LogManager();

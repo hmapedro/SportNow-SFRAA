@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿
+using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Net.Http;
 using Newtonsoft.Json;
 using SportNow.Model;
-using System.Collections.ObjectModel;
 
 namespace SportNow.Services.Data.JSON
 {
@@ -16,7 +13,7 @@ namespace SportNow.Services.Data.JSON
 		HttpClient client;
 
 		public List<Service> services { get; private set; }
-        public List<Appointment> appointments { get; private set; }
+        public ObservableCollection<Appointment> appointments { get; private set; }
 
 
         public ServicesManager()
@@ -103,7 +100,7 @@ namespace SportNow.Services.Data.JSON
             }
         }
 
-        public async Task<List<Appointment>> GetServiceAppointments(string memberid, string serviceid)
+        public async Task<ObservableCollection<Appointment>> GetServiceAppointments(string memberid, string serviceid)
         {
             Debug.Print("GetServiceAppointments - " + Constants.RestUrl_Get_Service_Appointments + "?userid=" + memberid + "&serviceid=" + serviceid);
             Uri uri = new Uri(string.Format(Constants.RestUrl_Get_Service_Appointments + "?userid=" + memberid + "&serviceid=" + serviceid, string.Empty));
@@ -115,7 +112,7 @@ namespace SportNow.Services.Data.JSON
                 {
                     string content = await response.Content.ReadAsStringAsync();
                     Debug.Print("GetServiceAppointments content=" + content);
-                    appointments = JsonConvert.DeserializeObject<List<Appointment>>(content);
+                    appointments = JsonConvert.DeserializeObject<ObservableCollection<Appointment>>(content);
                 }
                 return appointments;
             }
@@ -126,11 +123,33 @@ namespace SportNow.Services.Data.JSON
             }
         }
 
-
-        public async Task<string> createServiceAppointment(string memberid, string serviceid, string status, string description)
+        public async Task<ObservableCollection<Appointment>> GetAppointments(string memberid, string begindate, string enddate)
         {
-            Debug.Print("createAppointment " + Constants.RestUrl_Create_Service_Appointment + "?userid=" + memberid + "&serviceid=" + serviceid + "&status=" + status + "&description=" + description);
-            Uri uri = new Uri(string.Format(Constants.RestUrl_Create_Service_Appointment + "?userid=" + memberid + "&serviceid=" + serviceid + "&status=" + status + "&description=" + description, string.Empty));
+            Debug.Print("GetAppointments - " + Constants.RestUrl_Get_Appointments + "?userid=" + memberid + "&begindate=" + begindate + "&enddate=" + enddate);
+            Uri uri = new Uri(string.Format(Constants.RestUrl_Get_Appointments + "?userid=" + memberid + "&begindate=" + begindate + "&enddate=" + enddate, string.Empty));
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    Debug.Print("GetAppointments content=" + content);
+                    appointments = JsonConvert.DeserializeObject<ObservableCollection<Appointment>>(content);
+                }
+                return appointments;
+            }
+            catch
+            {
+                Debug.WriteLine("GetAppointments - http request error");
+                return null;
+            }
+        }
+
+        public async Task<string> createServiceAppointment(string memberid, string serviceid, string servicename, string status, string description, string membername, string memberphone, string memberemail)
+        {
+            Debug.Print("createAppointment " + Constants.RestUrl_Create_Service_Appointment + "?userid=" + memberid + "&serviceid=" + serviceid + "&servicename=" + servicename + "&status=" + status + "&description=" + description + "&username=" + membername + "&userphone=" + memberphone + "&useremail=" + memberemail);
+            Uri uri = new Uri(string.Format(Constants.RestUrl_Create_Service_Appointment + "?userid=" + memberid + "&serviceid=" + serviceid + "&servicename=" + servicename + "&status=" + status + "&description=" + description + "&username=" + membername + "&userphone=" + memberphone + "&useremail=" + memberemail, string.Empty));
             try
             {
                 HttpResponseMessage response = await client.GetAsync(uri);

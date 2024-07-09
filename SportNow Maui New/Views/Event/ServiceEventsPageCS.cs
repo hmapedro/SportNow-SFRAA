@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 
 namespace SportNow.Views
 {
-	public class AllEventsPageCS : DefaultPage
+	public class ServiceEventsPageCS : DefaultPage
 	{
 
 		protected override void OnAppearing()
@@ -23,15 +23,14 @@ namespace SportNow.Views
 			this.CleanScreen();
 		}
 
-		MenuButton proximosEspetaculosButton;
-		MenuButton proximosOutrosEventosButton;
+		Grid gridEvents;
 
-		private Microsoft.Maui.Controls.StackLayout stackButtons;
+        Service service;
 
 		private CollectionView proximosEventosCollectionView;
 
 
-		private List<Event> proximosEventosAll, proximosEspetaculos, proximosOutrosEventos;
+		private List<Event> proximosEventosAll, proximosEventosSelected;
 
 
         public void initLayout()
@@ -53,57 +52,50 @@ namespace SportNow.Views
 		{
 			Debug.Print("CleanScreen");
 			//valida se os objetos já foram criados antes de os remover
-			if (stackButtons != null)
-			{
-				absoluteLayout.Remove(stackButtons);
-				stackButtons = null;
-			}
+
 			CleanProximosEventosCollectionView();
 			//CleanProximasCompeticoesCollectionView();
 			//CleanProximasSessoesExameCollectionView();
-
 
         }
 
 		public async void initSpecificLayout()
 		{
 			showActivityIndicator();
-			
 
-			int result = await getEventData();
-			CreateStackButtons();
+            gridEvents = new Grid { BackgroundColor = Colors.Transparent, Padding = 0, RowSpacing = 10 * App.screenHeightAdapter };
+            gridEvents.RowDefinitions.Add(new RowDefinition { Height = 60 * App.screenHeightAdapter });
+            gridEvents.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            gridEvents.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star }); //GridLength.Auto
+
+			Label eventsLabel = new Label
+			{
+				Text = service.nome,
+                TextColor = App.activeTitleTextColor,
+                HorizontalTextAlignment = TextAlignment.Center,
+                FontSize = App.bigTitleFontSize,
+                FontFamily = "futuracondensedmedium",
+            };
+
+            int result = await getEventData();
 			CreateProximosEventosColletion();
-			activateLastSelectedTab();
-			//CreateCalendarioLink();
-			//OnProximosEstagiosButtonClicked(null, null);
+            //CreateCalendarioLink();
+            //OnProximosEstagiosButtonClicked(null, null);
 
-			hideActivityIndicator();
+            gridEvents.Add(eventsLabel, 0, 0);
+            gridEvents.Add(proximosEventosCollectionView, 0, 1);
 
+            absoluteLayout.Add(gridEvents);
+            absoluteLayout.SetLayoutBounds(gridEvents, new Rect(0 * App.screenWidthAdapter, 5 * App.screenHeightAdapter, App.screenWidth, App.screenHeight - 100));
+
+
+            hideActivityIndicator();
 		}
 
-
-		public void activateLastSelectedTab()
-		{
-			Debug.Print("activateLastSelectedTab");
-			if (App.EVENTOS_activetab == "espetaculos")
-			{
-				OnProximosEspetaculosButtonClicked(null, null);
-			}
-			else if (App.EVENTOS_activetab == "outroseventos")
-			{
-				OnProximosOutrosEventosButtonClicked(null, null);
-			}
-			else
-			{
-                OnProximosEspetaculosButtonClicked(null, null);
-			}
-		}
 
 		public async Task<int> getEventData()
 		{
-			proximosEventosAll = await GetFutureEventsAll();
-			proximosEspetaculos= new List<Event>();
-			proximosOutrosEventos= new List<Event>();
+			proximosEventosAll = await GetFutureEventsService();
 			if (proximosEventosAll != null)
 			{
 
@@ -127,54 +119,10 @@ namespace SportNow.Views
                     {
                         event_i.participationimage = "iconinativo.png";
                     }
-
-                    if (event_i.type == "espetaculo")
-					{
-                        proximosEspetaculos.Add(event_i);
-					}
-					else
-					{
-						proximosOutrosEventos.Add(event_i);
-					}
 				}
 			}
 
 			return 1;
-		}
-
-
-		public void CreateStackButtons()
-		{
-			Debug.Print("AllEventsPageCS - CreateStackButtons");
-            var buttonWidth = (App.screenWidth - 5 * App.screenWidthAdapter) / 2;
-
-
-            proximosEspetaculosButton = new MenuButton("ESPECTÁCULOS", buttonWidth, 60);
-            proximosEspetaculosButton.button.Clicked += OnProximosEspetaculosButtonClicked;
-
-			proximosOutrosEventosButton = new MenuButton("OUTROS", buttonWidth, 60);
-			proximosOutrosEventosButton.button.Clicked += OnProximosOutrosEventosButtonClicked;
-
-			stackButtons = new Microsoft.Maui.Controls.StackLayout
-			{
-				//WidthRequest = 370,
-				Margin = new Thickness(0),
-				Spacing = 5,
-				Orientation = StackOrientation.Horizontal,
-				HorizontalOptions = LayoutOptions.FillAndExpand,
-				VerticalOptions = LayoutOptions.FillAndExpand,
-				HeightRequest = 60,
-				Children =
-				{
-                    proximosEspetaculosButton,
-					proximosOutrosEventosButton
-				}
-			};
-
-			absoluteLayout.Add(stackButtons);
-			
-            absoluteLayout.SetLayoutBounds(stackButtons, new Rect(0, 0, App.screenWidth, 60 * App.screenHeightAdapter));
-
 		}
 
 
@@ -184,11 +132,11 @@ namespace SportNow.Views
 			proximosEventosCollectionView = new CollectionView
 			{
 				SelectionMode = SelectionMode.Single,
-				//ItemsSource = proximosEventosSelected,
+				ItemsSource = proximosEventosAll,
 				ItemsLayout = new GridItemsLayout(2, ItemsLayoutOrientation.Vertical) { VerticalItemSpacing = 5 * App.screenHeightAdapter, HorizontalItemSpacing = 5 * App.screenWidthAdapter,  },
 				EmptyView = new ContentView
 				{
-					Content = new Microsoft.Maui.Controls.StackLayout
+					Content = new StackLayout
 					{
 						Children =
 							{
@@ -260,13 +208,16 @@ namespace SportNow.Views
 				
 				return itemabsoluteLayout;
 			});
+
+
 			absoluteLayout.Add(proximosEventosCollectionView);
             absoluteLayout.SetLayoutBounds(proximosEventosCollectionView, new Rect(5 * App.screenWidthAdapter, 80 * App.screenHeightAdapter, App.screenWidth - 10 * App.screenWidthAdapter, App.screenHeight - 280 * App.screenHeightAdapter));
 
 		}
 
-		public AllEventsPageCS()
+		public ServiceEventsPageCS(Service service)
 		{
+			this.service = service;
 
 			this.initLayout();
 			//this.initSpecificLayout();
@@ -291,14 +242,14 @@ namespace SportNow.Views
 		}
 
 
-		async Task<List<Event>> GetFutureEventsAll()
+		async Task<List<Event>> GetFutureEventsService()
 		{
-			Debug.WriteLine("GetFutureEventsAll");
+			Debug.WriteLine("GetFutureEventsService");
 			EventManager eventManager = new EventManager();
-			List<Event> futureEvents = await eventManager.GetFutureEventsAll(App.member.id);
+			List<Event> futureEvents = await eventManager.GetFutureEventsService(App.member.id, this.service.id);
 			if (futureEvents == null)
 			{
-								Application.Current.MainPage = new NavigationPage(new LoginPageCS("Verifique a sua ligação à Internet e tente novamente."))
+				Application.Current.MainPage = new NavigationPage(new LoginPageCS("Verifique a sua ligação à Internet e tente novamente."))
 				{
 					BarBackgroundColor = App.backgroundColor,
 					BarTextColor = App.normalTextColor
@@ -308,25 +259,6 @@ namespace SportNow.Views
 			return futureEvents;
 		}
 
-
-		async void OnProximosEspetaculosButtonClicked(object sender, EventArgs e)
-		{
-			App.EVENTOS_activetab = "espetaculos";
-			proximosEspetaculosButton.activate();
-			proximosOutrosEventosButton.deactivate();
-
-			proximosEventosCollectionView.ItemsSource = proximosEspetaculos;
-		}
-
-
-		async void OnProximosOutrosEventosButtonClicked(object sender, EventArgs e)
-		{
-			App.EVENTOS_activetab = "outroseventos";
-            proximosEspetaculosButton.deactivate();
-			proximosOutrosEventosButton.activate();
-
-			proximosEventosCollectionView.ItemsSource = proximosOutrosEventos;
-		}
 
 
 		async void OnProximosEventosCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -341,21 +273,6 @@ namespace SportNow.Views
 					Event event_v = (sender as CollectionView).SelectedItem as Event;
 					await Navigation.PushAsync(new DetailEventPageCS(event_v));
 				}
-				else if ((sender as CollectionView).SelectedItem.GetType().ToString() == "SportNow.Model.Competition")
-				{
-					Competition competition = (sender as CollectionView).SelectedItem as Competition;
-					await Navigation.PushAsync(new DetailCompetitionPageCS(competition));
-				}
-				else if ((sender as CollectionView).SelectedItem.GetType().ToString() == "SportNow.Model.Examination_Session")
-				{
-
-					Examination_Session examination_session = (sender as CollectionView).SelectedItem as Examination_Session;
-
-                    Debug.Print("examination_session.imagemSource ANTES = " + examination_session.imagemSource);
-
-                    await Navigation.PushAsync(new ExaminationSessionPageCS(examination_session));
-				}
-
 			}
 		}
 

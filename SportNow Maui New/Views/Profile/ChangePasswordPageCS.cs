@@ -182,7 +182,7 @@ namespace SportNow.Views.Profile
 
         async void OndeleteMemberButtonClicked(object sender, EventArgs e)
         {
-            bool res = await DisplayAlert("Apagar Membro?", "Tens a certeza que pretendes apagar a tua conta e todos os dados associados? \nATENÇÃO: Esta acçao é irreversível!", "Sim", "Não");
+            bool res = await DisplayAlert("Apagar Membro?", "Tem a certeza que pretende apagar a sua conta e todos os dados associados? \nATENÇÃO: Esta acçao é irreversível!", "Sim", "Não");
 
             if (res == true)
             {

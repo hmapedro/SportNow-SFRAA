@@ -221,7 +221,7 @@ namespace SportNow.Views
 					{
 						Children =
 							{
-								new Label { FontFamily = "futuracondensedmedium", Text = "Ainda não tens prémios.\n Continua a treinar e vais ver que vais conseguir.", HorizontalTextAlignment = TextAlignment.Center, TextColor = App.normalTextColor, FontSize = App.itemTitleFontSize },
+								new Label { FontFamily = "futuracondensedmedium", Text = "Ainda não tem prémios.\n Continua a treinar e vais ver que vais conseguir.", HorizontalTextAlignment = TextAlignment.Center, TextColor = App.normalTextColor, FontSize = App.itemTitleFontSize },
 							}
 					}
 				}
@@ -370,7 +370,7 @@ namespace SportNow.Views
 					{
 						Children =
 							{
-								new Label { FontFamily = "futuracondensedmedium", Text = "Não existem resultados de competições.\n Fala com o teu treinador para participares na tua primeira competição.", HorizontalTextAlignment = TextAlignment.Center, TextColor = App.normalTextColor, FontSize = App.itemTitleFontSize },
+								new Label { FontFamily = "futuracondensedmedium", Text = "Não existem resultados de competições.\n Fala com o teu treinador para participares na sua primeira competição.", HorizontalTextAlignment = TextAlignment.Center, TextColor = App.normalTextColor, FontSize = App.itemTitleFontSize },
 							}
 					}
 				}

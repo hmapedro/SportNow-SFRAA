@@ -41,7 +41,8 @@ namespace SportNow.Services.Data.JSON
 				{
 					//return true;
 					string content = await response.Content.ReadAsStringAsync();
-					events = JsonConvert.DeserializeObject<List<Event>>(content);
+                    Debug.WriteLine("GetFutureEventsAll content=" + content);
+                    events = JsonConvert.DeserializeObject<List<Event>>(content);
 				}
 				return events;
 			}
@@ -52,7 +53,31 @@ namespace SportNow.Services.Data.JSON
 			}
 		}
 
-		public async Task<List<Event>> GetImportantEvents(string memberid)
+        public async Task<List<Event>> GetFutureEventsService(string memberid, string serviceid)
+        {
+            Debug.Print("GetFutureEventsService " + Constants.RestUrl_Get_Future_Events_Service + "?userid=" + memberid + "&serviceid=" + serviceid);
+            Uri uri = new Uri(string.Format(Constants.RestUrl_Get_Future_Events_Service + "?userid=" + memberid + "&serviceid=" + serviceid, string.Empty));
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    //return true;
+                    string content = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine("GetFutureEventsService content=" + content);
+                    events = JsonConvert.DeserializeObject<List<Event>>(content);
+                }
+                return events;
+            }
+            catch
+            {
+                Debug.WriteLine("http request error");
+                return null;
+            }
+        }
+
+        public async Task<List<Event>> GetImportantEvents(string memberid)
 		{
 			Debug.Print("GetImportantEvents "+ Constants.RestUrl_Get_Important_Events + "?userid=" + memberid);
 			Uri uri = new Uri(string.Format(Constants.RestUrl_Get_Important_Events + "?userid=" + memberid, string.Empty));

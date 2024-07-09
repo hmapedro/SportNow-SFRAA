@@ -151,7 +151,7 @@ namespace SportNow.Views
 				if (result == 1)
 				{
 					messageLabel.TextColor = Colors.Green;
-					messageLabel.Text = "Enviámos um email para o endereço indicado em cima com os dados para recuperar a tua password.";
+					messageLabel.Text = "Enviámos um email para o endereço indicado em cima com os dados para recuperar a sua password.";
 				}
 				else if (result == -1)
 				{
@@ -161,7 +161,7 @@ namespace SportNow.Views
 				else 
 				{
 					messageLabel.TextColor = Colors.Red;
-					messageLabel.Text = "Houve um erro. Verifica a tua ligação à Internet ou tenta novamente mais tarde.";
+					messageLabel.Text = "Houve um erro. Verifica a sua ligação à Internet ou tenta novamente mais tarde.";
 				}
 			}
 			else

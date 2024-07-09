@@ -128,7 +128,7 @@ namespace SportNow.Views
 			}
 			hideActivityIndicator();
 
-            await DisplayAlert("EQUIPAMENTO SOLICITADO", "A tua encomenda foi realizada com sucesso. Fala com o teu instrutor para saber quando te conseguirá entregar a mesma.", "Ok");
+            await DisplayAlert("EQUIPAMENTO SOLICITADO", "A sua encomenda foi realizada com sucesso. Fala com o teu instrutor para saber quando te conseguirá entregar a mesma.", "Ok");
 
 
 
