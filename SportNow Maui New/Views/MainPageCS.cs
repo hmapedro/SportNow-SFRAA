@@ -280,7 +280,7 @@ namespace SportNow.Views
 			//AULAS LABEL
 			teacherClassesLabel = new Label
 			{
-				Text = "PRÓXIMAS AULAS COMO INSTRUTOR/MONITOR",
+				Text = "PRÓXIMAS AULAS COMO RESPONSÁVEL/TREINADOR",
 				TextColor = App.topColor,
 				HorizontalTextAlignment = TextAlignment.Start,
 				FontSize = App.titleFontSize,
@@ -429,14 +429,8 @@ namespace SportNow.Views
                 FontSize = App.titleFontSize,
                 FontFamily = "futuracondensedmedium",
             };
-            if (App.member.gender == "female")
-            {
-                attendanceLabel.Text = "PRÓXIMAS AULAS/MARCAÇÕES COMO ALUNA";
-            }
-            else
-            {
-                attendanceLabel.Text = "PRÓXIMAS AULAS/MARCAÇÕES COMO ALUNO";
-            }
+            attendanceLabel.Text = "PRÓXIMAS AULAS/MARCAÇÕES";
+			
             absoluteLayout.Add(attendanceLabel);
 			absoluteLayout.SetLayoutBounds(attendanceLabel, new Rect(0, classesY, App.screenWidth, 30 * App.screenHeightAdapter));
 
